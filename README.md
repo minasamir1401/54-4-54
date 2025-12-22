@@ -1,40 +1,45 @@
-# MEIH Clone (Frontend)
+# MEIH Netflix Clone
 
-واجهة مستخدم حديثة وسريعة لمنصة بث الأفلام، مبنية باستخدام React و Vite، تحاكي تجربة Netflix مع دعم كامل للغة العربية.
+A Netflix-inspired streaming platform frontend built with React, TypeScript, and Vite.
 
-## 🌟 المميزات
+## Features
+- Responsive design with Tailwind CSS
+- Movie and series browsing
+- Search functionality
+- Detailed content pages
+- Modern UI with animations
 
-- **تصميم عصري**: واجهة مستخدم مظلمة (Dark Mode) وتفاعلية.
-- **مشغل فيديو متطور**: يدعم سيرفرات متعددة، جودات مختلفة، ونظام حماية من الإعلانات.
-- **تصفح سلس**: أقسام للأفلام، المسلسلات، البحث، والتصنيفات.
-- **متجاوب**: يعمل بكفاءة على جميع الأجهزة (موبايل، تابلت، ديسكتوب).
+## Tech Stack
+- React 18
+- TypeScript
+- Vite
+- Tailwind CSS
+- Axios for API requests
+- React Router for navigation
 
-## 🔗 الربط مع الباك اند
+## Setup Instructions
 
-يعتمد هذا المشروع على `VITE_API_URL` للاتصال بالخادم.
-
-- **محلياً**: `http://localhost:8000`
-- **على Vercel**: `https://meih-movies-api.onrender.com`
-
-## 🛠️ التشغيل محلياً
-
-1. **تثبيت المكاتب**:
-
-   ```bash
+1. Clone the repository
+2. Install dependencies:
+   ```
    npm install
    ```
 
-2. **بدء السيرفر**:
-   ```bash
+3. Create a `.env` file with the API URL:
+   ```
+   VITE_API_URL=http://localhost:8000
+   ```
+
+4. Run the development server:
+   ```
    npm run dev
    ```
 
-## ☁️ النشر على Vercel
+5. Build for production:
+   ```
+   npm run build
+   ```
 
-1. ارفع المشروع على GitHub.
-2. استورده في Vercel.
-3. أضف متغير البيئة `VITE_API_URL` برابط الباك اند الخاص بك.
+## Deployment
 
----
-
-Developed by Mina Samir.
+The frontend is configured for deployment on Vercel. Make sure to set the `VITE_API_URL` environment variable in your Vercel project settings.

@@ -87,7 +87,7 @@ export const fetchDetails = async (id: string) => {
   setCachedData(cacheKey, data);
   return data;
 };
-export const searchItems = async (query: string) => {
+export const searchContent = async (query: string) => {
   const cacheKey = `search_${query}`;
   const cached = getCachedData<ContentItem[]>(cacheKey);
   if (cached) return cached;

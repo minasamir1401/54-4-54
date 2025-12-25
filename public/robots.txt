@@ -1,0 +1,40 @@
+# robots.txt for LMINA Streaming Platform
+
+# Allow all search engines
+User-agent: *
+Allow: /
+
+# Disallow admin and API endpoints
+Disallow: /api/
+Disallow: /admin/
+Disallow: /private/
+
+# Disallow search result pages with parameters (avoid duplicate content)
+Disallow: /*?page=*
+Disallow: /*?sort=*
+Disallow: /*?filter=*
+
+# Disallow empty search pages
+Disallow: /search?q=$
+Disallow: /search?q=
+
+# Allow specific important paths
+Allow: /movie/
+Allow: /series/
+Allow: /category/
+
+# Sitemap location
+Sitemap: https://lmina.com/sitemap.xml
+
+# Crawl delay (optional, adjust based on server capacity)
+# Crawl-delay: 1
+
+# Specific rules for major search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /

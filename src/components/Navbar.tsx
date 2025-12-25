@@ -121,13 +121,17 @@ const Navbar = () => {
             </div>
           </div>
 
-          {/* LOGO */}
-          <Link to="/" className="flex items-center gap-2">
-            <img
-              src="/favicon.png"
-              alt="LMINA"
-              className="h-8 sm:h-10 object-contain"
-            />
+          {/* LOGO - LMINA Text */}
+          <Link to="/" className="flex items-center gap-2 group">
+            <span className="text-2xl sm:text-3xl md:text-4xl font-black italic tracking-tighter
+                           bg-gradient-to-r from-red-600 via-red-500 to-red-700 
+                           bg-clip-text text-transparent
+                           drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]
+                           transition-all duration-300
+                           group-hover:drop-shadow-[0_0_25px_rgba(220,38,38,0.8)]
+                           group-hover:scale-105">
+              LMINA
+            </span>
           </Link>
         </div>
 

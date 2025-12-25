@@ -1,9 +1,10 @@
 import { useEffect, useState, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Hero from '../components/Hero';
 import MovieCard from '../components/MovieCard';
 import MovieRow from '../components/MovieRow';
 import { fetchLatest, ContentItem } from '../services/api';
-import { FaFire, FaThLarge, FaBolt } from 'react-icons/fa';
+import { FaFire, FaThLarge, FaBolt, FaArrowUp } from 'react-icons/fa';
 
 const Home = () => {
   const [content, setContent] = useState<ContentItem[]>([]);
@@ -12,6 +13,7 @@ const Home = () => {
   const [heroMovie, setHeroMovie] = useState<any>(null);
   const [page, setPage] = useState(1);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -27,6 +29,22 @@ const Home = () => {
       })
       .finally(() => setLoading(false));
   }, []);
+
+  // Auto-cycle Hero content every 40 seconds
+  useEffect(() => {
+    if (content.length === 0) return;
+    
+    const interval = setInterval(() => {
+      setHeroMovie((currentMovie: any) => {
+        if (!currentMovie || content.length === 0) return content[0];
+        const currentIndex = content.findIndex(item => item.id === currentMovie.id);
+        const nextIndex = (currentIndex + 1) % Math.min(content.length, 10);
+        return content[nextIndex];
+      });
+    }, 40000); // 40 seconds
+
+    return () => clearInterval(interval);
+  }, [content]);
 
   const loadMore = async () => {
       if (loadingMore) return;
@@ -67,74 +85,216 @@ const Home = () => {
       return () => observer.disconnect();
   }, [loadingMore, loading, content]);
 
+  // Scroll to top button
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 500);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
-    <div className="bg-[#0a0a0a] min-h-screen pb-20">
+    <div className="bg-[#0a0a0a] min-h-screen pb-20 relative overflow-hidden">
       {loading ? (
-          <div className="h-screen flex flex-col items-center justify-center text-white">
-              <div className="w-20 h-20 border-[3px] border-red-600 border-t-transparent rounded-full animate-spin mb-8"></div>
-              <p className="text-xs font-black uppercase tracking-[0.4em] text-gray-500 animate-pulse">يتم الآن عرض عالمك الترفيهي...</p>
-          </div>
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="h-screen flex flex-col items-center justify-center text-white relative z-10"
+          >
+              <motion.div
+                animate={{ 
+                  rotate: 360,
+                  scale: [1, 1.1, 1]
+                }}
+                transition={{ 
+                  rotate: { duration: 2, repeat: Infinity, ease: "linear" },
+                  scale: { duration: 1, repeat: Infinity }
+                }}
+                className="w-24 h-24 border-4 border-red-600 border-t-transparent rounded-full mb-8 shadow-2xl shadow-red-600/50"
+              />
+              <motion.p 
+                animate={{ opacity: [0.5, 1, 0.5] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+                className="text-sm font-black uppercase tracking-[0.4em] text-gray-400"
+              >
+                جاري التحميل...
+              </motion.p>
+              <motion.div
+                animate={{ width: ["0%", "100%"] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                className="h-1 bg-gradient-to-r from-red-600 to-red-800 mt-6 rounded-full"
+                style={{ width: "200px" }}
+              />
+          </motion.div>
       ) : error ? (
-          <div className="h-screen flex flex-col items-center justify-center text-red-500 p-8 text-center">
-              <div className="w-24 h-24 bg-red-600/10 rounded-full flex items-center justify-center mb-8 border border-red-600/20">
-                 <FaBolt className="text-4xl text-red-600" />
-              </div>
-              <h2 className="text-4xl font-black mb-4 tracking-tighter italic">خطأ في الاتصال</h2>
-              <p className="text-gray-500 font-bold mb-10 max-w-md">{error}</p>
-              <button onClick={() => window.location.reload()} className="bg-white text-black font-black italic px-12 py-4 rounded-2xl hover:bg-red-600 hover:text-white transition-all transform hover:scale-105 active:scale-95 shadow-xl">أعد المحاولة الآن</button>
-          </div>
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="h-screen flex flex-col items-center justify-center text-red-500 p-8 text-center"
+          >
+              <motion.div
+                animate={{ scale: [1, 1.1, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                className="w-32 h-32 bg-gradient-to-br from-red-600/20 to-red-800/20 rounded-full 
+                         flex items-center justify-center mb-8 border-2 border-red-600/30 shadow-2xl"
+              >
+                 <FaBolt className="text-6xl text-red-600" />
+              </motion.div>
+              <h2 className="text-5xl font-black mb-4 tracking-tighter italic bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent">
+                خطأ في الاتصال
+              </h2>
+              <p className="text-gray-400 font-bold mb-10 max-w-md text-lg">{error}</p>
+              <motion.button 
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => window.location.reload()} 
+                className="bg-gradient-to-r from-red-600 to-red-700 text-white font-black italic 
+                         px-12 py-5 rounded-2xl hover:shadow-2xl hover:shadow-red-600/50 
+                         transition-all transform border border-red-500/30"
+              >
+                أعد المحاولة الآن
+              </motion.button>
+          </motion.div>
       ) : (
           <>
             <Hero movie={heroMovie} />
             
             <main className="relative z-20 -mt-16 sm:-mt-24 md:-mt-32">
                 {/* Categorized Rows */}
-                <div className="px-4 sm:px-6 md:px-12 mb-12 sm:mb-16 md:mb-20 space-y-8 sm:space-y-12 md:space-y-16">
+                <motion.div 
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  className="px-4 sm:px-6 md:px-12 mb-12 sm:mb-16 md:mb-20 space-y-8 sm:space-y-12 md:space-y-16"
+                >
                    <MovieRow title="أحدث المسلسلات العربية" catId="arabic-series46" />
                    <MovieRow title="عالم الأنمي والكرتون" catId="anime-movies-7" />
                    <MovieRow title="أفلام تركية مميزة" catId="8-aflam3isk" />
                    <MovieRow title="أفلام أجنبية حصرية" catId="all_movies_13" />
-                </div>
+                </motion.div>
 
                 {/* Main Grid Feed */}
-                <div className="px-4 sm:px-6 md:px-12">
-                    <div className="flex flex-row-reverse items-center justify-between mb-8 sm:mb-10 md:mb-12 bg-white/[0.02] p-6 sm:p-8 rounded-[1.5rem] sm:rounded-[2.5rem] border border-white/5 backdrop-blur-xl transition-all hover:bg-white/[0.04]">
-                        <div className="text-right">
-                            <h2 className="text-white text-2xl sm:text-3xl md:text-4xl font-black italic tracking-tighter flex items-center justify-end">
-                                استكشف المزيد <FaFire className="ml-3 sm:ml-4 text-red-600 animate-bounce" />
-                            </h2>
-                            <p className="text-gray-500 text-[8px] sm:text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] mt-1 sm:mt-2">تصفح المكتبة الشاملة المحدثة يومياً</p>
-                        </div>
-                        <div className="hidden sm:flex items-center space-x-reverse space-x-4 bg-black/60 px-4 sm:px-6 py-2 sm:py-3 rounded-xl sm:rounded-2xl border border-white/5 shadow-inner">
-                            <span className="text-[10px] sm:text-xs text-gray-400 font-black italic">عرض الكل</span>
-                            <FaThLarge className="text-red-600" />
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6 gap-y-10 sm:gap-y-12">
-                        {content.map((item) => (
-                            <MovieCard key={item.id} movie={item} />
-                        ))}
-                    </div>
-
-                    <div ref={observerTarget} className="h-40 sm:h-60 flex flex-col items-center justify-center mt-12 sm:mt-20">
-                        {loadingMore && (
-                            <div className="flex flex-col items-center space-y-4 sm:space-y-6">
-                                <div className="w-10 h-10 sm:w-12 sm:h-12 border-[3px] border-red-600 border-t-transparent rounded-full animate-spin"></div>
-                                <p className="text-gray-500 font-black italic text-[9px] sm:text-[10px] uppercase tracking-[0.4em] animate-pulse">نحضر لك المزيد من الأفلام...</p>
+                <motion.div 
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.4 }}
+                  className="px-4 sm:px-6 md:px-12"
+                >
+                    {/* Section Header */}
+                    <div className="relative mb-10 sm:mb-12 md:mb-16 overflow-hidden rounded-3xl">
+                        <div className="absolute inset-0 bg-gradient-to-r from-red-600/10 via-red-500/5 to-transparent blur-3xl" />
+                        <div className="relative bg-gradient-to-br from-white/[0.03] to-white/[0.01] p-8 sm:p-10 
+                                      border border-white/10 backdrop-blur-xl
+                                      hover:border-red-600/30 transition-all duration-500">
+                            <div className="flex flex-row-reverse items-center justify-between">
+                                <div className="text-right">
+                                    <div className="flex items-center justify-end gap-4 mb-3">
+                                        <h2 className="text-white text-3xl sm:text-4xl md:text-5xl font-black italic tracking-tighter">
+                                            استكشف المزيد
+                                        </h2>
+                                        <motion.div
+                                          animate={{ 
+                                            scale: [1, 1.2, 1],
+                                            rotate: [0, 10, -10, 0]
+                                          }}
+                                          transition={{ duration: 2, repeat: Infinity }}
+                                        >
+                                          <FaFire className="text-4xl sm:text-5xl text-red-600 drop-shadow-2xl" />
+                                        </motion.div>
+                                    </div>
+                                    <p className="text-gray-400 text-xs sm:text-sm font-bold tracking-wide">
+                                        تصفح المكتبة الشاملة المحدثة يومياً
+                                    </p>
+                                </div>
+                                <div className="hidden sm:flex items-center gap-3 bg-black/60 px-6 py-3 
+                                              rounded-2xl border border-white/10 shadow-xl backdrop-blur-sm
+                                              hover:bg-red-600/20 hover:border-red-600/50 transition-all duration-300 cursor-pointer">
+                                    <span className="text-sm text-white font-black italic">عرض الكل</span>
+                                    <FaThLarge className="text-red-500" />
+                                </div>
                             </div>
-                        )}
+                        </div>
                     </div>
-                </div>
+
+                    {/* Content Grid */}
+                    <motion.div 
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.6, delay: 0.6 }}
+                      className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 
+                               gap-4 sm:gap-6 gap-y-10 sm:gap-y-12"
+                    >
+                        {content.map((item, index) => (
+                            <motion.div
+                              key={item.id}
+                              initial={{ opacity: 0, y: 20 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ duration: 0.4, delay: index * 0.05 }}
+                            >
+                              <MovieCard movie={item} />
+                            </motion.div>
+                        ))}
+                    </motion.div>
+
+                    {/* Load More Indicator */}
+                    <div ref={observerTarget} className="h-40 sm:h-60 flex flex-col items-center justify-center mt-16 sm:mt-24">
+                        <AnimatePresence>
+                            {loadingMore && (
+                                <motion.div 
+                                  initial={{ opacity: 0, scale: 0.8 }}
+                                  animate={{ opacity: 1, scale: 1 }}
+                                  exit={{ opacity: 0, scale: 0.8 }}
+                                  className="flex flex-col items-center gap-6"
+                                >
+                                    <motion.div
+                                      animate={{ rotate: 360 }}
+                                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                                      className="w-16 h-16 border-4 border-red-600 border-t-transparent rounded-full shadow-2xl shadow-red-600/50"
+                                    />
+                                    <p className="text-gray-400 font-black italic text-sm uppercase tracking-widest">
+                                        نحضر لك المزيد...
+                                    </p>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </div>
+                </motion.div>
             </main>
           </>
       )}
 
+      {/* Scroll to Top Button */}
+      <AnimatePresence>
+        {showScrollTop && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={scrollToTop}
+            className="fixed bottom-8 left-8 z-50 bg-gradient-to-br from-red-600 to-red-700 
+                     text-white p-4 rounded-full shadow-2xl shadow-red-600/50
+                     border-2 border-white/20 backdrop-blur-sm
+                     hover:shadow-red-600/70 transition-all duration-300"
+          >
+            <FaArrowUp className="text-xl" />
+          </motion.button>
+        )}
+      </AnimatePresence>
+
       {/* Decorative Background Glows */}
-      <div className="fixed top-0 right-0 w-[500px] h-[500px] bg-red-600/5 blur-[150px] pointer-events-none -z-10 rounded-full"></div>
-      <div className="fixed bottom-0 left-0 w-[500px] h-[500px] bg-red-600/5 blur-[150px] pointer-events-none -z-10 rounded-full"></div>
+      <div className="fixed top-0 right-0 w-[600px] h-[600px] bg-red-600/5 blur-[200px] pointer-events-none -z-10 rounded-full animate-pulse" />
+      <div className="fixed bottom-0 left-0 w-[600px] h-[600px] bg-red-600/5 blur-[200px] pointer-events-none -z-10 rounded-full animate-pulse" style={{ animationDelay: '1s' }} />
+      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-red-600/3 blur-[250px] pointer-events-none -z-10 rounded-full" />
     </div>
   );
 };
 
 export default Home;
+

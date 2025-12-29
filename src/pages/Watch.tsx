@@ -43,11 +43,24 @@ const Watch = () => {
               download_links: Array.isArray(d.download_links) ? d.download_links : []
           };
           
-          // Set critical data first (video player and basic info) - this makes it feel fast
+          // Critical data is loaded immediately for fast perception
           setData(safeData);
           if (safeData.servers.length > 0) {
               setActiveServer(safeData.servers[0]);
           }
+
+          // Save to History
+          const historyItem = {
+              id: targetId,
+              title: safeData.title,
+              poster: safeData.poster,
+              type: safeData.type
+          };
+          const saved = localStorage.getItem('watch_history');
+          let history = saved ? JSON.parse(saved) : [];
+          // Remove if already exists and add to front
+          history = [historyItem, ...history.filter((h: any) => h.id !== targetId)].slice(0, 20);
+          localStorage.setItem('watch_history', JSON.stringify(history));
           
           // Critical data is loaded immediately for fast perception
           
@@ -255,34 +268,6 @@ const Watch = () => {
                           activeServer.type === 'iframe' ? (
                               // Enhanced server validation to check for various issues
                               (() => {
-                                  const url = activeServer.url.toLowerCase();
-                                  
-                                  // Check for ad domains
-                                  const adDomains = ['facebook', 'twitter', 'ads', 'doubleclick', 'googlesyndication'];
-                                  const hasAds = adDomains.some(domain => url.includes(domain));
-                                  
-                                  // Check for known problematic domains
-                                  const problematicDomains = ['okprime.site', 'film77.xyz'];
-                                  const isProblematic = problematicDomains.some(domain => url.includes(domain));
-                                  
-                                  if (hasAds) {
-                                      return (
-                                          <div className="w-full h-full flex flex-col items-center justify-center bg-black text-white">
-                                              <div className="text-red-500 mb-4">⚠️</div>
-                                              <p className="text-center mb-4">هذا السيرفر يحتوي على إعلانات<br/>يرجى اختيار سيرفر آخر يدويًا</p>
-                                          </div>
-                                      );
-                                  }
-                                  
-                                  if (isProblematic) {
-                                      return (
-                                          <div className="w-full h-full flex flex-col items-center justify-center bg-black text-white">
-                                              <div className="text-red-500 mb-4">⚠️</div>
-                                              <p className="text-center mb-4">هذا السيرفر لا يعمل بشكل صحيح<br/>يرجى اختيار سيرفر آخر يدويًا</p>
-                                          </div>
-                                      );
-                                  }
-                                  
                                   return (
                                       <div className="relative w-full h-full">
                                           {showShield && (
@@ -306,8 +291,9 @@ const Watch = () => {
                                               src={activeServer.url} 
                                               className={`w-full h-full border-0 ${!shieldActive ? 'pointer-events-none' : ''}`} 
                                               allowFullScreen 
-                                              allow="encrypted-media; autoplay; fullscreen"
-                                              // Safety: Removed sandbox to satisfy providers, but using overlay instead
+                                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen; web-share"
+                                              referrerPolicy="no-referrer-when-downgrade"
+                                              loading="lazy"
                                               onLoad={() => {
                                                   setServerLoading(false);
                                               }}
@@ -341,51 +327,47 @@ const Watch = () => {
                   {/* Servers - Load immediately as they're critical for playback */}
                   <div className="bg-zinc-900/50 rounded-2xl p-6 border border-white/5">
                       <div className="flex items-center justify-between mb-4">
-                          <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">سيرفرات المشاهدة</span>
+                          <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">سيرفرات المشاهدة</span>
                           <FaTv className="text-red-500" />
                       </div>
-                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                      <div className="grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-3">
                           {data.servers.map((srv, idx) => {
                               const isFailed = failedServers.has(srv.url);
                               const isActive = activeServer?.url === srv.url;
                               
-                              // Check for known problematic domains
-                              const problematicDomains = ['okprime.site', 'film77.xyz'];
-                              const isProblematic = problematicDomains.some(domain => srv.url.toLowerCase().includes(domain));
-                              
-                              return (
-                                  <button
-                                      key={idx}
-                                      onClick={() => { 
-                                          // Clear server from failed list when manually selected
-                                          if (failedServers.has(srv.url)) {
-                                              const newFailed = new Set(failedServers);
-                                              newFailed.delete(srv.url);
-                                              setFailedServers(newFailed);
-                                          }
-                                          setShowShield(true);
-                                          setShieldActive(false);
-                                          setActiveServer(srv); 
-                                          setServerLoading(true); 
-                                      }}
-                                      className={`p-3 rounded-xl text-xs font-bold transition-all border ${
-                                          isActive 
-                                            ? 'bg-red-600 border-red-500 text-white' 
-                                            : isFailed || isProblematic
-                                                ? 'bg-red-900/10 border-red-900/20 text-red-500 opacity-50 cursor-not-allowed'
-                                                : 'bg-white/5 border-white/5 text-gray-400 hover:bg-white/10'
-                                      }`}
-                                      disabled={isFailed || isProblematic}
-                                  >
-                                      {srv.name} {isFailed && '(عطل)'} {isProblematic && '(غير متاح)'}
-                                  </button>
-                              );
+                                  return (
+                                      <button
+                                          key={idx}
+                                          onClick={() => { 
+                                              // Clear server from failed list when manually selected
+                                              if (failedServers.has(srv.url)) {
+                                                  const newFailed = new Set(failedServers);
+                                                  newFailed.delete(srv.url);
+                                                  setFailedServers(newFailed);
+                                              }
+                                              setShowShield(true);
+                                              setShieldActive(false);
+                                              setActiveServer(srv); 
+                                              setServerLoading(true); 
+                                          }}
+                                          className={`p-3 rounded-xl text-xs font-bold transition-all border ${
+                                              isActive 
+                                                ? 'bg-red-600 border-red-500 text-white' 
+                                                : isFailed
+                                                    ? 'bg-red-900/10 border-red-900/20 text-red-500 opacity-50 cursor-not-allowed'
+                                                    : 'bg-white/5 border-white/5 text-gray-400 hover:bg-white/10'
+                                          }`}
+                                          disabled={isFailed}
+                                      >
+                                          {srv.name} {isFailed && '(عطل)'}
+                                      </button>
+                                  );
                           })}
                       </div>
                   </div>
 
                   {/* Info - Deferred loading for non-critical content */}
-                  <div className="space-y-4 text-right">
+                  <div className="space-y-4 text-center sm:text-right">
                       <h2 className="text-3xl font-black">{data.title}</h2>
                       <p className="text-gray-400 leading-relaxed text-sm">{data.description}</p>
                       
@@ -445,23 +427,36 @@ const Watch = () => {
                           
                           {(showEpisodes || window.innerWidth > 1024) && (
                               <div className="max-h-[500px] overflow-y-auto p-2 space-y-2 custom-scrollbar">
-                                  {[...data.episodes].sort((a, b) => a.episode - b.episode).map(ep => {
-                                      const isActive = ep.id === id || new URLSearchParams(window.location.search).get('episode') === String(ep.episode);
-                                      return (
-                                          <button
-                                              key={ep.id}
-                                              onClick={() => navigate(`/watch/${ep.id}?episode=${ep.episode}`)}
-                                              className={`w-full p-3 rounded-xl flex items-center gap-3 text-right transition-all border ${
-                                                  isActive 
-                                                  ? 'bg-red-600 border-red-500 text-white' 
-                                                  : 'bg-black/40 border-transparent text-gray-400 hover:bg-white/5'
-                                              }`}
-                                          >
-                                              <span className="w-8 h-8 flex items-center justify-center bg-black/20 rounded-lg text-[10px] font-bold">{ep.episode}</span>
-                                              <span className="flex-1 text-xs font-bold truncate">{ep.title}</span>
-                                          </button>
-                                      );
-                                  })}
+                                  {(() => {
+                                      const getEpNo = (ep: any) => {
+                                          if (ep.episode && !isNaN(parseInt(ep.episode))) return parseInt(ep.episode);
+                                          const m = String(ep.title).match(/\d+/);
+                                          return m ? parseInt(m[0]) : 0;
+                                      };
+                                      return [...data.episodes]
+                                          .sort((a, b) => getEpNo(b) - getEpNo(a))
+                                          .map(ep => {
+                                              const isActive = ep.id === id;
+                                              const epNo = getEpNo(ep);
+                                              return (
+                                                  <button
+                                                      key={ep.id}
+                                                      onClick={() => navigate(`/watch/${ep.id}`)}
+                                                      className={`w-full p-4 rounded-xl flex flex-row-reverse items-center gap-4 text-right transition-all border ${
+                                                          isActive 
+                                                          ? 'bg-red-600 border-red-500 text-white shadow-xl shadow-red-600/20' 
+                                                          : 'bg-white/[0.03] border-white/5 text-gray-400 hover:bg-white/10'
+                                                      }`}
+                                                  >
+                                                      <span className={`w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-xl text-xs font-black
+                                                                     ${isActive ? 'bg-white/20' : 'bg-black/40'}`}>
+                                                          {epNo || '?'}
+                                                      </span>
+                                                      <span className="flex-1 text-[11px] font-bold truncate">{ep.title}</span>
+                                                  </button>
+                                              );
+                                          });
+                                  })()}
                               </div>
                           )}
                       </div>

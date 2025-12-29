@@ -46,41 +46,43 @@ const Details = () => {
          />
       </div>
       
-      <div className="absolute top-[25%] left-4 sm:left-12 md:left-24 z-20 max-w-3xl text-right md:text-left right-4 sm:right-auto">
-         <div className="flex flex-row-reverse md:flex-row items-center gap-3 mb-6">
+      <div className="absolute top-[20%] sm:top-[25%] left-4 right-4 sm:left-12 sm:right-auto md:left-24 z-20 max-w-3xl text-center sm:text-right">
+         <div className="flex flex-row-reverse sm:items-center justify-center sm:justify-start gap-3 mb-6">
             <span className="px-3 py-1 bg-red-600 text-[10px] font-black italic rounded-md">NEW</span>
             <span className="text-green-500 font-black italic text-sm">98% Match</span>
-            <span className="text-gray-400 font-bold text-sm">2024</span>
+            <span className="hidden sm:inline text-gray-400 font-bold text-sm">2024</span>
          </div>
          
-         <h1 className="text-4xl sm:text-6xl md:text-8xl font-black italic mb-8 tracking-tighter leading-none drop-shadow-2xl">{content.title}</h1>
+         <h1 className="text-3xl sm:text-6xl md:text-8xl font-black italic mb-6 sm:mb-8 tracking-tighter leading-tight drop-shadow-2xl">
+            {content.title}
+         </h1>
          
-         <p className="text-base sm:text-xl text-gray-300 mb-12 leading-relaxed bg-black/20 backdrop-blur-md p-6 rounded-2xl border border-white/5 dir-rtl overflow-hidden line-clamp-4 md:line-clamp-none">
+         <p className="text-sm sm:text-xl text-gray-300 mb-8 sm:mb-12 leading-relaxed bg-black/40 backdrop-blur-xl p-5 sm:p-6 rounded-2xl border border-white/5 dir-rtl overflow-hidden line-clamp-4 sm:line-clamp-none mx-auto sm:mx-0">
             {content.description || "استمتع بمشاهدة هذا العمل الرائع بجودة عالية وحصرياً على منصتنا."}
          </p>
          
-         <div className="flex flex-row-reverse md:flex-row items-center gap-4 mb-8">
+         <div className="flex flex-row-reverse items-center justify-center sm:justify-start gap-3 sm:gap-4 mb-8">
             <button 
               onClick={() => navigate(`/watch/${encodeURIComponent(id!)}`)}
-              className="bg-red-600 text-white px-10 sm:px-14 py-4 sm:py-5 rounded-2xl font-black italic text-lg sm:text-xl hover:bg-red-700 transition flex items-center shadow-2xl shadow-red-600/20 group"
+              className="bg-red-600 text-white px-8 sm:px-14 py-4 sm:py-5 rounded-2xl font-black italic text-base sm:text-xl hover:bg-red-700 transition flex items-center shadow-2xl shadow-red-600/20 group"
             >
-              <FaPlay className="ml-3 sm:ml-4 group-hover:scale-110 transition-transform" /> Watch Now
+              <FaPlay className="ml-2 sm:ml-4 group-hover:scale-110 transition-transform" /> Watch Now
             </button>
             
             <button className="p-4 sm:p-5 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition">
-                <FaListUl className="text-xl" />
+                <FaListUl className="text-lg sm:text-xl" />
             </button>
          </div>
 
          {content.download_links && content.download_links.length > 0 && (
-            <div className="flex flex-wrap flex-row-reverse md:flex-row gap-3">
+            <div className="flex flex-wrap flex-row-reverse justify-center sm:justify-start gap-2 sm:gap-3">
                 {content.download_links.map((dl, i) => (
                     <a 
                       key={i} 
                       href={dl.url} 
                       target="_blank" 
                       rel="noreferrer" 
-                      className="bg-white/5 border border-white/10 px-6 py-3 rounded-xl text-xs font-bold hover:bg-red-600/10 hover:border-red-600/30 transition flex items-center gap-2"
+                      className="bg-white/5 border border-white/10 px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl text-[10px] sm:text-xs font-bold hover:bg-red-600/10 hover:border-red-600/30 transition flex items-center gap-2"
                     >
                         <FaDownload className="text-red-500" /> {dl.quality}
                     </a>

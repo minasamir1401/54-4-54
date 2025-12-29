@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100;300;400;500;600;700;800;900&family=Cairo:wght@400;700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -10,9 +10,9 @@
 
 body {
   margin: 0;
-  background-color: #0a0a0a;
+  background-color: #050505;
   color: #fff;
-  font-family: "Cairo", "Inter", system-ui, -apple-system, sans-serif;
+  font-family: "Outfit", "Cairo", sans-serif;
   -webkit-font-smoothing: antialiased;
   direction: rtl;
 }
@@ -50,4 +50,33 @@ body {
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #ef4444;
+}
+
+@keyframes premium-glow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 5px rgba(220, 38, 38, 0.3));
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    filter: drop-shadow(0 0 15px rgba(220, 38, 38, 0.6));
+    transform: scale(1.02);
+    opacity: 0.95;
+  }
+}
+
+.fire-text {
+  animation: premium-glow 4s infinite ease-in-out;
+  background: linear-gradient(to right, #ffffff 0%, #ff1a1a 50%, #ffffff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% auto;
+  animation: premium-glow 4s infinite ease-in-out, shine 8s linear infinite;
+}
+
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
 }

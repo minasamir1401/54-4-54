@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Hero from '../components/Hero';
 import MovieCard from '../components/MovieCard';
 import MovieRow from '../components/MovieRow';
+import HistoryRow from '../components/HistoryRow';
 import { fetchLatest, ContentItem } from '../services/api';
 import { FaFire, FaThLarge, FaBolt, FaArrowUp } from 'react-icons/fa';
 
@@ -172,11 +173,20 @@ const Home = () => {
                   transition={{ duration: 0.6, delay: 0.2 }}
                   className="px-4 sm:px-6 md:px-12 mb-12 sm:mb-16 md:mb-20 space-y-8 sm:space-y-12 md:space-y-16"
                 >
-                   <MovieRow title="أحدث المسلسلات العربية" catId="arabic-series46" />
-                   <MovieRow title="عالم الأنمي والكرتون" catId="anime-movies-7" />
-                   <MovieRow title="أفلام تركية مميزة" catId="8-aflam3isk" />
-                   <MovieRow title="أفلام أجنبية حصرية" catId="all_movies_13" />
-                </motion.div>
+                    <HistoryRow />
+                    <MovieRow title="أفلام أجنبية" catId="english-movies" />
+                    <MovieRow title="أفلام عربية" catId="arabic-movies" />
+                    <MovieRow title="أفلام هندية" catId="indian-movies" />
+                    <MovieRow title="أفلام تركية" catId="turkish-movies" />
+                    <MovieRow title="أفلام آسيوية" catId="asian-movies" />
+                    <MovieRow title="أفلام أنمي" catId="anime-movies" />
+                    <MovieRow title="أفلام مدبلجة" catId="dubbed-movies" />
+                    <MovieRow title="مسلسلات تركية" catId="turkish-series" />
+                    <MovieRow title="مسلسلات عربية" catId="arabic-series" />
+                    <MovieRow title="مسلسلات اجنبية" catId="english-series" />
+                    <MovieRow title="مسلسلات آسياوية" catId="asian-series" />
+                    <MovieRow title="مسلسلات أنمي" catId="anime-series" />
+                 </motion.div>
 
                 {/* Main Grid Feed */}
                 <motion.div 

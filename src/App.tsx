@@ -7,6 +7,7 @@ const Home = lazy(() => import('./pages/Home'));
 const Watch = lazy(() => import('./pages/Watch'));
 const Search = lazy(() => import('./pages/Search'));
 const CategoryPage = lazy(() => import('./pages/Category'));
+const Downloader = lazy(() => import('./pages/Downloader'));
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/search" element={<Search />} />
+            <Route path="/downloader" element={<Downloader />} />
             <Route path="/category/:catId" element={<CategoryPage />} />
             <Route path="/details/:id" element={<Watch />} />
             <Route path="/watch/:id" element={<Watch />} />

@@ -3,7 +3,7 @@ import axios from 'axios';
 const API_BASE_URL = (import.meta as any).env?.VITE_API_URL || 
                      (window.location.hostname === 'localhost' 
                         ? 'http://localhost:8000' 
-                        : 'https://meih-movies-api.onrender.com');
+                        : 'https://minaewrw-meih-movies-api.hf.space');
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
@@ -69,39 +69,69 @@ export interface Details {
     message?: string;
 }
 
+export const getProxyImage = (url: string) => {
+  if (!url) return '';
+  // If it's already a relative path or already proxied, return as is
+  if (url.startsWith('/') || url.includes('/proxy/image')) return url;
+  return `${API_BASE_URL}/proxy/image?url=${encodeURIComponent(url)}`;
+};
+
+export const getProxyDownloadUrl = (url: string, filename: string) => {
+  return `${API_BASE_URL}/download/file?url=${encodeURIComponent(url)}&filename=${encodeURIComponent(filename)}`;
+};
+
+const mapContentItem = (item: ContentItem) => ({
+  ...item,
+  poster: getProxyImage(item.poster)
+});
+
 export const fetchLatest = async (page: number = 1) => {
   const cacheKey = `latest_${page}`;
   const cached = getCachedData<ContentItem[]>(cacheKey);
   if (cached) return cached;
   
-  const data = (await api.get<ContentItem[]>(`/content/latest?page=${page}`)).data;
-  setCachedData(cacheKey, data);
-  return data;
+  const data = (await api.get<ContentItem[]>(`/latest?page=${page}`)).data;
+  const mapped = (Array.isArray(data) ? data : []).map(mapContentItem);
+  setCachedData(cacheKey, mapped);
+  return mapped;
 };
+
 export const fetchDetails = async (id: string) => {
   const cacheKey = `details_${id}`;
   const cached = getCachedData<Details>(cacheKey);
   if (cached) return cached;
   
-  const data = (await api.get<Details>(`/content/details/${id}`)).data;
+  const data = (await api.get<Details>(`/details/${id}`)).data;
+  if (data && data.poster) {
+    data.poster = getProxyImage(data.poster);
+  }
   setCachedData(cacheKey, data);
   return data;
 };
+
 export const searchContent = async (query: string) => {
   const cacheKey = `search_${query}`;
   const cached = getCachedData<ContentItem[]>(cacheKey);
   if (cached) return cached;
   
-  const data = (await api.get<ContentItem[]>(`/content/search?q=${query}`)).data;
-  setCachedData(cacheKey, data);
-  return data;
+  const data = (await api.get<ContentItem[]>(`/search?q=${query}`)).data;
+  const mapped = (Array.isArray(data) ? data : []).map(mapContentItem);
+  setCachedData(cacheKey, mapped);
+  return mapped;
 };
+
 export const fetchByCategory = async (catId: string, page: number = 1) => {
   const cacheKey = `category_${catId}_${page}`;
   const cached = getCachedData<ContentItem[]>(cacheKey);
   if (cached) return cached;
   
-  const data = (await api.get<ContentItem[]>(`/content/group/${catId}?page=${page}`)).data;
-  setCachedData(cacheKey, data);
-  return data;
+  const data = (await api.get<ContentItem[]>(`/category/${catId}?page=${page}`)).data;
+  const mapped = (Array.isArray(data) ? data : []).map(mapContentItem);
+  setCachedData(cacheKey, mapped);
+  return mapped;
 };
+
+export const fetchDownloadInfo = async (url: string) => {
+  return (await api.get(`/download/info?url=${encodeURIComponent(url)}`)).data;
+};
+

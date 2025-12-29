@@ -25,17 +25,23 @@ const movieCategories = [
   { name: 'أفلام أجنبية', path: '/category/english-movies', icon: <FaFilm /> },
   { name: 'أفلام عربية', path: '/category/arabic-movies', icon: <FaFilm /> },
   { name: 'أفلام هندية', path: '/category/indian-movies', icon: <FaFilm /> },
+  { name: 'أفلام تركية', path: '/category/turkish-movies', icon: <FaFilm /> },
   { name: 'أفلام آسيوية', path: '/category/asian-movies', icon: <FaFilm /> },
   { name: 'أفلام أنمي', path: '/category/anime-movies', icon: <FaFilm /> },
   { name: 'أفلام مدبلجة', path: '/category/dubbed-movies', icon: <FaFilm /> },
 ];
 
 const seriesCategories = [
-  { name: 'مسلسلات تركية', path: '/category/turkish-series', icon: <FaTv /> },
-  { name: 'مسلسلات عربية', path: '/category/arabic-series', icon: <FaTv /> },
   { name: 'مسلسلات رمضان 2025', path: '/category/ramadan-2025', icon: <FaFire /> },
+  { name: 'مسلسلات رمضان 2024', path: '/category/ramadan-2024', icon: <FaTv /> },
+  { name: 'مسلسلات عربية', path: '/category/arabic-series', icon: <FaTv /> },
+  { name: 'مسلسلات تركية', path: '/category/turkish-series', icon: <FaTv /> },
   { name: 'مسلسلات اجنبية', path: '/category/english-series', icon: <FaTv /> },
+  { name: 'مسلسلات هندية', path: '/category/indian-series', icon: <FaTv /> },
   { name: 'مسلسلات آسياوية', path: '/category/asian-series', icon: <FaTv /> },
+  { name: 'مسلسلات انمي', path: '/category/anime-series', icon: <FaTv /> },
+  { name: 'برامج تلفزيون', path: '/category/tv-programs', icon: <FaTv /> },
+  { name: 'مسرحيات', path: '/category/plays', icon: <FaTv /> },
 ];
 
 const Navbar = () => {

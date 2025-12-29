@@ -71,8 +71,11 @@ export interface Details {
 
 export const getProxyImage = (url: string) => {
   if (!url) return '';
-  // If it's already a relative path or already proxied, return as is
-  if (url.startsWith('/') || url.includes('/proxy/image')) return url;
+  // If it's a relative path from the backend, prepend the API base
+  if (url.startsWith('/')) return `${API_BASE_URL}${url}`;
+  // If it's already a full proxied URL, return as is
+  if (url.includes('/proxy/image')) return url;
+  // Fallback: proxy it manually
   return `${API_BASE_URL}/proxy/image?url=${encodeURIComponent(url)}`;
 };
 

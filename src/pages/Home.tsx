@@ -171,21 +171,25 @@ const Home = () => {
                   initial={{ opacity: 0, y: 50 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.2 }}
-                  className="px-4 sm:px-6 md:px-12 mb-12 sm:mb-16 md:mb-20 space-y-8 sm:space-y-12 md:space-y-16"
+                  className="px-4 sm:px-6 md:px-12 mb-12 sm:mb-16 md:mb-20 space-y-12 sm:space-y-16 md:space-y-24"
                 >
                     <HistoryRow />
+                    <MovieRow title="مسلسلات رمضان 2025" catId="ramadan-2025" />
                     <MovieRow title="أفلام أجنبية" catId="english-movies" />
                     <MovieRow title="أفلام عربية" catId="arabic-movies" />
+                    <MovieRow title="مسلسلات عربية" catId="arabic-series" />
+                    <MovieRow title="مسلسلات تركية" catId="turkish-series" />
                     <MovieRow title="أفلام هندية" catId="indian-movies" />
                     <MovieRow title="أفلام تركية" catId="turkish-movies" />
+                    <MovieRow title="مسلسلات اجنبية" catId="english-series" />
                     <MovieRow title="أفلام آسيوية" catId="asian-movies" />
                     <MovieRow title="أفلام أنمي" catId="anime-movies" />
                     <MovieRow title="أفلام مدبلجة" catId="dubbed-movies" />
-                    <MovieRow title="مسلسلات تركية" catId="turkish-series" />
-                    <MovieRow title="مسلسلات عربية" catId="arabic-series" />
-                    <MovieRow title="مسلسلات اجنبية" catId="english-series" />
+                    <MovieRow title="مسلسلات هندية" catId="indian-series" />
                     <MovieRow title="مسلسلات آسياوية" catId="asian-series" />
                     <MovieRow title="مسلسلات أنمي" catId="anime-series" />
+                    <MovieRow title="برامج تلفزيون" catId="tv-programs" />
+                    <MovieRow title="مسرحيات" catId="plays" />
                  </motion.div>
 
                 {/* Main Grid Feed */}

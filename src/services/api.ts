@@ -1,8 +1,7 @@
 import axios from 'axios';
 
-const API_BASE_URL = (import.meta as any).env?.VITE_API_URL || 
-                     'https://minaewrw-meih-movies-api.hf.space';
-// Note: If you want to use a local backend, set VITE_API_URL=http://localhost:8000
+const API_BASE_URL = 'https://minaewrw-meih-movies-api.hf.space';
+// Note: Changed to production URL permanently to fix connection errors.
 
 export const api = axios.create({
   baseURL: API_BASE_URL,

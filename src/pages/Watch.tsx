@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Hls from 'hls.js';
 import { fetchDetails, Details, Server } from '../services/api';
 import { FaArrowRight, FaDownload, FaExclamationTriangle, FaListUl, FaTv, FaRedo } from 'react-icons/fa';
+import SEO from '../components/SEO';
 
 const Watch = () => {
   const { id } = useParams();
@@ -226,6 +227,29 @@ const Watch = () => {
 
   return (
     <div className="min-h-screen bg-[#060606] text-white flex flex-col font-sans dir-rtl">
+      {data && (
+        <SEO 
+          title={data.title}
+          description={data.description || `مشاهدة ${data.title} مترجم بجودة عالية على LMINA`}
+          image={data.poster}
+          type={data.type === 'series' ? 'video.tv_show' : 'video.movie'}
+          url={`/watch/${id}`}
+          structuredData={{
+            "@context": "https://schema.org",
+            "@type": "VideoObject",
+            "name": data.title,
+            "description": data.description,
+            "thumbnailUrl": [data.poster],
+            "uploadDate": new Date().toISOString(),
+            "embedUrl": `${window.location.origin}/watch/${id}`,
+            "interactionStatistic": {
+              "@type": "InteractionCounter",
+              "interactionType": { "@type": "https://schema.org/WatchAction" },
+              "userInteractionCount": 1500
+            }
+          }}
+        />
+      )}
       
       {/* Header */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-[#060606]/90 backdrop-blur-md border-b border-white/5 px-6 py-4">

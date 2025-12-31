@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { fetchByCategory, ContentItem } from '../services/api';
 import MovieCard from '../components/MovieCard';
 import { FaArrowDown, FaLayerGroup } from 'react-icons/fa';
+import SEO from '../components/SEO';
 
 const categoryNames: Record<string, string> = {
   'all_movies_13': 'أفلام أجنبية',
@@ -75,6 +76,11 @@ const CategoryPage = () => {
 
     return (
         <div className="min-h-screen bg-[#0a0a0a] pt-24 sm:pt-32 pb-12 sm:pb-20 px-4 sm:px-6 md:px-12">
+            <SEO 
+                title={`${categoryTitle} - شاهد بجودة عالية`}
+                description={`استعرض قائمة ${categoryTitle} المحدثة يومياً على LMINA. شاهد أحدث العروض بجودة عالية وبدون إعلانات.`}
+                url={`/category/${catId}`}
+            />
             <div className="max-w-[1920px] mx-auto">
                 <div className="flex flex-col md:flex-row-reverse items-center justify-between mb-8 sm:mb-16 gap-6 sm:gap-8 bg-white/[0.02] p-6 sm:p-10 rounded-[1.5rem] sm:rounded-[2.5rem] border border-white/5 shadow-3xl backdrop-blur-xl relative overflow-hidden group">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-red-600/5 rounded-full blur-[100px] -z-10"></div>

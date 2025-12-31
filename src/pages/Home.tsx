@@ -6,6 +6,7 @@ import MovieRow from '../components/MovieRow';
 import HistoryRow from '../components/HistoryRow';
 import { fetchLatest, ContentItem } from '../services/api';
 import { FaFire, FaThLarge, FaBolt, FaArrowUp } from 'react-icons/fa';
+import SEO from '../components/SEO';
 
 const Home = () => {
   const [content, setContent] = useState<ContentItem[]>([]);
@@ -101,6 +102,22 @@ const Home = () => {
 
   return (
     <div className="bg-[#0a0a0a] min-h-screen pb-20 relative overflow-hidden">
+      <SEO 
+        title="الرئيسية | LMINA - منصة المشاهدة الأولى"
+        description="شاهد أحدث الأفلام والمسلسلات العربية والأجنبية والتركية بجودة عالية مجاناً على منصة LMINA. تجربة مشاهدة فريدة بدون إعلانات."
+        url="/"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "LMINA",
+          "url": "https://lmina.com",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://lmina.com/search?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        }}
+      />
       {loading ? (
           <motion.div 
             initial={{ opacity: 0 }}

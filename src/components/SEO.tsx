@@ -83,8 +83,12 @@ const SEO = ({
       <meta name="referrer" content="no-referrer-when-downgrade" />
       <meta httpEquiv="x-ua-compatible" content="ie=edge" />
       
-      {/* Language */}
+      {/* Language & Geo */}
       <html lang="ar" dir="rtl" />
+      <link rel="alternate" href={fullUrl} hrefLang="ar" />
+      <link rel="alternate" href={fullUrl} hrefLang="x-default" />
+      <meta name="geo.region" content="EG" />
+      <meta name="geo.placename" content="Cairo" />
       
       {/* Structured Data (JSON-LD) */}
       {structuredData && (

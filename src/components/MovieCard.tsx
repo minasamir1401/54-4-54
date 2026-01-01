@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FaPlay, FaStar } from 'react-icons/fa';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 interface MovieProps {
   id?: string;
@@ -33,26 +35,39 @@ const MovieCard = ({ id, title, poster, type, year, rating, movie, isLarge = fal
   if (!finalId) return null;
 
   return (
-    <Link to={`/watch/${encodeURIComponent(finalId)}`} className="block group">
+    <Link 
+      to={`/watch/${encodeURIComponent(finalId)}`} 
+      className="block group"
+      aria-label={`مشاهدة ${finalTitle}`}
+    >
       <motion.div 
-        className={`relative cursor-pointer transition-all duration-700 rounded-3xl overflow-hidden
-                   bg-[#0c0c0c] aspect-[2/3] border border-white/5
+        className={`relative cursor-pointer rounded-3xl overflow-hidden
+                   bg-[#0c0c0c] aspect-[2/3] border border-white/5 shadow-2xl
                    ${isLarge ? 'md:h-[420px]' : ''}`}
-        whileHover={{ scale: 1.05, zIndex: 50 }}
-        transition={{ type: "spring", stiffness: 300, damping: 20 }}
+        whileHover={{ 
+          scale: 1.05, 
+          zIndex: 50,
+          boxShadow: "0 0 30px 10px rgba(220, 38, 38, 0.2)",
+          borderColor: "rgba(220, 38, 38, 0.4)"
+        }}
+        transition={{ 
+          duration: 0.4,
+          ease: [0.22, 1, 0.36, 1] // Custom refined ease-out
+        }}
       >
         {/* Poster Image */}
-        <div className="relative w-full h-full overflow-hidden">
-          <img
-            src={finalPoster || "https://images.unsplash.com/photo-1594909122845-11baa439b7bf?q=80&w=2070&auto=format&fit=crop"}
+        <div className="relative w-full h-full overflow-hidden bg-zinc-900">
+          <LazyLoadImage
             alt={finalTitle}
+            src={finalPoster || "https://images.unsplash.com/photo-1594909122845-11baa439b7bf?q=80&w=2070&auto=format&fit=crop"}
             className="object-cover w-full h-full transition-all duration-1000 
                      group-hover:scale-110 group-hover:brightness-50"
-            loading="lazy"
+            effect="blur"
+            wrapperClassName="w-full h-full"
           />
           
           {/* Subtle Bottom Shade */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60 group-hover:opacity-90 transition-opacity" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60 group-hover:opacity-90 transition-opacity pointer-events-none" />
         </div>
         
         {/* Centered Title & Play on Hover */}

@@ -145,7 +145,7 @@ const Watch = () => {
   };
 
   if (loading) return (
-    <div className="min-h-screen bg-[#060606] text-white flex flex-col font-sans dir-rtl">
+    <div className="min-h-screen bg-transparent text-white flex flex-col font-sans dir-rtl">
       {/* Skeleton Header */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-[#060606]/90 backdrop-blur-md border-b border-white/5 px-6 py-4">
           <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -210,7 +210,7 @@ const Watch = () => {
   );
 
   if (error || !data) return (
-    <div className="min-h-screen bg-[#060606] text-white flex flex-col items-center justify-center p-8 text-center">
+    <div className="min-h-screen bg-transparent text-white flex flex-col items-center justify-center p-8 text-center">
         <FaExclamationTriangle className="text-red-600 text-5xl mb-6" />
         <h2 className="text-2xl font-bold mb-4">حدث خطأ</h2>
         <p className="text-gray-400 mb-8 max-w-md">{error || "تعذّر تحميل المحتوى"}</p>
@@ -226,7 +226,7 @@ const Watch = () => {
   );
 
   return (
-    <div className="min-h-screen bg-[#060606] text-white flex flex-col font-sans dir-rtl">
+    <div className="min-h-screen bg-transparent text-white flex flex-col font-sans dir-rtl">
       {data && (
         <SEO 
           title={data.title}
@@ -254,8 +254,12 @@ const Watch = () => {
       {/* Header */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-[#060606]/90 backdrop-blur-md border-b border-white/5 px-6 py-4">
           <div className="max-w-7xl mx-auto flex items-center justify-between">
-              <button onClick={() => navigate(-1)} className="p-2 bg-white/5 hover:bg-white/10 rounded-lg transition-all">
-                  <FaArrowRight />
+              <button 
+                  onClick={() => navigate(-1)} 
+                  aria-label="الرجوع للصفحة السابقة"
+                  className="p-2 bg-white/5 hover:bg-white/10 rounded-lg transition-all"
+              >
+                  <FaArrowRight aria-hidden="true" />
               </button>
               <h1 className="text-lg font-bold truncate mx-4">{data?.title || <div className="h-6 bg-white/10 rounded w-48 animate-pulse"></div>}</h1>
               <div className="w-8"></div>

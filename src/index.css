@@ -10,7 +10,7 @@
 
 body {
   margin: 0;
-  background-color: #050505;
+  background-color: transparent;
   color: #fff;
   font-family: "Outfit", "Cairo", sans-serif;
   -webkit-font-smoothing: antialiased;

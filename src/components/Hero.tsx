@@ -21,11 +21,14 @@ const Hero = ({ movie }: HeroProps) => {
       <div className="absolute inset-0">
           <motion.img 
              key={movie.poster}
-             initial={{ scale: 1.1, opacity: 0 }}
+             initial={{ scale: 1.05, opacity: 0 }}
              animate={{ scale: 1, opacity: 1 }}
-             transition={{ duration: 2, ease: "easeOut" }}
+             transition={{ duration: 1.5, ease: "easeOut" }}
              src={movie.poster} 
              alt={movie.title} 
+             loading="eager"
+             // @ts-ignore
+             fetchPriority="high"
              className="w-full h-full object-cover object-top brightness-75 contrast-[1.05]"
           />
           {/* Global Cinematic Vignette */}
@@ -39,16 +42,16 @@ const Hero = ({ movie }: HeroProps) => {
           <AnimatePresence mode="wait">
             <motion.div
               key={movie.id}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
             >
                <div className="flex flex-row-reverse items-center justify-center md:justify-start gap-4 mb-6">
                   <span className="flex items-center gap-2 bg-white/5 backdrop-blur-2xl border border-white/10 px-4 py-1.5 rounded-full text-[10px] uppercase font-bold tracking-widest text-red-500">
                     <span className="w-2 h-2 bg-red-600 rounded-full animate-pulse" /> الأكثر شهرة الآن
                   </span>
                   <div className="flex flex-row-reverse items-center gap-1 text-yellow-500 font-outfit text-sm font-bold">
-                      <FaStar size={14} /> {movie.rating || '8.5'}
+                      <FaStar size={14} aria-hidden="true" /> {movie.rating || '8.5'}
                   </div>
                </div>
                
@@ -63,15 +66,17 @@ const Hero = ({ movie }: HeroProps) => {
                <div className="flex flex-row-reverse items-center justify-center md:justify-start gap-3 sm:gap-4">
                   <button 
                     onClick={() => navigate(`/watch/${movie.id}`)}
+                    aria-label={`مشاهدة ${movie.title} الآن`}
                     className="flex flex-row-reverse items-center bg-white text-black px-6 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold hover:bg-red-600 hover:text-white transition-all duration-500 transform hover:scale-105 text-sm sm:text-base"
                   >
-                    <FaPlay className="ml-2 sm:ml-3" /> شاهد الآن
+                    <FaPlay className="ml-2 sm:ml-3" aria-hidden="true" /> شاهد الآن
                   </button>
                   <button 
                     onClick={() => navigate(`/watch/${movie.id}`)}
+                    aria-label={`عرض تفاصيل ${movie.title}`}
                     className="flex flex-row-reverse items-center bg-white/5 backdrop-blur-3xl text-white border border-white/10 px-6 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold hover:bg-white/10 transition-all duration-500 text-sm sm:text-base"
                   >
-                    <FaInfoCircle className="ml-2 sm:ml-3 text-red-600" /> التفاصيل
+                    <FaInfoCircle className="ml-2 sm:ml-3 text-red-600" aria-hidden="true" /> التفاصيل
                   </button>
                </div>
             </motion.div>

@@ -75,7 +75,7 @@ const CategoryPage = () => {
     }, [items, loading, loadingMore, page, catId]);
 
     return (
-        <div className="min-h-screen bg-[#0a0a0a] pt-24 sm:pt-32 pb-12 sm:pb-20 px-4 sm:px-6 md:px-12">
+        <div className="min-h-screen bg-transparent pt-24 sm:pt-32 pb-12 sm:pb-20 px-4 sm:px-6 md:px-12">
             <SEO 
                 title={`${categoryTitle} - شاهد بجودة عالية`}
                 description={`استعرض قائمة ${categoryTitle} المحدثة يومياً على LMINA. شاهد أحدث العروض بجودة عالية وبدون إعلانات.`}
@@ -96,9 +96,10 @@ const CategoryPage = () => {
                 </div>
 
                 {loading && items.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center py-32 sm:py-48">
-                        <div className="w-12 h-12 sm:w-16 sm:h-16 border-[3px] border-red-600 border-t-transparent rounded-full animate-spin"></div>
-                        <p className="mt-6 sm:mt-8 text-gray-500 font-black italic text-[8px] sm:text-[10px] uppercase tracking-[0.4em] animate-pulse">جاري جلب المحتوى...</p>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6 gap-y-10 sm:gap-y-12">
+                        {[...Array(12)].map((_, i) => (
+                            <div key={i} className="aspect-[2/3] bg-white/5 rounded-3xl animate-pulse" />
+                        ))}
                     </div>
                 ) : (
                     <>

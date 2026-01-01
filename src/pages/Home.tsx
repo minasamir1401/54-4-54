@@ -101,7 +101,7 @@ const Home = () => {
   };
 
   return (
-    <div className="bg-[#0a0a0a] min-h-screen pb-20 relative overflow-hidden">
+    <div className="bg-transparent min-h-screen pb-20 relative overflow-hidden">
       <SEO 
         title="الرئيسية | LMINA - منصة المشاهدة الأولى"
         description="شاهد أحدث الأفلام والمسلسلات العربية والأجنبية والتركية بجودة عالية مجاناً على منصة LMINA. تجربة مشاهدة فريدة بدون إعلانات."
@@ -177,6 +177,21 @@ const Home = () => {
               >
                 أعد المحاولة الآن
               </motion.button>
+          </motion.div>
+      ) : content.length === 0 ? (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="h-screen flex flex-col items-center justify-center text-white"
+          >
+              <h2 className="text-3xl font-bold mb-4">لا يوجد محتوى حالياً</h2>
+              <p className="text-gray-400">نواجه مشكلة في العثور على أحدث الأفلام. يرجى المحاولة لاحقاً.</p>
+              <button 
+                onClick={() => window.location.reload()}
+                className="mt-6 bg-red-600 px-8 py-3 rounded-xl font-bold"
+              >
+                تحديث الصفحة
+              </button>
           </motion.div>
       ) : (
           <>

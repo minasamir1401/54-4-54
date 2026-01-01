@@ -56,7 +56,7 @@ const Navbar = () => {
   ======================= */
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 10);
-    window.addEventListener('scroll', onScroll);
+    window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
@@ -90,10 +90,11 @@ const Navbar = () => {
           {/* MOBILE MENU BUTTON */}
           <button
             onClick={() => setIsMenuOpen(prev => !prev)}
+            aria-label={isMenuOpen ? "إغلاق القائمة" : "فتح القائمة"}
             className="xl:hidden text-white text-2xl p-2 rounded-xl
                        border border-white/10 hover:bg-white/10"
           >
-            {isMenuOpen ? <FaTimes /> : <FaBars />}
+            {isMenuOpen ? <FaTimes aria-hidden="true" /> : <FaBars aria-hidden="true" />}
           </button>
 
           {/* SEARCH + USER */}
@@ -104,6 +105,7 @@ const Navbar = () => {
                 value={searchInput}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchInput(e.target.value)}
                 placeholder="بحث..."
+                aria-label="ابحث عن الأفلام والمسلسلات"
                 className={`
                   bg-white/10 border border-white/20 text-sm p-3 rounded-2xl
                   placeholder-gray-400 focus:outline-none focus:border-red-600
@@ -117,18 +119,20 @@ const Navbar = () => {
               <button
                 type="button"
                 onClick={() => setIsSearchActive(true)}
+                aria-label="تفعيل البحث"
                 className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-300"
               >
-                <FaSearch />
+                <FaSearch aria-hidden="true" />
               </button>
 
               {searchInput && (
                 <button
                   type="button"
                   onClick={() => setSearchInput('')}
+                  aria-label="مسح البحث"
                   className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-300"
                 >
-                  <FaTimes />
+                  <FaTimes aria-hidden="true" />
                 </button>
               )}
             </form>
@@ -141,7 +145,12 @@ const Navbar = () => {
           </div>
 
           {/* LOGO - LMINA Text */}
-          <Link to="/" className="flex items-center gap-2 group">
+          <Link 
+            to="/" 
+            aria-label="LMINA - الرئيسية"
+            title="LMINA - العودة للرئيسية"
+            className="flex items-center gap-2 group"
+          >
             <span className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tighter
                            bg-gradient-to-r from-red-600 via-white to-red-600
                            bg-clip-text text-transparent

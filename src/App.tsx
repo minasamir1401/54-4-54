@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from './components/Navbar';
 import ErrorBoundary from './components/ErrorBoundary';
 import Background3D from './components/Background3D';
-import ConnectionFixer from './components/ConnectionFixer';
 
 const Home = lazy(() => import('./pages/Home'));
 const Watch = lazy(() => import('./pages/Watch'));
@@ -19,7 +18,6 @@ const App = () => {
     <div className="bg-transparent min-h-screen selection:bg-red-600/30">
       <Background3D />
       <ErrorBoundary>
-        <ConnectionFixer />
         <Navbar />
         <Suspense fallback={
           <div className="bg-[#0a0a0a] h-screen text-white flex flex-col items-center justify-center">

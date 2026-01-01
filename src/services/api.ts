@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = (import.meta as any).env?.VITE_API_BASE_URL || 
-                     (window.location.port === '5173' ? 'http://localhost:8000' : window.location.origin);
+const API_BASE_URL = (import.meta as any).env.VITE_API_BASE_URL || 'https://navigate-happen-facility-closed.trycloudflare.com';
 console.log('🔗 API connected to:', API_BASE_URL);
 
 export const api = axios.create({

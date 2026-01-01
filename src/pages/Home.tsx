@@ -5,7 +5,7 @@ import MovieCard from '../components/MovieCard';
 import MovieRow from '../components/MovieRow';
 import HistoryRow from '../components/HistoryRow';
 import { fetchLatest, ContentItem } from '../services/api';
-import { FaFire, FaThLarge, FaBolt, FaArrowUp } from 'react-icons/fa';
+import { FaFire, FaThLarge, FaArrowUp } from 'react-icons/fa';
 import SEO from '../components/SEO';
 
 const Home = () => {
@@ -118,6 +118,7 @@ const Home = () => {
           }
         }}
       />
+      
       {/* Full layout starts here - Always visible */}
       <Hero movie={heroMovie} />
       
@@ -283,4 +284,3 @@ const Home = () => {
 };
 
 export default Home;
-

@@ -8,52 +8,83 @@ const ConnectionFixer: React.FC = () => {
     useEffect(() => {
         const checkConnection = async () => {
             try {
-                // Get the actual base URL from axios instance
-                const url = api.defaults.baseURL || '';
+                // Get the actual base URL from axios instance safely
+                const url = api?.defaults?.baseURL || '';
                 setApiUrl(url);
 
                 if (!url || url.includes('localhost') || url.includes('vercel.app')) {
-                    return; // Don't check if local or self-referencing
+                    return;
                 }
 
-                // Let's try a real fetch and catch the error.
-                await fetch(`${url}/health`);
-                setIsBlocked(false);
+                // Use AbortController for timeouts to avoid hanging requests
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+                try {
+                    const response = await fetch(`${url}/health`, { 
+                        method: 'GET',
+                        signal: controller.signal
+                    });
+                    
+                    if (response.ok) {
+                        setIsBlocked(false);
+                    } else {
+                        setIsBlocked(true);
+                    }
+                } catch (e) {
+                    setIsBlocked(true);
+                } finally {
+                    clearTimeout(timeoutId);
+                }
             } catch (error) {
-                console.error("API connection failed. Probable browser block.", error);
-                setIsBlocked(true);
+                console.error("Connection check failed:", error);
             }
         };
 
         checkConnection();
-        // Check every 30 seconds
-        const interval = setInterval(checkConnection, 30000);
+        const interval = setInterval(checkConnection, 15000);
         return () => clearInterval(interval);
     }, []);
 
     if (!isBlocked) return null;
 
     return (
-        <div className="fixed bottom-6 left-6 right-6 z-[9999] md:left-auto md:w-96 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="bg-zinc-900 border border-red-900/50 p-6 rounded-2xl shadow-2xl backdrop-blur-xl">
-                <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-red-600/20 rounded-full flex items-center justify-center flex-shrink-0">
-                        <svg className="w-6 h-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                        </svg>
-                    </div>
-                    <div className="flex-1">
-                        <h3 className="text-white font-bold text-lg mb-1 text-right">المحتوى مخفي؟</h3>
-                        <p className="text-zinc-400 text-sm mb-4 leading-relaxed text-right">
-                            متصفحك يمنع الاتصال بسيرفر الأفلام لأسباب أمنية. اضغط على الزر أدناه ثم اختر "إعدادات متقدمة" ثم "متابعة" لتفعيل المحتوى.
-                        </p>
-                        <button 
-                            onClick={() => window.open(apiUrl, '_blank')}
-                            className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-xl transition-all active:scale-95 shadow-lg shadow-red-600/20"
-                        >
-                            تنشيط السيرفر الآن
-                        </button>
-                    </div>
+        <div style={{
+            position: 'fixed',
+            bottom: '20px',
+            left: '20px',
+            right: '20px',
+            zIndex: 99999,
+            background: '#18181b',
+            padding: '20px',
+            borderRadius: '16px',
+            border: '1px solid #7f1d1d',
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+            direction: 'rtl'
+        }}>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '15px' }}>
+                <div style={{ flex: 1 }}>
+                    <h3 style={{ color: 'white', fontWeight: 'bold', margin: '0 0 5px 0', fontSize: '18px' }}>تنبيه بخصوص المحتوى</h3>
+                    <p style={{ color: '#a1a1aa', fontSize: '14px', margin: '0 0 15px 0', lineHeight: '1.5' }}>
+                        المتصفح يمنع الاتصال بسيرفر الأفلام. لتفعيل المحتوى، اضغط على الزر وافتح الرابط ثم اختر "متابعة".
+                    </p>
+                    <button 
+                        onClick={() => {
+                            if (apiUrl) window.open(apiUrl, '_blank');
+                        }}
+                        style={{
+                            width: '100%',
+                            background: '#e11d48',
+                            color: 'white',
+                            fontWeight: 'bold',
+                            padding: '12px',
+                            borderRadius: '10px',
+                            border: 'none',
+                            cursor: 'pointer'
+                        }}
+                    >
+                        تنشيط الموقع الآن
+                    </button>
                 </div>
             </div>
         </div>

@@ -18,8 +18,8 @@ const App = () => {
   return (
     <div className="bg-transparent min-h-screen selection:bg-red-600/30">
       <Background3D />
-      <ConnectionFixer />
       <ErrorBoundary>
+        <ConnectionFixer />
         <Navbar />
         <Suspense fallback={
           <div className="bg-[#0a0a0a] h-screen text-white flex flex-col items-center justify-center">

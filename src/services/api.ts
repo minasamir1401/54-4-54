@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = (import.meta as any).env.VITE_API_BASE_URL || 'https://navigate-happen-facility-closed.trycloudflare.com';
+const API_BASE_URL = '/api-proxy';
 console.log('🔗 API connected to:', API_BASE_URL);
 
 export const api = axios.create({

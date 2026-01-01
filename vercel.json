@@ -1,3 +1,12 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [
+    {
+      "source": "/api-proxy/:path*",
+      "destination": "https://navigate-happen-facility-closed.trycloudflare.com/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
 }

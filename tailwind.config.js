@@ -6,17 +6,24 @@ export default {
   ],
   theme: {
     extend: {
-      colors: {
-        netflix: {
-          red: '#E50914',
-          black: '#141414',
-          dark: '#0F0F0F',
-          gray: '#E5E5E5'
-        }
-      },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'], 
-      }
+        outfit: ['Outfit', 'sans-serif'],
+        cairo: ['Cairo', 'sans-serif'],
+      },
+      screens: {
+        'xs': '475px',
+        'sm': '640px',
+        'md': '768px',
+        'lg': '1024px',
+        'xl': '1280px',
+        '2xl': '1536px',
+      },
+      spacing: {
+        'safe-top': 'env(safe-area-inset-top)',
+        'safe-bottom': 'env(safe-area-inset-bottom)',
+        'safe-left': 'env(safe-area-inset-left)',
+        'safe-right': 'env(safe-area-inset-right)',
+      },
     },
   },
   plugins: [],

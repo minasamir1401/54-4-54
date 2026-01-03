@@ -58,7 +58,7 @@ const MovieCard = ({ id, title, poster, type, year, rating, movie, isLarge = fal
         {/* Poster Image */}
         <div className="relative w-full h-full overflow-hidden bg-zinc-900">
           <LazyLoadImage
-            alt={finalTitle}
+            alt={`بوستر فيلم ${finalTitle}`}
             src={finalPoster || "https://images.unsplash.com/photo-1594909122845-11baa439b7bf?q=80&w=2070&auto=format&fit=crop"}
             className="object-cover w-full h-full transition-all duration-1000 
                      group-hover:scale-110 group-hover:brightness-50"

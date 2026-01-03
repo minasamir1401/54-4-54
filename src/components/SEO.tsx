@@ -34,8 +34,8 @@ const SEO = ({
   noindex = false,
   structuredData
 }: SEOProps) => {
-  const siteUrl = 'https://lmina.com'; // Replace with your actual domain
-  const fullUrl = url ? `${siteUrl}${url}` : siteUrl;
+  const siteUrl = typeof window !== 'undefined' ? window.location.origin : 'https://lmina.com';
+  const fullUrl = url ? (url.startsWith('http') ? url : `${siteUrl}${url}`) : siteUrl;
   const fullImage = image.startsWith('http') ? image : `${siteUrl}${image}`;
   
   // Full title with brand

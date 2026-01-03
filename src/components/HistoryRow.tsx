@@ -45,9 +45,9 @@ const HistoryRow = () => {
         </button>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+      <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
         {history.slice(0, 6).map((item, index) => (
-          <motion.div
+          <motion.li
             key={item.id}
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -61,7 +61,7 @@ const HistoryRow = () => {
               <div className="relative aspect-[2/3] rounded-xl overflow-hidden mb-3 shadow-lg bg-zinc-900 border border-white/5">
                 <LazyLoadImage 
                   src={item.poster} 
-                  alt={item.title}
+                  alt={`بوستر فيلم ${item.title}`}
                   effect="blur"
                   wrapperClassName="w-full h-full"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
@@ -76,9 +76,9 @@ const HistoryRow = () => {
                 {item.title}
               </h3>
             </Link>
-          </motion.div>
+          </motion.li>
         ))}
-      </div>
+      </ul>
     </div>
   );
 };

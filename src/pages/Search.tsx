@@ -61,12 +61,12 @@ const SearchPage = () => {
         structuredData={breadcrumbSchema}
       />
 
-      <div className="min-h-screen bg-[#0a0a0a] pt-28 px-4 md:px-10">
+      <div className="min-h-screen bg-[#0a0a0a] pt-24 sm:pt-28 px-3 sm:px-4 md:px-10">
         {/* Search Header */}
         <header className="max-w-4xl mx-auto mb-12">
           <div className="flex flex-row-reverse items-center gap-4 mb-8">
              <div className="w-1.5 h-10 bg-red-600 rounded-full shadow-[0_0_15px_rgba(220,38,38,0.5)]"></div>
-             <h1 className="text-3xl md:text-5xl font-black text-white italic tracking-tighter uppercase">
+             <h1 className="text-2xl sm:text-3xl md:text-5xl font-black text-white italic tracking-tighter uppercase">
                {query ? `نتائج البحث: ${query}` : 'محرك البحث'}
              </h1>
           </div>
@@ -78,7 +78,7 @@ const SearchPage = () => {
               value={localQuery}
               onChange={handleSearchChange}
               placeholder="ابحث عن فيلم، مسلسل، أو ممثل..."
-              className="w-full bg-white/5 border border-white/10 text-white text-lg p-5 rounded-[2rem]
+              className="w-full bg-white/5 border border-white/10 text-white text-base sm:text-lg p-4 sm:p-5 rounded-2xl sm:rounded-[2rem]
                        placeholder-gray-500 focus:outline-none focus:border-red-600/50 focus:bg-white/10
                        transition-all duration-500 text-right pr-6 shadow-2xl"
               autoFocus
@@ -127,11 +127,13 @@ const SearchPage = () => {
                 <div className="h-[1px] flex-1 mx-8 bg-gradient-to-l from-white/10 to-transparent"></div>
               </div>
               
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6 md:gap-8">
+              <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-6 md:gap-8">
                 {searchResults.map((item: any) => (
-                  <MovieCard key={item.id} movie={item} />
+                  <li key={item.id}>
+                    <MovieCard movie={item} />
+                  </li>
                 ))}
-              </div>
+              </ul>
             </>
           ) : (
             <div className="text-center py-32">

@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api-proxy/:path*",
-      "destination": "https://routes-police-spider-remaining.trycloudflare.com/:path*"
+      "destination": "https://minaewrw-lmina-api-t.hf.space/:path*"
     },
     {
       "source": "/(.*)",

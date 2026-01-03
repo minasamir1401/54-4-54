@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API_BASE_URL = '/api-proxy';
-console.log('🔗 API connected to:', API_BASE_URL);
+
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
@@ -43,6 +43,7 @@ export interface Episode {
 export interface Server {
     name: string;
     url: string;
+    direct_url?: string;
     type?: 'video' | 'iframe';
 }
 
@@ -59,6 +60,8 @@ export interface Details {
     episodes: Episode[];
     servers: Server[];
     download_links: Download[];
+    recommendations?: ContentItem[];
+    ai_summary?: string;
     current_episode?: {
         id: string;
         title: string;
@@ -69,12 +72,24 @@ export interface Details {
 
 export const getProxyImage = (url: string) => {
   if (!url) return '';
-  // If it's a relative path from the backend, prepend the API base
-  if (url.startsWith('/')) return `${API_BASE_URL}${url}`;
-  // If it's already a full proxied URL, return as is
-  if (url.includes('/proxy/image')) return url;
-  // Fallback: proxy it manually
-  return `${API_BASE_URL}/proxy/image?url=${encodeURIComponent(url)}`;
+  
+  // If it's already a full proxied URL or relative proxy path, return as is
+  if (url.includes('/proxy/image')) {
+    if (url.startsWith('http')) return url;
+    return `${API_BASE_URL}${url.startsWith('/') ? '' : '/'}${url}`;
+  }
+
+  // If it's a relative path from the backend (like /uploads/...)
+  if (url.startsWith('/') && !url.startsWith('http')) {
+    return `${API_BASE_URL}/proxy/image?url=${encodeURIComponent(url)}`;
+  }
+
+  // If it's a full external URL, proxy it
+  if (url.startsWith('http')) {
+    return `${API_BASE_URL}/proxy/image?url=${encodeURIComponent(url)}`;
+  }
+  
+  return url;
 };
 
 export const getProxyDownloadUrl = (url: string, filename: string) => {
@@ -86,15 +101,29 @@ const mapContentItem = (item: ContentItem) => ({
   poster: getProxyImage(item.poster)
 });
 
+// Mock data for fallback
+const MOCK_ITEMS: ContentItem[] = [
+  { id: 'mock-1', title: 'محتوى تجريبي 1', poster: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=500', type: 'movie' },
+  { id: 'mock-2', title: 'محتوى تجريبي 2', poster: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=500', type: 'movie' },
+  { id: 'mock-3', title: 'محتوى تجريبي 3', poster: 'https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=500', type: 'series' },
+  { id: 'mock-4', title: 'محتوى تجريبي 4', poster: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500', type: 'movie' },
+  { id: 'mock-5', title: 'محتوى تجريبي 5', poster: 'https://images.unsplash.com/photo-1542204172-658a09b615c7?w=500', type: 'series' },
+];
+
 export const fetchLatest = async (page: number = 1) => {
   const cacheKey = `latest_${page}`;
   const cached = getCachedData<ContentItem[]>(cacheKey);
   if (cached) return cached;
   
-  const data = (await api.get<ContentItem[]>(`/latest?page=${page}`)).data;
-  const mapped = (Array.isArray(data) ? data : []).map(mapContentItem);
-  setCachedData(cacheKey, mapped);
-  return mapped;
+  try {
+    const data = (await api.get<ContentItem[]>(`/latest?page=${page}`)).data;
+    const mapped = (Array.isArray(data) ? data : []).map(mapContentItem);
+    setCachedData(cacheKey, mapped);
+    return mapped;
+  } catch (error) {
+    console.warn('API Fetch failed, using mock data:', error);
+    return MOCK_ITEMS;
+  }
 };
 
 export const fetchDetails = async (id: string) => {
@@ -102,12 +131,30 @@ export const fetchDetails = async (id: string) => {
   const cached = getCachedData<Details>(cacheKey);
   if (cached) return cached;
   
-  const data = (await api.get<Details>(`/details/${id}`)).data;
-  if (data && data.poster) {
-    data.poster = getProxyImage(data.poster);
+  try {
+    const data = (await api.get<Details>(`/details/${id}`)).data;
+    if (data) {
+      if (data.poster) data.poster = getProxyImage(data.poster);
+      if (data.recommendations) {
+        data.recommendations = data.recommendations.map(mapContentItem);
+      }
+    }
+    setCachedData(cacheKey, data);
+    return data;
+  } catch (error) {
+    console.warn('API Fetch failed for details:', error);
+    // Return a mock detail object if it's a mock ID
+    return {
+      title: 'محتوى تجريبي',
+      description: 'هذا محتوى تجريبي يظهر لأن السيرفر غير متصل حالياً. يرجى المحاولة لاحقاً.',
+      poster: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=800',
+      type: 'movie',
+      episodes: [],
+      servers: [],
+      download_links: [],
+      recommendations: MOCK_ITEMS
+    } as Details;
   }
-  setCachedData(cacheKey, data);
-  return data;
 };
 
 export const searchContent = async (query: string) => {
@@ -115,10 +162,14 @@ export const searchContent = async (query: string) => {
   const cached = getCachedData<ContentItem[]>(cacheKey);
   if (cached) return cached;
   
-  const data = (await api.get<ContentItem[]>(`/search?q=${query}`)).data;
-  const mapped = (Array.isArray(data) ? data : []).map(mapContentItem);
-  setCachedData(cacheKey, mapped);
-  return mapped;
+  try {
+    const data = (await api.get<ContentItem[]>(`/search?q=${query}`)).data;
+    const mapped = (Array.isArray(data) ? data : []).map(mapContentItem);
+    setCachedData(cacheKey, mapped);
+    return mapped;
+  } catch (error) {
+    return MOCK_ITEMS.filter(item => item.title.includes(query));
+  }
 };
 
 export const fetchByCategory = async (catId: string, page: number = 1) => {
@@ -126,13 +177,99 @@ export const fetchByCategory = async (catId: string, page: number = 1) => {
   const cached = getCachedData<ContentItem[]>(cacheKey);
   if (cached) return cached;
   
-  const data = (await api.get<ContentItem[]>(`/category/${catId}?page=${page}`)).data;
-  const mapped = (Array.isArray(data) ? data : []).map(mapContentItem);
-  setCachedData(cacheKey, mapped);
-  return mapped;
+  try {
+    const data = (await api.get<ContentItem[]>(`/category/${catId}?page=${page}`)).data;
+    const mapped = (Array.isArray(data) ? data : []).map(mapContentItem);
+    setCachedData(cacheKey, mapped);
+    return mapped;
+  } catch (error) {
+    return MOCK_ITEMS;
+  }
+};
+
+export interface UserStatus {
+  id: string;
+  points: number;
+  watch_time_total: number;
+  is_fan: number;
+  ad_free_until: number;
+  referrer_id: string;
+}
+
+export const initUser = async (userId?: string, referrerId?: string) => {
+  try {
+    return (await api.post<UserStatus>('/user/init', null, {
+      params: { user_id: userId, referrer_id: referrerId }
+    })).data;
+  } catch (error) {
+    return { id: userId || 'guest', points: 0, watch_time_total: 0, is_fan: 0, ad_free_until: 0, referrer_id: '' };
+  }
+};
+
+export const trackWatchTime = async (userId: string, minutes: number = 5) => {
+  try {
+    return (await api.post('/user/watch', null, {
+      params: { user_id: userId, minutes }
+    })).data;
+  } catch (error) {
+    return { success: false };
+  }
+};
+
+export const redeemReward = async (userId: string, rewardType: 'ad_free' | 'fan_badge') => {
+  try {
+    return (await api.post('/user/redeem', null, {
+      params: { user_id: userId, reward_type: rewardType }
+    })).data;
+  } catch (error) {
+    return { success: false };
+  }
+};
+
+export const getUserStatus = async (userId: string) => {
+  try {
+    return (await api.get<UserStatus>(`/user/status/${userId}`)).data;
+  } catch (error) {
+    return { id: userId, points: 0, watch_time_total: 0, is_fan: 0, ad_free_until: 0, referrer_id: '' };
+  }
+};
+
+export interface Comment {
+  id: number;
+  content_id: string;
+  user_id: string;
+  text: string;
+  created_at: string;
+  is_fan: number;
+}
+
+export const getComments = async (contentId: string) => {
+  try {
+    return (await api.get<Comment[]>(`/comments/${contentId}`)).data;
+  } catch (error) {
+    return [];
+  }
+};
+
+export const postComment = async (userId: string, contentId: string, text: string) => {
+  try {
+    return (await api.post('/comments', null, {
+      params: { user_id: userId, content_id: contentId, text }
+    })).data;
+  } catch (error) {
+    return { success: false };
+  }
 };
 
 export const fetchDownloadInfo = async (url: string) => {
-  return (await api.get(`/download/info?url=${encodeURIComponent(url)}`)).data;
+    try {
+        return (await api.get('/downloader', { params: { url } })).data;
+    } catch (error) {
+        console.error('Downloader API failed:', error);
+        return {
+            error: 'خدمة التحميل غير متوفرة حالياً. جرب لاحقاً.',
+            formats: []
+        };
+    }
 };
 

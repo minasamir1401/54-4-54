@@ -16,7 +16,7 @@ const MovieRow = memo(({ title, catId }: MovieRowProps) => {
     const [hasFetched, setHasFetched] = useState(false);
     const [showLeftButton, setShowLeftButton] = useState(false);
     const [showRightButton, setShowRightButton] = useState(true);
-    const scrollRef = useRef<HTMLDivElement>(null);
+    const scrollRef = useRef<HTMLUListElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -145,34 +145,34 @@ const MovieRow = memo(({ title, catId }: MovieRowProps) => {
                 </button>
 
                 {/* Scrollable container with improved spacing */}
-                <div 
-                    ref={scrollRef}
-                    aria-label={`قائمة ${title}`}
-                    className="flex overflow-x-auto gap-3 md:gap-5 px-4 md:px-0 
-                             scrollbar-hide scroll-smooth pb-8
-                             snap-x snap-mandatory group/row"
-                    style={{
-                        scrollbarWidth: 'none',
-                        msOverflowStyle: 'none',
-                        WebkitOverflowScrolling: 'touch'
-                    }}
-                >
-                    {(Array.isArray(items) ? items : []).map((item, index) => (
-                        <div 
-                            key={item.id} 
-                            className="flex-shrink-0 w-[140px] sm:w-[180px] md:w-[220px] lg:w-[250px]
-                                     snap-start
-                                     transition-all duration-500 ease-out
-                                     group-hover/row:opacity-40 hover:!opacity-100
-                                     hover:scale-105 hover:z-10"
-                            style={{
-                                animationDelay: `${index * 50}ms`
-                            }}
-                        >
-                            <MovieCard movie={item} />
-                        </div>
-                    ))}
-                </div>
+                    <ul 
+                        ref={scrollRef}
+                        aria-label={`قائمة ${title}`}
+                        className="flex overflow-x-auto gap-3 md:gap-5 px-4 md:px-0 
+                                 scrollbar-hide scroll-smooth pb-8
+                                 snap-x snap-mandatory group/row"
+                        style={{
+                            scrollbarWidth: 'none',
+                            msOverflowStyle: 'none',
+                            WebkitOverflowScrolling: 'touch'
+                        }}
+                    >
+                        {(Array.isArray(items) ? items : []).map((item, index) => (
+                            <li 
+                                key={item.id} 
+                                className="flex-shrink-0 w-[140px] sm:w-[180px] md:w-[220px] lg:w-[250px]
+                                         snap-start
+                                         transition-all duration-500 ease-out
+                                         group-hover/row:opacity-40 hover:!opacity-100
+                                         hover:scale-105 hover:z-10"
+                                style={{
+                                    animationDelay: `${index * 50}ms`
+                                }}
+                            >
+                                <MovieCard movie={item} />
+                            </li>
+                        ))}
+                    </ul>
 
                 {/* Gradient overlays for visual depth */}
                 <div className="absolute top-0 bottom-8 left-0 w-12 md:w-20 

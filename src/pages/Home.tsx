@@ -16,6 +16,15 @@ const Home = () => {
   const [page, setPage] = useState(1);
   const [loadingMore, setLoadingMore] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [kidsMode, setKidsMode] = useState(localStorage.getItem('kidsMode') === 'true');
+
+  useEffect(() => {
+    const handleKidsChange = () => {
+      setKidsMode(localStorage.getItem('kidsMode') === 'true');
+    };
+    window.addEventListener('kidsModeChange', handleKidsChange);
+    return () => window.removeEventListener('kidsModeChange', handleKidsChange);
+  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -128,7 +137,7 @@ const Home = () => {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="px-4 sm:px-6 md:px-12 mb-12 sm:mb-16 md:mb-20 space-y-12 sm:space-y-16 md:space-y-24"
+            className="px-3 sm:px-6 md:px-12 mb-10 sm:mb-16 md:mb-20 space-y-10 sm:space-y-16 md:space-y-24"
           >
               <HistoryRow />
               
@@ -149,22 +158,32 @@ const Home = () => {
                 </div>
               )}
 
-              <MovieRow title="مسلسلات رمضان 2025" catId="ramadan-2025" />
-              <MovieRow title="أفلام أجنبية" catId="english-movies" />
-              <MovieRow title="أفلام عربية" catId="arabic-movies" />
-              <MovieRow title="مسلسلات عربية" catId="arabic-series" />
-              <MovieRow title="مسلسلات تركية" catId="turkish-series" />
-              <MovieRow title="أفلام هندية" catId="indian-movies" />
-              <MovieRow title="أفلام تركية" catId="turkish-movies" />
-              <MovieRow title="مسلسلات اجنبية" catId="english-series" />
-              <MovieRow title="أفلام آسيوية" catId="asian-movies" />
-              <MovieRow title="أفلام أنمي" catId="anime-movies" />
-              <MovieRow title="أفلام مدبلجة" catId="dubbed-movies" />
-              <MovieRow title="مسلسلات هندية" catId="indian-series" />
-              <MovieRow title="مسلسلات آسياوية" catId="asian-series" />
-              <MovieRow title="مسلسلات أنمي" catId="anime-series" />
-              <MovieRow title="برامج تلفزيون" catId="tv-programs" />
-              <MovieRow title="مسرحيات" catId="plays" />
+              {kidsMode ? (
+                <>
+                  <MovieRow title="أفلام أنمي" catId="anime-movies" />
+                  <MovieRow title="مسلسلات أنمي" catId="anime-series" />
+                  <MovieRow title="أفلام مدبلجة" catId="dubbed-movies" />
+                </>
+              ) : (
+                <>
+                  <MovieRow title="مسلسلات رمضان 2025" catId="ramadan-2025" />
+                  <MovieRow title="أفلام أجنبية" catId="english-movies" />
+                  <MovieRow title="أفلام عربية" catId="arabic-movies" />
+                  <MovieRow title="مسلسلات عربية" catId="arabic-series" />
+                  <MovieRow title="مسلسلات تركية" catId="turkish-series" />
+                  <MovieRow title="أفلام هندية" catId="indian-movies" />
+                  <MovieRow title="أفلام تركية" catId="turkish-movies" />
+                  <MovieRow title="مسلسلات اجنبية" catId="english-series" />
+                  <MovieRow title="أفلام آسيوية" catId="asian-movies" />
+                  <MovieRow title="أفلام أنمي" catId="anime-movies" />
+                  <MovieRow title="أفلام مدبلجة" catId="dubbed-movies" />
+                  <MovieRow title="مسلسلات هندية" catId="indian-series" />
+                  <MovieRow title="مسلسلات آسياوية" catId="asian-series" />
+                  <MovieRow title="مسلسلات أنمي" catId="anime-series" />
+                  <MovieRow title="برامج تلفزيون" catId="tv-programs" />
+                  <MovieRow title="مسرحيات" catId="plays" />
+                </>
+              )}
            </motion.div>
 
           {/* Main Grid Feed */}
@@ -172,18 +191,18 @@ const Home = () => {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="px-4 sm:px-6 md:px-12"
+            className="px-3 sm:px-6 md:px-12"
           >
               {/* Section Header */}
               <div className="relative mb-10 sm:mb-12 md:mb-16 overflow-hidden rounded-3xl">
                   <div className="absolute inset-0 bg-gradient-to-r from-red-600/10 via-red-500/5 to-transparent blur-3xl" />
-                  <div className="relative bg-gradient-to-br from-white/[0.03] to-white/[0.01] p-8 sm:p-10 
+                  <div className="relative bg-gradient-to-br from-white/[0.03] to-white/[0.01] p-6 sm:p-10 
                                 border border-white/10 backdrop-blur-xl
                                 hover:border-red-600/30 transition-all duration-500">
                       <div className="flex flex-row-reverse items-center justify-between">
                           <div className="text-right">
                               <div className="flex items-center justify-end gap-4 mb-3">
-                                  <h2 className="text-white text-3xl sm:text-4xl md:text-5xl font-black italic tracking-tighter">
+                                  <h2 className="text-white text-2xl sm:text-4xl md:text-5xl font-black italic tracking-tighter">
                                       استكشف المزيد
                                   </h2>
                                   <motion.div
@@ -211,24 +230,24 @@ const Home = () => {
               </div>
 
               {/* Content Grid */}
-              <motion.div 
+              <motion.ul 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.6, delay: 0.6 }}
                 className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 
-                         gap-4 sm:gap-6 gap-y-10 sm:gap-y-12"
+                         gap-3 sm:gap-6 gap-y-8 sm:gap-y-12"
               >
                   {content.map((item, index) => (
-                      <motion.div
+                      <motion.li
                         key={item.id}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.4, delay: index * 0.05 }}
                       >
                         <MovieCard movie={item} />
-                      </motion.div>
+                      </motion.li>
                   ))}
-              </motion.div>
+              </motion.ul>
 
               {/* Load More Indicator */}
               <div ref={observerTarget} className="h-40 sm:h-60 flex flex-col items-center justify-center mt-16 sm:mt-24">
@@ -275,10 +294,6 @@ const Home = () => {
         )}
       </AnimatePresence>
 
-      {/* Decorative Background Glows */}
-      <div className="fixed top-0 right-0 w-[600px] h-[600px] bg-red-600/5 blur-[200px] pointer-events-none -z-10 rounded-full animate-pulse" />
-      <div className="fixed bottom-0 left-0 w-[600px] h-[600px] bg-red-600/5 blur-[200px] pointer-events-none -z-10 rounded-full animate-pulse" style={{ animationDelay: '1s' }} />
-      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-red-600/3 blur-[250px] pointer-events-none -z-10 rounded-full" />
     </div>
   );
 };

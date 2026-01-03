@@ -75,14 +75,14 @@ const CategoryPage = () => {
     }, [items, loading, loadingMore, page, catId]);
 
     return (
-        <div className="min-h-screen bg-transparent pt-24 sm:pt-32 pb-12 sm:pb-20 px-4 sm:px-6 md:px-12">
+        <div className="min-h-screen bg-transparent pt-20 sm:pt-28 md:pt-32 pb-8 sm:pb-20 px-3 sm:px-4 md:px-12">
             <SEO 
                 title={`${categoryTitle} - شاهد بجودة عالية`}
                 description={`استعرض قائمة ${categoryTitle} المحدثة يومياً على LMINA. شاهد أحدث العروض بجودة عالية وبدون إعلانات.`}
                 url={`/category/${catId}`}
             />
             <div className="max-w-[1920px] mx-auto">
-                <div className="flex flex-col md:flex-row-reverse items-center justify-between mb-8 sm:mb-16 gap-6 sm:gap-8 bg-white/[0.02] p-6 sm:p-10 rounded-[1.5rem] sm:rounded-[2.5rem] border border-white/5 shadow-3xl backdrop-blur-xl relative overflow-hidden group">
+                <div className="flex flex-col md:flex-row-reverse items-center justify-between mb-8 sm:mb-16 gap-6 sm:gap-8 bg-white/[0.02] p-6 sm:p-10 rounded-2xl sm:rounded-[2.5rem] border border-white/5 shadow-3xl backdrop-blur-xl relative overflow-hidden group">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-red-600/5 rounded-full blur-[100px] -z-10"></div>
                     <div className="text-right relative z-10">
                         <h1 className="text-red-600 text-[8px] sm:text-[10px] font-black uppercase tracking-[0.4em] mb-2 sm:mb-4">اكتشف الآن</h1>
@@ -96,18 +96,20 @@ const CategoryPage = () => {
                 </div>
 
                 {loading && items.length === 0 ? (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6 gap-y-10 sm:gap-y-12">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-6 gap-y-8 sm:gap-y-12">
                         {[...Array(12)].map((_, i) => (
                             <div key={i} className="aspect-[2/3] bg-white/5 rounded-3xl animate-pulse" />
                         ))}
                     </div>
                 ) : (
                     <>
-                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6 gap-y-10 sm:gap-y-12">
+                        <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-6 gap-y-8 sm:gap-y-12">
                             {items.map((item) => (
-                                <MovieCard key={item.id} movie={item} />
+                                <li key={item.id}>
+                                    <MovieCard movie={item} />
+                                </li>
                             ))}
-                        </div>
+                        </ul>
 
                         <div ref={observerTarget} className="h-40 sm:h-60 flex flex-col items-center justify-center mt-12 sm:mt-20">
                             {loadingMore && (

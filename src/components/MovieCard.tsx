@@ -36,9 +36,9 @@ const MovieCard = ({ id, title, poster, type, year, rating, movie, isLarge = fal
 
   return (
     <Link 
-      to={`/watch/${encodeURIComponent(finalId)}`} 
+      to={finalType === 'course' ? `/course/${encodeURIComponent(finalId)}` : `/watch/${encodeURIComponent(finalId)}`} 
       className="block group"
-      aria-label={`مشاهدة ${finalTitle}`}
+      aria-label={`شاهد ${finalTitle}`}
     >
       <motion.div 
         className={`relative cursor-pointer rounded-3xl overflow-hidden
@@ -47,8 +47,8 @@ const MovieCard = ({ id, title, poster, type, year, rating, movie, isLarge = fal
         whileHover={{ 
           scale: 1.05, 
           zIndex: 50,
-          boxShadow: "0 0 30px 10px rgba(220, 38, 38, 0.2)",
-          borderColor: "rgba(220, 38, 38, 0.4)"
+          boxShadow: "0 0 30px 10px rgba(245, 158, 11, 0.2)",
+          borderColor: "rgba(245, 158, 11, 0.4)"
         }}
         transition={{ 
           duration: 0.4,
@@ -85,7 +85,7 @@ const MovieCard = ({ id, title, poster, type, year, rating, movie, isLarge = fal
           {finalType && (
             <div className="bg-black/40 backdrop-blur-xl px-3 py-1.5 rounded-2xl border border-white/10 flex items-center gap-2 group-hover:opacity-0 transition-opacity">
                <span className="text-[10px] font-bold uppercase tracking-wider text-gray-300">
-                {finalType === 'series' ? 'Series' : 'Movie'}
+                {finalType === 'series' ? 'Series' : finalType === 'course' ? 'Course' : 'Movie'}
               </span>
             </div>
           )}

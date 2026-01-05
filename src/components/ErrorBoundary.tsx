@@ -28,8 +28,8 @@ class ErrorBoundary extends Component<Props, State> {
     if (this.state.hasError) {
       return (
         <div className="min-h-screen bg-[#060606] text-white flex flex-col items-center justify-center p-8 text-center">
-            <div className="w-24 h-24 bg-red-600/10 rounded-full flex items-center justify-center mb-10 border border-red-600/20">
-               <FaExclamationTriangle className="text-red-600 text-4xl" />
+            <div className="w-24 h-24 bg-amber-600/10 rounded-full flex items-center justify-center mb-10 border border-amber-600/20">
+               <FaExclamationTriangle className="text-amber-600 text-4xl" />
             </div>
             <h2 className="text-3xl font-black italic mb-4 tracking-tighter">عذراً، حدث خطأ غير متوقع</h2>
             <p className="text-gray-500 max-w-sm mb-12 text-sm font-medium leading-relaxed">
@@ -44,13 +44,13 @@ class ErrorBoundary extends Component<Props, State> {
                 </button>
                 <button 
                   onClick={() => window.location.href = '/'} 
-                  className="bg-red-600 hover:bg-red-700 text-white font-bold py-4 rounded-2xl transition-all shadow-xl shadow-red-600/20"
+                  className="bg-amber-600 hover:bg-amber-700 text-white font-bold py-4 rounded-2xl transition-all shadow-xl shadow-amber-600/20"
                 >
                   العودة للرئيسية
                 </button>
             </div>
             {this.state.error && (
-              <pre className="mt-8 p-4 bg-black/50 text-red-400 text-left text-xs overflow-auto max-w-full rounded-lg">
+              <pre className="mt-8 p-4 bg-black/50 text-amber-400 text-left text-xs overflow-auto max-w-full rounded-lg">
                 {this.state.error.toString()}
               </pre>
             )}

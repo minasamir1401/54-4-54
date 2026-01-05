@@ -58,6 +58,10 @@ export interface Details {
     poster: string;
     type: 'movie' | 'series';
     episodes: Episode[];
+    seasons?: {
+        number: number;
+        episodes: Episode[];
+    }[];
     servers: Server[];
     download_links: Download[];
     recommendations?: ContentItem[];
@@ -68,6 +72,25 @@ export interface Details {
     };
     error?: string;
     message?: string;
+}
+
+export interface Lesson {
+    id: string;
+    title: string;
+    index: number;
+    duration?: string;
+    completed?: boolean;
+}
+
+export interface CourseDetails {
+    id: string;
+    title: string;
+    description: string;
+    instructor: string;
+    lessons: Lesson[];
+    type: 'course';
+    progress_percentage?: number;
+    completed_count?: number;
 }
 
 export const getProxyImage = (url: string) => {
@@ -143,7 +166,6 @@ export const fetchDetails = async (id: string) => {
     return data;
   } catch (error) {
     console.warn('API Fetch failed for details:', error);
-    // Return a mock detail object if it's a mock ID
     return {
       title: 'محتوى تجريبي',
       description: 'هذا محتوى تجريبي يظهر لأن السيرفر غير متصل حالياً. يرجى المحاولة لاحقاً.',
@@ -270,6 +292,66 @@ export const fetchDownloadInfo = async (url: string) => {
             error: 'خدمة التحميل غير متوفرة حالياً. جرب لاحقاً.',
             formats: []
         };
+    }
+};
+
+// --- Course API Methods ---
+
+export const fetchLatestCourses = async (page: number = 1) => {
+    try {
+        const data = (await api.get<ContentItem[]>(`/courses/latest?page=${page}`)).data;
+        return (Array.isArray(data) ? data : []).map(mapContentItem);
+    } catch (error) {
+        return [];
+    }
+};
+
+export const fetchCoursesByCategory = async (catId: string, page: number = 1) => {
+    try {
+        const response = await api.get<ContentItem[]>(`/courses/category/${catId}?page=${page}`);
+        const data = response.data;
+        return (Array.isArray(data) ? data : []).map(mapContentItem);
+    } catch (error: any) {
+        console.error(`Fetch category ${catId} failed:`, error.message);
+        throw error; // Throw so UI shows error state
+    }
+};
+
+export const searchCourses = async (query: string) => {
+    try {
+        const data = (await api.get<ContentItem[]>(`/courses/search?q=${query}`)).data;
+        return (Array.isArray(data) ? data : []).map(mapContentItem);
+    } catch (error) {
+        return [];
+    }
+};
+
+export const fetchCourseDetails = async (id: string, userId?: string) => {
+    try {
+        const data = (await api.get<CourseDetails>(`/courses/details/${id}`, {
+            params: { user_id: userId }
+        })).data;
+        return data;
+    } catch (error) {
+        return null;
+    }
+};
+
+export const fetchLessonVideo = async (lessonId: string) => {
+    try {
+        return (await api.get<{ video_url: string }>(`/courses/lesson/${lessonId}`)).data;
+    } catch (error) {
+        return { video_url: '' };
+    }
+};
+
+export const updateCourseProgress = async (userId: string, courseId: string, lessonId: string, completed: number = 1) => {
+    try {
+        return (await api.post('/user/course/progress', null, {
+            params: { user_id: userId, course_id: courseId, lesson_id: lessonId, completed }
+        })).data;
+    } catch (error) {
+        return { success: false };
     }
 };
 

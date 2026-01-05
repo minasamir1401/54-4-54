@@ -65,7 +65,7 @@ const SearchPage = () => {
         {/* Search Header */}
         <header className="max-w-4xl mx-auto mb-12">
           <div className="flex flex-row-reverse items-center gap-4 mb-8">
-             <div className="w-1.5 h-10 bg-red-600 rounded-full shadow-[0_0_15px_rgba(220,38,38,0.5)]"></div>
+             <div className="w-1.5 h-10 bg-amber-500 rounded-full shadow-[0_0_15px_rgba(245,158,11,0.5)]"></div>
              <h1 className="text-2xl sm:text-3xl md:text-5xl font-black text-white italic tracking-tighter uppercase">
                {query ? `نتائج البحث: ${query}` : 'محرك البحث'}
              </h1>
@@ -79,11 +79,11 @@ const SearchPage = () => {
               onChange={handleSearchChange}
               placeholder="ابحث عن فيلم، مسلسل، أو ممثل..."
               className="w-full bg-white/5 border border-white/10 text-white text-base sm:text-lg p-4 sm:p-5 rounded-2xl sm:rounded-[2rem]
-                       placeholder-gray-500 focus:outline-none focus:border-red-600/50 focus:bg-white/10
+                        placeholder-gray-500 focus:outline-none focus:border-amber-500/50 focus:bg-white/10
                        transition-all duration-500 text-right pr-6 shadow-2xl"
               autoFocus
             />
-            <div className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-red-500 transition-colors">
+            <div className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-amber-500 transition-colors">
                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                </svg>
@@ -95,15 +95,15 @@ const SearchPage = () => {
         <section className="max-w-7xl mx-auto pb-20">
           {isLoading ? (
             <div className="flex flex-col justify-center items-center py-32 gap-6">
-              <div className="w-16 h-16 border-4 border-red-600/20 border-t-red-600 rounded-full animate-spin" />
+              <div className="w-16 h-16 border-4 border-amber-500/20 border-t-amber-500 rounded-full animate-spin" />
               <p className="text-gray-500 font-black italic text-xs tracking-widest uppercase animate-pulse">جاري البحث عن العظماء...</p>
             </div>
           ) : isError ? (
-            <div className="text-center py-20 bg-red-600/5 rounded-[2rem] border border-red-600/10">
-              <p className="text-red-500 text-xl font-bold">عذراً، حدث خطأ ما أثناء البحث</p>
+            <div className="text-center py-20 bg-amber-600/5 rounded-[2rem] border border-amber-600/10">
+              <p className="text-amber-500 text-xl font-bold">عذراً، حدث خطأ ما أثناء البحث</p>
               <button 
                 onClick={() => window.location.reload()}
-                className="mt-6 bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-xl font-black transition-all"
+                className="mt-6 bg-amber-600 hover:bg-amber-700 text-black px-8 py-3 rounded-xl font-black transition-all"
               >
                 إعادة المحاولة
               </button>
@@ -128,10 +128,17 @@ const SearchPage = () => {
               </div>
               
               <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-6 md:gap-8">
-                {searchResults.map((item: any) => (
-                  <li key={item.id}>
-                    <MovieCard movie={item} />
-                  </li>
+                {(searchResults || [])
+                  .filter((item: any) => {
+                    const kidsMode = localStorage.getItem('kidsMode') === 'true';
+                    if (!kidsMode) return true;
+                    const title = item.title.toLowerCase();
+                    return ['كرتون', 'انمي', 'مدبلج', 'اطفال', 'anime', 'cartoon', 'kids', 'مغامرات'].some(k => title.includes(k));
+                  })
+                  .map((item: any) => (
+                    <li key={item.id}>
+                      <MovieCard movie={item} />
+                    </li>
                 ))}
               </ul>
             </>

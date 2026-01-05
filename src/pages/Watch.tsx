@@ -23,7 +23,18 @@ const Watch = () => {
   const [showShield, setShowShield] = useState(true);
   const [shieldActive, setShieldActive] = useState(false);
   const [lightsOff, setLightsOff] = useState(false);
+  const [activeSeason, setActiveSeason] = useState<number | null>(null);
+  const [kidsMode, setKidsMode] = useState(localStorage.getItem('kidsMode') === 'true');
   const { user, refreshStatus } = useUser();
+
+  // Listen to Kids Mode changes
+  useEffect(() => {
+    const handleKidsChange = () => {
+      setKidsMode(localStorage.getItem('kidsMode') === 'true');
+    };
+    window.addEventListener('kidsModeChange', handleKidsChange);
+    return () => window.removeEventListener('kidsModeChange', handleKidsChange);
+  }, []);
 
   // Watch Time Tracking logic
   useEffect(() => {
@@ -79,6 +90,13 @@ const Watch = () => {
           setData(safeData);
           if (safeData.servers.length > 0) {
               setActiveServer(safeData.servers[0]);
+          }
+
+          // Set initial season if multiple exist
+          if (safeData.seasons && safeData.seasons.length > 0) {
+             // Try to find which season the current episode belongs to
+             const currentSeason = safeData.seasons.find(s => s.episodes.some(e => e.id === targetId));
+             setActiveSeason(currentSeason?.number || safeData.seasons[0].number);
           }
 
           // Save to History
@@ -194,7 +212,7 @@ const Watch = () => {
               <div className="flex-1 space-y-6">
                   <div className="relative aspect-video bg-black/50 rounded-3xl overflow-hidden shadow-2xl border border-white/10 animate-pulse" style={{ minHeight: '300px' }}>
                       <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="w-16 h-16 border-4 border-red-600/30 border-t-transparent rounded-full animate-spin"></div>
+                          <div className="w-16 h-16 border-4 border-amber-600/30 border-t-transparent rounded-full animate-spin"></div>
                       </div>
                   </div>
 
@@ -243,14 +261,14 @@ const Watch = () => {
 
   if (error || !data) return (
     <div className="min-h-screen bg-transparent text-white flex flex-col items-center justify-center p-8 text-center">
-        <FaExclamationTriangle className="text-red-600 text-5xl mb-6" />
+        <FaExclamationTriangle className="text-amber-500 text-5xl mb-6" />
         <h2 className="text-2xl font-bold mb-4">حدث خطأ</h2>
         <p className="text-gray-400 mb-8 max-w-md">{error || "تعذّر تحميل المحتوى"}</p>
         <div className="flex gap-4">
              <button onClick={() => id && fetchData(id)} className="flex items-center gap-2 bg-white/10 hover:bg-white/20 px-6 py-3 rounded-xl font-bold transition-all">
                 <FaRedo /> إعادة المحاولة
              </button>
-             <button onClick={() => navigate('/')} className="bg-red-600 hover:bg-red-700 px-6 py-3 rounded-xl font-bold transition-all">
+             <button onClick={() => navigate('/')} className="bg-amber-600 hover:bg-amber-700 text-black px-6 py-3 rounded-xl font-bold transition-all">
                 الرئيسية
              </button>
         </div>
@@ -306,8 +324,8 @@ const Watch = () => {
                   <div className="relative aspect-video bg-black rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border border-white/10 group" style={{ minHeight: '200px' }}>
                       {serverLoading && (
                           <div className="absolute inset-0 z-20 bg-black/80 flex flex-col items-center justify-center">
-                              <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin mb-4"></div>
-                              <p className="text-xs font-bold text-red-500 uppercase tracking-widest">
+                              <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+                              <p className="text-xs font-bold text-amber-500 uppercase tracking-widest">
                                   {activeServer ? `جاري الاتصال بـ ${activeServer.name}` : 'جاري التحضير...'}
                               </p>
                           </div>
@@ -338,8 +356,8 @@ const Watch = () => {
                                                       setShieldActive(true);
                                                   }}
                                               >
-                                                  <div className="w-20 h-20 bg-red-600 rounded-full flex items-center justify-center shadow-2xl shadow-red-600/40 group-hover/shield:scale-110 transition-transform duration-500">
-                                                      <FaTv className="text-3xl text-white ml-1" />
+                                                  <div className="w-20 h-20 bg-amber-500 rounded-full flex items-center justify-center shadow-2xl shadow-amber-500/40 group-hover/shield:scale-110 transition-transform duration-500">
+                                                      <FaTv className="text-3xl text-black ml-1" />
                                                   </div>
                                                   <p className="mt-6 text-white font-black italic text-xl tracking-tighter uppercase">اضغط لبدء المشاهدة الآمنة</p>
                                                   <p className="mt-2 text-white/40 text-xs font-bold uppercase tracking-widest">نظام حماية من الإعلانات المنبثقة مفعل</p>
@@ -407,7 +425,7 @@ const Watch = () => {
                   <div className="bg-zinc-900/50 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-white/5" style={{ minHeight: '120px' }}>
                       <div className="flex items-center justify-between mb-4">
                           <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">سيرفرات المشاهدة</span>
-                          <FaTv className="text-red-500" />
+                           <FaTv className="text-amber-500" />
                       </div>
                       <ul className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-3 md:grid-cols-4 gap-2">
                           {data.servers.map((srv, idx) => {
@@ -431,9 +449,9 @@ const Watch = () => {
                                               }}
                                               className={`w-full p-2 sm:p-3 rounded-lg sm:rounded-xl text-[10px] sm:text-xs font-bold transition-all border ${
                                                   isActive 
-                                                    ? 'bg-red-600 border-red-500 text-white' 
+                                                     ? 'bg-amber-500 border-amber-500 text-black shadow-lg shadow-amber-500/20' 
                                                     : isFailed
-                                                        ? 'bg-red-900/10 border-red-900/20 text-red-500 opacity-50 cursor-not-allowed'
+                                                        ? 'bg-amber-900/10 border-amber-900/20 text-amber-500 opacity-50 cursor-not-allowed'
                                                         : 'bg-white/5 border-white/5 text-gray-400 hover:bg-white/10'
                                               }`}
                                               disabled={isFailed}
@@ -453,7 +471,7 @@ const Watch = () => {
                       {/* AI Summary Section */}
                       {data.ai_summary && (
                           <div className="bg-white/5 border border-white/10 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-right">
-                              <h4 className="text-[10px] font-black text-red-500 uppercase tracking-widest mb-2">ملخص ذكي (AI Summary)</h4>
+                               <h4 className="text-[10px] font-black text-amber-500 uppercase tracking-widest mb-2">ملخص ذكي (AI Summary)</h4>
                               <p className="text-sm text-gray-300 italic leading-relaxed">
                                   "{data.ai_summary}"
                               </p>
@@ -462,70 +480,104 @@ const Watch = () => {
 
                       <p className="text-gray-400 leading-relaxed text-sm">{data.description}</p>
                       
-                      {/* Recommendations Sidebar / Grid */}
-                      {data.recommendations && data.recommendations.length > 0 && (
-                          <div className="mt-12">
-                              <h3 className="text-xl font-black mb-6 text-right flex items-center justify-end gap-3">
-                                  قد يعجبك أيضاً
-                                  <div className="w-1 h-6 bg-red-600 rounded-full" />
-                              </h3>
-                              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-                                  {data.recommendations.map((rec) => (
-                                      <div 
-                                          key={rec.id} 
-                                          onClick={() => navigate(`/watch/${rec.id}`)}
-                                          className="cursor-pointer group relative aspect-[2/3] rounded-xl overflow-hidden shadow-lg hover:ring-2 hover:ring-red-600 transition-all duration-300"
-                                      >
-                                          <img src={rec.poster} alt={rec.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                                          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-3 flex flex-col justify-end">
-                                              <p className="text-[10px] font-bold truncate text-white">{rec.title}</p>
-                                          </div>
-                                      </div>
-                                  ))}
-                              </div>
-                          </div>
-                      )}
-                      
-                     {/* Better Download Section - Show all download links immediately */}
-                  {data.download_links && data.download_links.length > 0 && (
-                      <div className="bg-gradient-to-br from-zinc-900 to-black rounded-xl sm:rounded-[2rem] p-4 sm:p-8 border border-white/10 shadow-2xl overflow-hidden relative group">
-                          <div className="absolute top-0 right-0 w-32 h-32 bg-red-600/5 blur-3xl rounded-full"></div>
-                          
-                          <div className="flex items-center justify-between mb-8 relative z-10">
-                              <div className="flex items-center gap-3">
-                                  <div className="w-10 h-10 bg-red-600/20 rounded-xl flex items-center justify-center border border-red-600/30">
-                                      <FaDownload className="text-red-500 text-sm" />
-                                  </div>
-                                  <h3 className="text-lg font-black italic tracking-tighter text-white uppercase">روابط التحميل المباشر</h3>
-                              </div>
-                          </div>
-
-                          <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 relative z-10">
-                              {data.download_links.map((dl, i) => (
-                                  <li key={i}>
-                                      <a 
-                                          href={dl.url} 
-                                          target="_blank" 
-                                          rel="noreferrer" 
-                                          className="flex items-center justify-between p-4 rounded-2xl w-full
-                                                     bg-white/5 border border-white/10 hover:bg-red-600/10 hover:border-red-600/30
-                                                     transition-all duration-300 group/btn"
-                                      >
-                                          <span className="text-gray-400 group-hover/btn:text-red-500 transition-colors">
-                                              <FaDownload className="text-xs" />
-                                          </span>
-                                          <div className="text-right">
-                                              <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-0.5 group-hover/btn:text-red-500/50 transition-colors">جودة عالية</p>
-                                              <p className="text-sm font-bold text-white group-hover/btn:text-white transition-colors">
-                                                  {dl.quality || 'Link'}
-                                              </p>
-                                          </div>
-                                      </a>
-                                  </li>
-                              ))}
-                          </ul>
-                      </div>
-                  )}
+                                {/* Recommendations Sidebar / Grid */}
+                                {data.recommendations && data.recommendations.length > 0 && (
+                                    <div className={`mt-12 p-6 rounded-[2.5rem] transition-all duration-500 ${kidsMode ? 'bg-white border-4 border-dashed border-blue-200 shadow-xl relative overflow-hidden' : ''}`}>
+                                        {kidsMode && (
+                                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 via-pink-400 to-yellow-400 animate-rainbow-flow bg-[length:200%_auto]"></div>
+                                        )}
+                                        <h3 className={`text-xl font-black mb-6 text-right flex items-center justify-end gap-3 ${kidsMode ? 'text-indigo-600 animate-bounce-slow' : 'text-white'}`}>
+                                            {kidsMode ? 'مغامرات ممتعة لك ✨' : 'قد يعجبك أيضاً'}
+                                            <div className={`w-1 h-6 rounded-full ${kidsMode ? 'bg-pink-400' : 'bg-indigo-600'}`} />
+                                        </h3>
+                                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
+                                            {data.recommendations
+                                                .filter(rec => {
+                                                    if (!kidsMode) return true;
+                                                    const title = rec.title.toLowerCase();
+                                                    const keywords = ['كرتون', 'انمي', 'مدبلج', 'اطفال', 'باربي', 'ديزني', 'سبيستون', 'نتورك', 'anime', 'cartoon', 'kids', 'dubbed', 'مغامرات'];
+                                                    return keywords.some(k => title.includes(k));
+                                                })
+                                                .slice(0, 10)
+                                                .map((rec) => (
+                                                <div 
+                                                    key={rec.id} 
+                                                    onClick={() => navigate(`/watch/${rec.id}`)}
+                                                    className={`cursor-pointer group relative aspect-[2/3] rounded-[2rem] overflow-hidden transition-all duration-500 transform hover:scale-105 active:scale-95 ${
+                                                        kidsMode 
+                                                        ? 'border-4 border-white shadow-lg bg-indigo-50 hover:rotate-2' 
+                                                        : 'shadow-lg hover:ring-2 hover:ring-indigo-600'
+                                                    }`}
+                                                >
+                                                    <img src={rec.poster} alt={rec.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                                                    <div className={`absolute inset-0 bg-gradient-to-t via-transparent to-transparent transition-opacity p-4 flex flex-col justify-end ${kidsMode ? 'from-white/95' : 'from-black'}`}>
+                                                        <p className={`font-black truncate ${kidsMode ? 'text-indigo-700 text-sm' : 'text-white text-[10px]'}`}>{rec.title}</p>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                       
+                    {/* Better Download Section - Show all download links immediately */}
+                    {data.download_links && data.download_links.length > 0 && (
+                        <div className={`rounded-[3rem] p-8 sm:p-12 border transition-all duration-500 relative overflow-hidden group ${
+                            kidsMode 
+                            ? 'bg-white border-blue-100 shadow-2xl' 
+                            : 'bg-gradient-to-br from-amber-900/40 to-black border-amber-500/20 shadow-amber-500/10'
+                        }`}>
+                            {kidsMode && (
+                                <div className="absolute -top-10 -right-10 w-40 h-40 bg-pink-100 rounded-full blur-3xl opacity-50 animate-pulse"></div>
+                            )}
+                            <div className="flex items-center justify-between mb-10 relative z-10">
+                                <div className="flex items-center gap-5">
+                                    <div className={`w-14 h-14 rounded-3xl flex items-center justify-center border-4 transition-all duration-500 ${
+                                        kidsMode 
+                                        ? 'bg-blue-400 border-white shadow-lg animate-bounce' 
+                                        : 'bg-amber-600/20 border-amber-600/30'
+                                    }`}>
+                                        <FaDownload className={`${kidsMode ? 'text-white text-2xl' : 'text-amber-400 text-lg'}`} />
+                                    </div>
+                                    <h3 className={`text-2xl font-black italic tracking-tighter uppercase ${kidsMode ? 'text-blue-500' : 'text-amber-100'}`}>
+                                        {kidsMode ? 'حفظ المغامرة 🎈' : 'روابط التحميل المباشر'}
+                                    </h3>
+                                </div>
+                            </div>
+ 
+                            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
+                                {data.download_links.map((dl, i) => (
+                                    <li key={i}>
+                                        <a 
+                                            href={dl.url} 
+                                            target="_blank" 
+                                            rel="noreferrer" 
+                                            className={`flex items-center justify-between p-6 rounded-[2rem] w-full transition-all duration-300 group/btn border-4 ${
+                                                kidsMode 
+                                                ? 'bg-blue-50 border-white hover:bg-pink-50 hover:border-pink-200 hover:scale-105 shadow-md' 
+                                                : 'bg-amber-950/20 border-white/5 hover:bg-amber-600/10 hover:border-amber-600/30 hover:-translate-y-1'
+                                            }`}
+                                        >
+                                            <span className={`transition-colors ${kidsMode ? 'text-blue-400' : 'text-amber-400 group-hover/btn:text-amber-300'}`}>
+                                                <FaDownload className={`${kidsMode ? 'text-xl' : 'text-xs'}`} />
+                                            </span>
+                                            <div className="text-right">
+                                                <p className={`text-[10px] font-black uppercase tracking-widest mb-1 transition-colors ${
+                                                    kidsMode ? 'text-pink-400' : 'text-amber-500/50 group-hover/btn:text-amber-400'
+                                                }`}>
+                                                    {kidsMode ? 'جودة مدهشة' : 'تحميل مباشر'}
+                                                </p>
+                                                <p className={`text-lg font-black transition-colors ${
+                                                    kidsMode ? 'text-blue-600' : 'text-white group-hover/btn:text-amber-100'
+                                                }`}>
+                                                    {dl.quality || 'Link'}
+                                                </p>
+                                            </div>
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
 
                   {/* Comments System */}
                   {id && (
@@ -543,9 +595,28 @@ const Watch = () => {
                              className="w-full p-4 flex items-center justify-between text-right bg-white/5 hover:bg-white/10"
                           >
                              <span className="text-xs font-bold text-gray-400">قائمة الحلقات ({data.episodes.length})</span>
-                             <FaListUl className="text-red-500" />
+                             <FaListUl className="text-amber-500" />
                           </button>
                           
+                          {/* Season Tabs */}
+                          {data.seasons && data.seasons.length > 1 && (
+                              <div className="flex overflow-x-auto p-2 gap-2 bg-black/20 border-b border-white/5 custom-scrollbar">
+                                  {data.seasons.map(s => (
+                                      <button
+                                          key={s.number}
+                                          onClick={() => setActiveSeason(s.number)}
+                                          className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-tighter transition-all flex-shrink-0 border ${
+                                              activeSeason === s.number 
+                                              ? 'bg-amber-500 border-amber-500 text-black shadow-lg shadow-amber-500/20' 
+                                              : 'bg-white/5 border-white/5 text-gray-500 hover:bg-white/10'
+                                          }`}
+                                      >
+                                          الجزء {s.number}
+                                      </button>
+                                  ))}
+                              </div>
+                          )}
+
                           {(showEpisodes || window.innerWidth > 1024) && (
                               <ul className="max-h-[500px] overflow-y-auto p-2 space-y-2 custom-scrollbar">
                                   {(() => {
@@ -554,7 +625,13 @@ const Watch = () => {
                                           const m = String(ep.title).match(/\d+/);
                                           return m ? parseInt(m[0]) : 0;
                                       };
-                                      return [...data.episodes]
+                                      
+                                      // Filter episodes by active season if it exists
+                                      const displayEpisodes = data.seasons && activeSeason 
+                                          ? data.seasons.find(s => s.number === activeSeason)?.episodes || data.episodes
+                                          : data.episodes;
+
+                                      return [...displayEpisodes]
                                           .sort((a, b) => getEpNo(b) - getEpNo(a))
                                           .map(ep => {
                                               const isActive = ep.id === id;
@@ -565,7 +642,7 @@ const Watch = () => {
                                                           onClick={() => navigate(`/watch/${ep.id}`)}
                                                           className={`w-full p-4 rounded-xl flex flex-row-reverse items-center gap-4 text-right transition-all border ${
                                                               isActive 
-                                                              ? 'bg-red-600 border-red-500 text-white shadow-xl shadow-red-600/20' 
+                                                              ? 'bg-amber-500 border-amber-500 text-black shadow-xl shadow-amber-500/20' 
                                                               : 'bg-white/[0.03] border-white/5 text-gray-400 hover:bg-white/10'
                                                           }`}
                                                       >
@@ -599,7 +676,7 @@ const Watch = () => {
       <style>{`
           ${lightsOff ? `
               main { position: relative; z-index: 70; }
-              .aspect-video { box-shadow: 0 0 100px rgba(220, 38, 38, 0.4); border: 1px solid rgba(220, 38, 38, 0.5) !important; }
+              .aspect-video { box-shadow: 0 0 100px rgba(245, 158, 11, 0.4); border: 1px solid rgba(245, 158, 11, 0.5) !important; }
               header, nav, .sidebar, .info-section { opacity: 0.1; pointer-events: none; transition: all 1s; }
           ` : ''}
       `}</style>

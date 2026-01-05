@@ -41,6 +41,42 @@ const SEO = ({
   // Full title with brand
   const fullTitle = title.includes('LMINA') ? title : `${title} | LMINA`;
   
+  // Default Structured Data for AI
+  const defaultStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": fullTitle,
+    "description": description,
+    "url": fullUrl,
+    "publisher": {
+      "@type": "Organization",
+      "name": "LMINA",
+      "logo": {
+        "@type": "ImageObject",
+        "url": `${siteUrl}/logo.png`
+      }
+    }
+  };
+
+  const breadcrumbData = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "الرئيسية",
+        "item": siteUrl
+      },
+      url ? {
+        "@type": "ListItem",
+        "position": 2,
+        "name": title,
+        "item": fullUrl
+      } : null
+    ].filter(Boolean)
+  };
+
   return (
     <Helmet>
       {/* Basic Meta Tags */}
@@ -52,11 +88,15 @@ const SEO = ({
       {/* Canonical URL */}
       <link rel="canonical" href={canonical || fullUrl} />
       
-      {/* Robots */}
+      {/* Robots & AI Crawlers */}
       {noindex ? (
         <meta name="robots" content="noindex, nofollow" />
       ) : (
-        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+        <>
+          <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+          <meta name="googlebot" content="index, follow" />
+          <meta name="bingbot" content="index, follow" />
+        </>
       )}
       
       {/* Open Graph / Facebook */}
@@ -79,18 +119,25 @@ const SEO = ({
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={fullImage} />
       
-      {/* Additional Meta Tags */}
+      {/* Semantic Tags for AI */}
+      <meta name="theme-color" content="#0a0a0a" />
+      <meta name="mobile-web-app-capable" content="yes" />
+      <meta name="apple-mobile-web-app-title" content="LMINA" />
+      <meta name="application-name" content="LMINA" />
       <meta name="referrer" content="no-referrer-when-downgrade" />
-      <meta httpEquiv="x-ua-compatible" content="ie=edge" />
       
       {/* Language & Geo */}
       <html lang="ar" dir="rtl" />
       <link rel="alternate" href={fullUrl} hrefLang="ar" />
       <link rel="alternate" href={fullUrl} hrefLang="x-default" />
-      <meta name="geo.region" content="EG" />
-      <meta name="geo.placename" content="Cairo" />
       
       {/* Structured Data (JSON-LD) */}
+      <script type="application/ld+json">
+        {JSON.stringify(defaultStructuredData)}
+      </script>
+      <script type="application/ld+json">
+        {JSON.stringify(breadcrumbData)}
+      </script>
       {structuredData && (
         <script type="application/ld+json">
           {JSON.stringify(structuredData)}

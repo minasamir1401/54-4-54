@@ -30,15 +30,15 @@ const HistoryRow = () => {
     <div className="mb-12">
       <div className="flex flex-row-reverse items-center justify-between mb-6">
         <div className="flex flex-row-reverse items-center gap-3">
-          <div className="p-2 bg-red-600/20 rounded-lg">
-            <FaHistory className="text-red-500 text-xl" aria-hidden="true" />
+          <div className="p-2 bg-amber-600/20 rounded-lg">
+            <FaHistory className="text-amber-500 text-xl" aria-hidden="true" />
           </div>
           <h2 className="text-2xl font-bold text-white tracking-tight">تابع المشاهدة</h2>
         </div>
         <button 
           onClick={clearHistory}
           aria-label="مسح سجل المشاهدة"
-          className="text-gray-400 hover:text-red-500 transition-colors flex flex-row-reverse items-center gap-2 text-sm"
+          className="text-gray-400 hover:text-amber-500 transition-colors flex flex-row-reverse items-center gap-2 text-sm"
         >
           <FaTrash size={12} aria-hidden="true" />
           مسح السجل
@@ -68,11 +68,11 @@ const HistoryRow = () => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
                    <div className="w-full h-1 bg-white/20 rounded-full overflow-hidden">
-                      <div className="w-1/2 h-full bg-red-600" />
+                      <div className="w-1/2 h-full bg-amber-600" />
                    </div>
                 </div>
               </div>
-              <h3 className="text-sm font-medium text-gray-200 group-hover:text-red-500 transition-colors line-clamp-2 text-center">
+              <h3 className="text-sm font-medium text-gray-200 group-hover:text-amber-500 transition-colors line-clamp-2 text-center">
                 {item.title}
               </h3>
             </Link>

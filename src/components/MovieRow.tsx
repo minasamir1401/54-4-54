@@ -91,17 +91,15 @@ const MovieRow = memo(({ title, catId }: MovieRowProps) => {
                 {/* Header with modern styling */}
             <div className="flex flex-row-reverse items-center justify-between mb-5 md:mb-7 px-4 md:px-0">
                 <div className="flex flex-row-reverse items-center gap-3">
-                    <div className="w-1 h-8 md:h-10 bg-gradient-to-b from-red-600 to-red-800 rounded-full" />
-                    <h2 className="text-white text-xl md:text-3xl font-black italic tracking-tight
-                                 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]
-                                 transition-all duration-300 group-hover:text-red-500">
+                    <div className="w-1 h-8 md:h-10 bg-gradient-to-b from-amber-600 to-amber-800 rounded-full" />
+                    <h2 className="text-xl md:text-3xl font-black tracking-wide text-white group-hover:text-amber-500 transition-colors duration-300">
                         {title}
                     </h2>
                 </div>
                 <button 
                     onClick={() => navigate(`/category/${catId}`)}
                     className="text-[10px] md:text-xs text-gray-400 font-bold uppercase tracking-widest 
-                                 hover:text-red-500 transition-all duration-300 
+                                 hover:text-amber-500 transition-all duration-300 
                                  hover:scale-105 active:scale-95
                                  px-3 py-1.5 rounded-lg hover:bg-white/5"
                 >
@@ -118,7 +116,7 @@ const MovieRow = memo(({ title, catId }: MovieRowProps) => {
                               bg-gradient-to-r from-black/90 to-transparent
                               px-6 py-4 rounded-r-3xl
                               transition-all duration-300 ease-out
-                              hover:from-red-600/90 hover:to-transparent
+                              hover:from-amber-600/90 hover:to-transparent
                               hidden md:flex items-center
                               backdrop-blur-sm
                               ${showLeftButton ? 'opacity-0 group-hover:opacity-100' : 'opacity-0 pointer-events-none'}`}
@@ -134,7 +132,7 @@ const MovieRow = memo(({ title, catId }: MovieRowProps) => {
                               bg-gradient-to-l from-black/90 to-transparent
                               px-6 py-4 rounded-l-3xl
                               transition-all duration-300 ease-out
-                              hover:from-red-600/90 hover:to-transparent
+                              hover:from-amber-600/90 hover:to-transparent
                               hidden md:flex items-center
                               backdrop-blur-sm
                               ${showRightButton ? 'opacity-0 group-hover:opacity-100' : 'opacity-0 pointer-events-none'}`}

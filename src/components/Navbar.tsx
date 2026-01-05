@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-// Force Refetch of Framer Motion
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   FaSearch,
@@ -17,7 +16,8 @@ import {
   FaCoins,
   FaShareAlt,
   FaTrophy,
-  FaGift
+  FaGift,
+  FaGraduationCap
 } from 'react-icons/fa';
 import { useUser } from '../hooks/useUser';
 import { redeemReward } from '../services/api';
@@ -27,6 +27,7 @@ import { redeemReward } from '../services/api';
 ======================= */
 const navigationLinks = [
   { name: 'الرئيسية', path: '/', icon: <FaHome /> },
+  { name: 'الأكاديمية', path: '/courses', icon: <FaGraduationCap /> },
   { name: 'تحميل فيديوهات', path: '/downloader', icon: <FaFire /> },
 ];
 
@@ -53,7 +54,11 @@ const seriesCategories = [
   { name: 'مسرحيات', path: '/category/plays', icon: <FaTv /> },
 ];
 
-const Navbar = () => {
+interface NavbarProps {
+  onSearch?: (query: string) => void;
+}
+
+const Navbar = ({ onSearch }: NavbarProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchActive, setIsSearchActive] = useState(false);
@@ -65,6 +70,13 @@ const Navbar = () => {
   const { user, refreshStatus, getReferralLink } = useUser();
   const [showRewards, setShowRewards] = useState(false);
   const navigate = useNavigate();
+
+  // Handle unused prop to suppress lint
+  useEffect(() => {
+    if (onSearch) {
+       // Placeholder to use onSearch if needed in future
+    }
+  }, [onSearch]);
 
   const handleVoiceSearch = () => {
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
@@ -93,7 +105,6 @@ const Navbar = () => {
 
   useEffect(() => {
     localStorage.setItem('kidsMode', String(kidsMode));
-    // Dispatch event for other components
     window.dispatchEvent(new Event('kidsModeChange'));
     
     if (kidsMode) {
@@ -122,18 +133,12 @@ const Navbar = () => {
     }
   };
 
-  /* =======================
-     SCROLL EFFECT
-  ======================= */
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 10);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  /* =======================
-     SEARCH
-  ======================= */
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (!searchInput.trim()) return;
@@ -145,21 +150,18 @@ const Navbar = () => {
 
   return (
     <>
-      {/* =======================
-          NAVBAR
-      ======================= */}
-      <nav
-        className={`
-          fixed top-0 left-0 right-0 h-[72px]
-          z-[9999] transition-all duration-300
-          ${isScrolled || isMenuOpen
-            ? 'bg-black/95 backdrop-blur-xl shadow-2xl'
-            : 'bg-gradient-to-b from-black to-transparent'}
-        `}
-      >
+      <nav className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 border-b border-white/5
+      ${isScrolled ? 'h-16 sm:h-20 bg-black/80 backdrop-blur-xl' : 'h-20 sm:h-28 bg-transparent'}`}>
+      
+      {kidsMode && (
+        <>
+          <div className="kids-decor-1 pointer-events-none" />
+          <div className="kids-decor-2 pointer-events-none" />
+        </>
+      )}
+
         <div className="max-w-[1920px] mx-auto h-full px-2 xs:px-4 sm:px-10 md:px-32 flex items-center justify-between gap-2">
 
-          {/* MOBILE MENU BUTTON */}
           <button
             onClick={() => setIsMenuOpen(prev => !prev)}
             aria-label={isMenuOpen ? "إغلاق القائمة" : "فتح القائمة"}
@@ -169,9 +171,8 @@ const Navbar = () => {
             {isMenuOpen ? <FaTimes aria-hidden="true" /> : <FaBars aria-hidden="true" />}
           </button>
 
-          {/* SEARCH + USER + COINS + KIDS */}
           <div className="flex items-center gap-2 xs:gap-3 sm:gap-4 md:gap-8 relative">
-            <form onSubmit={handleSearch} className="relative">
+            <form onSubmit={handleSearch} className="relative hidden lg:block">
               <input
                 type="text"
                 value={searchInput}
@@ -180,7 +181,7 @@ const Navbar = () => {
                 aria-label="ابحث عن الأفلام والمسلسلات"
                 className={`
                   bg-white/10 border border-white/20 text-xs sm:text-sm p-2 sm:p-3 rounded-2xl
-                  placeholder-gray-400 focus:outline-none focus:border-red-600
+                  placeholder-gray-400 focus:outline-none focus:border-amber-500
                   transition-all duration-300 text-right dir-rtl text-white
                   ${isSearchActive
                     ? 'w-32 xs:w-44 sm:w-64 opacity-100 pr-10 sm:pr-12 pl-16 sm:pl-20'
@@ -213,7 +214,7 @@ const Navbar = () => {
                 onClick={handleVoiceSearch}
                 aria-label="بحث صوتي"
                 className={`absolute left-8 top-1/2 -translate-y-1/2 transition-all p-1.5 rounded-full
-                           ${isListening ? 'text-white bg-red-600 animate-pulse' : 'text-gray-300 hover:text-red-500'}
+                           ${isListening ? 'text-white bg-indigo-600 animate-pulse' : 'text-gray-300 hover:text-indigo-400'}
                            ${kidsMode ? 'bg-yellow-400 text-black shadow-lg scale-110' : ''}`}
               >
                 <FaMicrophone aria-hidden="true" />
@@ -221,13 +222,12 @@ const Navbar = () => {
             </form>
 
             <div className={`w-7 h-7 xs:w-8 xs:h-8 sm:w-10 sm:h-10 bg-gradient-to-br
-                            from-red-600 to-red-800 rounded-lg xs:rounded-xl
+                            from-amber-600 to-yellow-500 rounded-lg xs:rounded-xl
                             items-center justify-center shadow-lg shrink-0
                             ${isSearchActive ? 'hidden xs:flex' : 'flex'}`}>
               <FaUser className="text-white text-[10px] xs:text-xs sm:text-sm" />
             </div>
 
-            {/* Meih Coins Display */}
             <div className="flex items-center shrink-0">
               <button
                 onClick={() => setShowRewards(true)}
@@ -243,7 +243,6 @@ const Navbar = () => {
               </button>
             </div>
 
-            {/* Kids Mode Toggle */}
             <button
               onClick={handleToggleKids}
               className={`
@@ -259,31 +258,34 @@ const Navbar = () => {
             </button>
           </div>
 
-          {/* LOGO - LMINA Text */}
           <Link 
             to={kidsMode ? "/category/anime-movies" : "/"} 
             aria-label="LMINA - الرئيسية"
             title="LMINA - العودة للرئيسية"
             className="flex items-center gap-2 group"
           >
-            <span className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tighter
-                           bg-gradient-to-r from-red-600 via-white to-red-600
+            <span className={`text-3xl sm:text-5xl md:text-6xl font-black tracking-tighter
+                           bg-gradient-to-r 
+                           ${kidsMode 
+                             ? 'from-[#FF6B6B] via-[#4ECDC4] via-[#FFE66D] to-[#FF6B6B]' 
+                             : 'from-[#bf953f] via-[#fcf6ba] via-[#b38728] via-[#fcf6ba] to-[#bf953f]'}
+                           bg-[length:200%_auto] 
                            bg-clip-text text-transparent
-                           italic fire-text
-                           select-none drop-shadow-2xl">
+                           italic select-none
+                           animate-shimmer-logo
+                           ${kidsMode ? 'animate-bounce-slow' : 'drop-shadow-[0_0_15px_rgba(184,135,40,0.3)]'}
+                           transition-all duration-500 hover:scale-110 cursor-pointer`}>
               LMINA
             </span>
           </Link>
         </div>
 
-        {/* FLOATING TOP MENU (STYLISH) */}
         <div className="hidden lg:flex justify-center -mt-3">
           <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-full px-8 py-2 
                          shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex items-center">
             <ul className="flex flex-row-reverse items-center justify-center gap-1 
                            text-[11px] font-bold tracking-widest uppercase text-gray-300">
               
-              {/* Static Links */}
               {navigationLinks
                 .filter(_ => !kidsMode)
                 .map(link => (
@@ -292,18 +294,18 @@ const Navbar = () => {
                     to={link.path}
                     className={`px-5 py-2.5 transition-all duration-300 rounded-full flex items-center gap-2
                                ${link.path === '/downloader' 
-                                 ? 'bg-red-600/10 text-red-500 border border-red-600/20 hover:bg-red-600/20' 
+                                 ? 'bg-amber-600/10 text-amber-500 border border-amber-600/20 hover:bg-amber-600/20' 
                                  : 'hover:text-white hover:bg-white/5'}`}
                   >
                     {link.path === '/downloader' && (
                       <span className="relative flex h-2 w-2 mr-1">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
                       </span>
                     )}
                     {link.name}
                     {link.path === '/downloader' && (
-                      <span className="bg-red-600 text-[7px] px-1.5 py-0.5 rounded-sm font-black text-white ml-1 animate-pulse">
+                      <span className="bg-amber-600 text-[7px] px-1.5 py-0.5 rounded-sm font-black text-white ml-1 animate-pulse">
                         NEW
                       </span>
                     )}
@@ -311,14 +313,12 @@ const Navbar = () => {
                 </li>
               ))}
 
-              {/* Minimal Separator */}
               <div className="w-[1px] h-4 bg-white/10 mx-3" />
               
-              {/* Movies Mega Menu Trigger */}
               <li className="group/menu relative">
                 <button className="px-5 py-2.5 flex items-center gap-2 hover:text-white transition-all duration-300 rounded-full hover:bg-white/5 uppercase">
                   الأفلام
-                  <span className="text-[8px] opacity-40 group-hover/menu:rotate-180 group-hover/menu:text-red-500 transition-all duration-500">▼</span>
+                  <span className="text-[8px] opacity-40 group-hover/menu:rotate-180 group-hover/menu:text-amber-500 transition-all duration-500">▼</span>
                 </button>
                 <div className="absolute top-full right-0 pt-5 opacity-0 translate-y-4 pointer-events-none group-hover/menu:opacity-100 group-hover/menu:translate-y-0 group-hover/menu:pointer-events-auto transition-all duration-500 z-50">
                   <div className="bg-black/95 backdrop-blur-3xl border border-white/10 p-6 rounded-[2.5rem] shadow-[0_30px_70px_rgba(0,0,0,0.8)] w-64 grid gap-1">
@@ -327,18 +327,17 @@ const Navbar = () => {
                       .map(cat => (
                       <Link key={cat.path} to={cat.path} className="flex flex-row-reverse items-center justify-between p-3.5 rounded-2xl hover:bg-white/5 transition-all text-sm group/item">
                          <span className="text-gray-400 group-hover/item:text-white font-medium">{cat.name}</span>
-                         <span className="text-gray-600 group-hover/item:text-red-500 transform group-hover/item:scale-110 transition-transform">{cat.icon}</span>
+                         <span className="text-gray-600 group-hover/item:text-amber-500 transform group-hover/item:scale-110 transition-transform">{cat.icon}</span>
                       </Link>
                     ))}
                   </div>
                 </div>
               </li>
 
-              {/* Series Mega Menu Trigger */}
               <li className="group/menu relative">
                 <button className="px-5 py-2.5 flex items-center gap-2 hover:text-white transition-all duration-300 rounded-full hover:bg-white/5 uppercase">
                   المسلسلات
-                  <span className="text-[8px] opacity-40 group-hover/menu:rotate-180 group-hover/menu:text-red-500 transition-all duration-500">▼</span>
+                  <span className="text-[8px] opacity-40 group-hover/menu:rotate-180 group-hover/menu:text-amber-500 transition-all duration-500">▼</span>
                 </button>
                 <div className="absolute top-full right-0 pt-5 opacity-0 translate-y-4 pointer-events-none group-hover/menu:opacity-100 group-hover/menu:translate-y-0 group-hover/menu:pointer-events-auto transition-all duration-500 z-50">
                   <div className="bg-black/95 backdrop-blur-3xl border border-white/10 p-6 rounded-[2.5rem] shadow-[0_30px_70px_rgba(0,0,0,0.8)] w-64 grid gap-1">
@@ -347,7 +346,7 @@ const Navbar = () => {
                       .map(cat => (
                       <Link key={cat.path} to={cat.path} className="flex flex-row-reverse items-center justify-between p-3.5 rounded-2xl hover:bg-white/5 transition-all text-sm group/item">
                          <span className="text-gray-400 group-hover/item:text-white font-medium">{cat.name}</span>
-                         <span className="text-gray-600 group-hover/item:text-red-500 transform group-hover/item:scale-110 transition-transform">{cat.icon}</span>
+                         <span className="text-gray-600 group-hover/item:text-amber-500 transform group-hover/item:scale-110 transition-transform">{cat.icon}</span>
                       </Link>
                     ))}
                   </div>
@@ -358,13 +357,9 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* =======================
-          MOBILE MENU (PREMIUM DRAWER)
-      ======================= */}
       <AnimatePresence>
         {isMenuOpen && (
           <>
-            {/* Backdrop Blur overlay */}
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -383,7 +378,6 @@ const Navbar = () => {
                          border-l border-white/5 shadow-[-20px_0_50px_rgba(0,0,0,0.5)]"
             >
               <div className="p-8 pt-24 space-y-10">
-                {/* Search in Mobile Menu */}
                 <div className="relative group">
                    <form onSubmit={handleSearch}>
                       <input 
@@ -391,13 +385,12 @@ const Navbar = () => {
                         value={searchInput}
                         onChange={(e) => setSearchInput(e.target.value)}
                         placeholder="ابحث عن فيلم أو مسلسل..."
-                        className="w-full bg-white/5 border border-white/10 p-5 rounded-2xl text-white text-right dir-rtl focus:border-red-600 transition-all"
+                        className="w-full bg-white/5 border border-white/10 p-5 rounded-2xl text-white text-right dir-rtl focus:border-amber-500 transition-all"
                       />
-                      <FaSearch className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-red-600" />
+                      <FaSearch className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-amber-500" />
                    </form>
                 </div>
 
-                {/* Kids Mode Toggle - Mobile */}
                 <button
                   onClick={() => {
                     handleToggleKids();
@@ -415,7 +408,6 @@ const Navbar = () => {
                   <span>{kidsMode ? 'إيقاف وضع الأطفال' : 'تشغيل وضع الأطفال'}</span>
                 </button>
 
-                {/* Quick Action Pills */}
                 <ul className="grid grid-cols-2 gap-3">
                     {navigationLinks
                       .filter(_ => !kidsMode)
@@ -425,7 +417,7 @@ const Navbar = () => {
                               to={link.path} 
                               onClick={() => setIsMenuOpen(false)}
                               className={`flex flex-col items-center justify-center p-5 rounded-3xl border border-white/5 transition-all w-full
-                                         ${link.path === '/downloader' ? 'bg-red-600/10 border-red-600/20 text-red-500' : 'bg-white/5 text-white'}`}
+                                         ${link.path === '/downloader' ? 'bg-amber-600/10 border-amber-600/20 text-amber-500' : 'bg-white/5 text-white'}`}
                             >
                                 <span className="text-2xl mb-2">{link.icon}</span>
                                 <span className="text-[10px] font-black uppercase tracking-widest">{link.name}</span>
@@ -434,11 +426,10 @@ const Navbar = () => {
                     ))}
                 </ul>
                 
-                {/* Categories Sections */}
                 <div className="space-y-8">
                     <div>
                         <div className="flex flex-row-reverse items-center gap-3 mb-4 px-2">
-                           <div className="w-1 h-4 bg-red-600 rounded-full" />
+                           <div className="w-1 h-4 bg-amber-600 rounded-full" />
                            <h4 className="text-[10px] font-black uppercase tracking-widest text-gray-500">الأفلام</h4>
                         </div>
                         <div className="grid grid-cols-1 gap-2">
@@ -446,8 +437,8 @@ const Navbar = () => {
                               .filter(cat => !kidsMode || cat.path.includes('anime') || cat.path.includes('dubbed'))
                               .map(cat => (
                                 <Link key={cat.path} to={cat.path} onClick={() => setIsMenuOpen(false)} className="flex flex-row-reverse items-center justify-between p-4 bg-white/[0.03] hover:bg-white/5 rounded-2xl border border-white/5 text-white transition-all group">
-                                    <span className="text-sm font-bold group-hover:text-red-500">{cat.name}</span>
-                                    <span className="text-gray-600 group-hover:text-red-500 group-hover:scale-110 transition-all">{cat.icon}</span>
+                                    <span className="text-sm font-bold group-hover:text-amber-500">{cat.name}</span>
+                                    <span className="text-gray-600 group-hover:text-amber-500 group-hover:scale-110 transition-all">{cat.icon}</span>
                                 </Link>
                             ))}
                         </div>
@@ -455,7 +446,7 @@ const Navbar = () => {
 
                     <div>
                         <div className="flex flex-row-reverse items-center gap-3 mb-4 px-2">
-                           <div className="w-1 h-4 bg-red-600 rounded-full" />
+                           <div className="w-1 h-4 bg-amber-600 rounded-full" />
                            <h4 className="text-[10px] font-black uppercase tracking-widest text-gray-500">المسلسلات</h4>
                         </div>
                         <div className="grid grid-cols-1 gap-2">
@@ -463,15 +454,14 @@ const Navbar = () => {
                               .filter(cat => !kidsMode || cat.path.includes('anime'))
                               .map(cat => (
                                 <Link key={cat.path} to={cat.path} onClick={() => setIsMenuOpen(false)} className="flex flex-row-reverse items-center justify-between p-4 bg-white/[0.03] hover:bg-white/5 rounded-2xl border border-white/5 text-white transition-all group">
-                                    <span className="text-sm font-bold group-hover:text-red-500">{cat.name}</span>
-                                    <span className="text-gray-600 group-hover:text-red-500 group-hover:scale-110 transition-all">{cat.icon}</span>
+                                    <span className="text-sm font-bold group-hover:text-amber-500">{cat.name}</span>
+                                    <span className="text-gray-600 group-hover:text-amber-500 group-hover:scale-110 transition-all">{cat.icon}</span>
                                 </Link>
                             ))}
                         </div>
                     </div>
                 </div>
 
-                {/* Footer Info in Menu */}
                 <div className="pt-10 border-t border-white/5 text-center">
                     <p className="text-[10px] font-bold text-gray-600 uppercase tracking-[0.4em]">LMINA PREMIUM v2.0</p>
                 </div>
@@ -481,7 +471,6 @@ const Navbar = () => {
         )}
       </AnimatePresence>
 
-      {/* Rewards Modal */}
       <AnimatePresence>
         {showRewards && (
           <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
@@ -497,10 +486,7 @@ const Navbar = () => {
               `}
             >
                <div className="text-center mb-8">
-                  <div className={`
-                    w-20 h-20 mx-auto rounded-3xl flex items-center justify-center mb-4
-                    ${kidsMode ? 'bg-orange-400' : 'bg-yellow-500'}
-                  `}>
+                  <div className="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-br from-amber-400 to-yellow-600 flex items-center justify-center mb-4 shadow-xl shadow-amber-500/20">
                     <FaTrophy className="text-white text-4xl" />
                   </div>
                   <h2 className={`text-2xl font-black mb-1 ${kidsMode ? 'text-orange-900' : 'text-white'}`}>تحدي المشاركة والربح</h2>
@@ -605,7 +591,7 @@ const Navbar = () => {
               animate={{ scale: 1, opacity: 1 }}
               className="bg-zinc-900 border border-white/10 p-6 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] max-w-sm w-full text-center overflow-y-auto max-h-[90vh]"
             >
-              <FaLock className="text-red-600 text-4xl mx-auto mb-6" />
+              <FaLock className="text-amber-500 text-4xl mx-auto mb-6" />
               <h3 className="text-xl font-black mb-2 text-white">منطقة الوالدين</h3>
               <p className="text-gray-400 text-sm mb-6">أدخل الرمز الافتراضي (1234) للخروج من وضع الأطفال</p>
               <input 
@@ -614,7 +600,7 @@ const Navbar = () => {
                 value={pinInput}
                 onChange={(e) => setPinInput(e.target.value)}
                 autoFocus
-                className="w-full bg-white/5 border border-white/10 p-4 rounded-2xl text-center text-2xl tracking-[1em] text-white mb-6 focus:border-red-600 outline-none"
+                className="w-full bg-white/5 border border-white/10 p-4 rounded-2xl text-center text-2xl tracking-[1em] text-white mb-6 focus:border-amber-500 outline-none"
               />
               <div className="flex gap-4">
                 <button 
@@ -625,7 +611,7 @@ const Navbar = () => {
                 </button>
                 <button 
                   onClick={verifyPin}
-                  className="flex-1 p-4 rounded-2xl bg-red-600 text-white font-bold"
+                  className="flex-1 p-4 rounded-2xl bg-amber-600 text-black font-bold"
                 >
                   تأكيد
                 </button>
@@ -636,133 +622,152 @@ const Navbar = () => {
       </AnimatePresence>
 
       <style>{`
-        .kids-mode {
-          background-color: #7dd3fc !important;
-          background-image: 
-            radial-gradient(circle at 10% 20%, #ffffff 0%, transparent 20%),
-            radial-gradient(circle at 90% 80%, #ffffff 0%, transparent 20%),
-            radial-gradient(circle at 50% 50%, #ffffff 0%, transparent 30%) !important;
-          background-attachment: fixed !important;
-          color: #0c4a6e !important;
-          font-family: 'Cairo', cursive !important;
-          cursor: url('https://cur.cursors-4u.net/games/gam-4/gam373.cur'), auto !important;
-        }
-        
-        .kids-mode nav {
-          background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #fbbf24 100%) !important;
-          border-bottom: 8px solid #d97706 !important;
-          box-shadow: 0 8px 25px rgba(251, 191, 36, 0.4), inset 0 -4px 0 rgba(217, 119, 6, 0.3) !important;
-          position: relative !important;
-        }
-
-        .kids-mode nav::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          height: 4px;
-          background: linear-gradient(90deg, #ef4444, #f59e0b, #10b981, #3b82f6, #8b5cf6, #ef4444);
-          background-size: 200% 100%;
-          animation: rainbow 3s linear infinite;
-        }
-
-        @keyframes rainbow {
+        @keyframes shimmer-logo {
           0% { background-position: 0% 50%; }
           100% { background-position: 200% 50%; }
         }
 
-        .kids-mode .fire-text {
-          background: linear-gradient(to bottom, #f87171, #dc2626) !important;
+        .animate-shimmer-logo {
+          animation: shimmer-logo 4s linear infinite;
+        }
+
+        .animate-bounce-slow {
+          animation: bounce-slow 3s ease-in-out infinite;
+        }
+
+        @keyframes bounce-slow {
+          0%, 100% { transform: translateY(0) rotate(-2deg); }
+          50% { transform: translateY(-10px) rotate(2deg); }
+        }
+
+        .kids-mode {
+          background-color: #f0f9ff !important;
+          background-image: 
+            linear-gradient(120deg, #f0f9ff 0%, #e0f2fe 50%, #fdf2f8 100%) !important;
+          background-size: 400% 400% !important;
+          animation: bg-gradient-move 15s infinite alternate ease-in-out !important;
+          color: #1e293b !important;
+          font-family: 'Almarai', sans-serif !important;
+          overflow-x: hidden;
+        }
+
+        @keyframes bg-gradient-move {
+          0% { background-position: 0% 50%; }
+          100% { background-position: 100% 50%; }
+        }
+        
+        /* More Floating Decorations */
+        .kids-mode::after {
+          content: '🎈';
+          position: fixed;
+          top: 10%;
+          right: 8%;
+          font-size: 50px;
+          opacity: 0.5;
+          z-index: -1;
+          animation: float-fun 8s infinite ease-in-out;
+        }
+
+        .kids-mode::before {
+          content: '🚀';
+          position: fixed;
+          bottom: 20%;
+          left: 5%;
+          font-size: 60px;
+          opacity: 0.3;
+          z-index: -1;
+          animation: fly-across 20s infinite linear;
+        }
+
+        .kids-decor-1::after {
+          content: '☁️';
+          position: fixed;
+          top: 25%;
+          left: 15%;
+          font-size: 40px;
+          opacity: 0.4;
+          z-index: -1;
+          animation: float-fun 12s infinite ease-in-out reverse;
+        }
+
+        .kids-decor-2::after {
+          content: '🍭';
+          position: fixed;
+          bottom: 10%;
+          right: 15%;
+          font-size: 45px;
+          opacity: 0.4;
+          z-index: -1;
+          animation: sparkle 4s infinite alternate;
+        }
+
+        @keyframes float-fun {
+          0%, 100% { transform: translateY(0) rotate(5deg) scale(1); }
+          50% { transform: translateY(-30px) rotate(-5deg) scale(1.1); }
+        }
+
+        @keyframes fly-across {
+          0% { left: -10%; transform: rotate(45deg); }
+          100% { left: 110%; transform: rotate(45deg); }
+        }
+
+        @keyframes sparkle {
+          0% { transform: scale(1) rotate(0deg); filter: hue-rotate(0deg); }
+          100% { transform: scale(1.2) rotate(15deg); filter: hue-rotate(90deg); }
+        }
+        
+        .kids-mode nav {
+          background: linear-gradient(90deg, #60a5fa, #f472b6, #fbbf24, #60a5fa) !important;
+          background-size: 200% auto !important;
+          animation: rainbow-flow 6s linear infinite !important;
+          border-bottom: 4px solid rgba(255,255,255,0.4) !important;
+          box-shadow: 0 8px 32px rgba(96, 165, 250, 0.2) !important;
+        }
+
+        @keyframes rainbow-flow {
+          0% { background-position: 0% 50%; }
+          100% { background-position: 200% 50%; }
+        }
+
+        .kids-mode .fire-text, .kids-mode .premium-text {
+          background: white !important;
           -webkit-background-clip: text !important;
           color: transparent !important;
-          font-weight: 900 !important;
-          -webkit-text-stroke: 1.5px #ffffff;
           filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.1)) !important;
+          font-weight: 900 !important;
         }
 
         .kids-mode a, .kids-mode button {
-          border-radius: 40px !important;
-          border: 3px solid #fbbf24 !important;
-          background: #38bdf8 !important;
-          color: #ffffff !important;
-          font-weight: 900 !important;
-          box-shadow: 0 4px 0px #0369a1 !important;
-          transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+          border-radius: 20px !important;
+          border: 3px solid white !important;
+          background: rgba(255,255,255,0.9) !important;
+          color: #4338ca !important;
+          font-weight: 800 !important;
+          box-shadow: 0 6px 0px rgba(0,0,0,0.05) !important;
+          transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
         }
 
         .kids-mode a:hover, .kids-mode button:hover {
-          transform: scale(1.05) !important;
-          background: #4ade80 !important;
-          box-shadow: 0 4px 0px #15803d !important;
+          transform: scale(1.1) translateY(-5px) !important;
+          background: #fdf2f8 !important;
+          border-color: #f472b6 !important;
+          color: #be185d !important;
         }
 
         .kids-mode .bg-zinc-900, 
         .kids-mode .bg-white\\/5,
+        .kids-mode .bg-zinc-900\\/50,
         .kids-mode .bg-white\\/\\[0\\.03\\] {
-          background: #fef3c7 !important;
-          border: 3px solid #fbbf24 !important;
-          border-radius: 20px !important;
-          color: #0c4a6e !important;
-          box-shadow: 0 4px 0px #d97706 !important;
-        }
-
-        @media (min-width: 768px) {
-          .kids-mode .bg-zinc-900, 
-          .kids-mode .bg-white\\/5,
-          .kids-mode .bg-white\\/\\[0\\.03\\] {
-            border: 6px solid #fbbf24 !important;
-            border-radius: 30px !important;
-            box-shadow: 0 6px 0px #d97706 !important;
-          }
-        }
-
-        .kids-mode .relative.aspect-video,
-        .kids-mode .relative.aspect-\\[2\\/3\\] {
-          border-radius: 40px !important;
-          border: 6px solid #fbbf24 !important;
-          box-shadow: 0 10px 20px rgba(0,0,0,0.2) !important;
-        }
-
-        .kids-mode input {
-          background: #e0f2fe !important;
-          border: 4px solid #fbbf24 !important;
-          color: #0c4a6e !important;
+          background: #fff !important;
+          border: 4px solid #fde68a !important; /* Pastel Yellow border */
+          border-radius: 30px !important;
+          color: #1e293b !important;
+          box-shadow: 0 10px 0px #fef3c7 !important;
         }
 
         .kids-mode h1, .kids-mode h2, .kids-mode h3 {
-          color: #be123c !important;
-          -webkit-text-stroke: 1px #fbbf24;
-        }
-
-        .kids-mode p, .kids-mode span, .kids-mode div {
-          color: #0c4a6e !important;
-        }
-
-        .kids-mode .text-gray-300,
-        .kids-mode .text-gray-400,
-        .kids-mode .text-gray-500,
-        .kids-mode .text-gray-600 {
-          color: #0c4a6e !important;
-        }
-
-        .kids-mode input::placeholder {
-          color: #38bdf8 !important;
-          opacity: 1 !important;
-        }
-
-        /* Fun Animations */
-        @keyframes bounce-slow {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-10px); }
-        }
-        .kids-mode .animate-bounce {
-          animation: bounce-slow 2s infinite ease-in-out !important;
-        }
-
-        .kids-mode .lg\\:hidden.fixed.bg-black\\/95 {
-          background: #bae6fd !important;
-          border-right: 15px solid #fbbf24 !important;
+          color: #4338ca !important;
+          font-weight: 900 !important;
         }
       `}</style>
     </>

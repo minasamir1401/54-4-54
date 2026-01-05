@@ -11,7 +11,7 @@ const Hero = ({ movie }: HeroProps) => {
 
   if (!movie) return (
     <div className="h-[75vh] md:h-[92vh] bg-[#050505] flex items-center justify-center">
-        <div className="w-10 h-10 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-10 h-10 border-2 border-amber-600 border-t-transparent rounded-full animate-spin"></div>
     </div>
   );
 
@@ -48,8 +48,8 @@ const Hero = ({ movie }: HeroProps) => {
               transition={{ duration: 0.6, delay: 0.1 }}
             >
                <div className="flex flex-row-reverse items-center justify-center md:justify-start gap-4 mb-6">
-                  <span className="flex items-center gap-2 bg-white/5 backdrop-blur-2xl border border-white/10 px-4 py-1.5 rounded-full text-[10px] uppercase font-bold tracking-widest text-red-500">
-                    <span className="w-2 h-2 bg-red-600 rounded-full animate-pulse" /> الأكثر شهرة الآن
+                  <span className="flex items-center gap-2 bg-white/5 backdrop-blur-2xl border border-white/10 px-4 py-1.5 rounded-full text-[10px] uppercase font-bold tracking-widest text-amber-500">
+                    <span className="w-2 h-2 bg-amber-600 rounded-full animate-pulse" /> الأكثر شهرة الآن
                   </span>
                   <div className="flex flex-row-reverse items-center gap-1 text-yellow-500 font-outfit text-sm font-bold">
                       <FaStar size={14} aria-hidden="true" /> {movie.rating || '8.5'}
@@ -69,16 +69,16 @@ const Hero = ({ movie }: HeroProps) => {
                   <button 
                     onClick={() => navigate(`/watch/${movie.id}`)}
                     aria-label={`مشاهدة ${movie.title} الآن`}
-                    className="flex flex-row-reverse items-center bg-white text-black px-6 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold hover:bg-red-600 hover:text-white transition-all duration-500 transform hover:scale-105 text-sm sm:text-base"
+                    className="flex flex-row-reverse items-center bg-white text-black px-6 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold hover:bg-amber-500 hover:text-black transition-all duration-500 transform hover:scale-105 text-sm sm:text-base"
                   >
-                    <FaPlay className="ml-2 sm:ml-3" aria-hidden="true" /> شاهد الآن
+                    <FaPlay className="ml-2 sm:ml-3" aria-hidden="true" /> مشاهدة
                   </button>
                   <button 
                     onClick={() => navigate(`/watch/${movie.id}`)}
                     aria-label={`عرض تفاصيل ${movie.title}`}
-                    className="flex flex-row-reverse items-center bg-white/5 backdrop-blur-3xl text-white border border-white/10 px-6 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold hover:bg-white/10 transition-all duration-500 text-sm sm:text-base"
+                    className="flex flex-row-reverse items-center bg-white/10 text-white backdrop-blur-md px-6 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold hover:bg-white/20 transition-all duration-300 text-sm sm:text-base border border-white/10"
                   >
-                    <FaInfoCircle className="ml-2 sm:ml-3 text-red-600" aria-hidden="true" /> التفاصيل
+                    <FaInfoCircle className="ml-2 sm:ml-3 text-amber-600" aria-hidden="true" /> التفاصيل
                   </button>
                </div>
             </motion.div>

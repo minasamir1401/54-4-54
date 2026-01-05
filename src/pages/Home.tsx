@@ -146,13 +146,13 @@ const Home = () => {
                 <div className="flex flex-col items-center justify-center py-10 text-center">
                   {loading ? (
                     <div className="flex items-center gap-3 text-gray-500 font-bold italic">
-                      <div className="w-5 h-5 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+                      <div className="w-5 h-5 border-2 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
                       تحديث المكتبة...
                     </div>
                   ) : (
-                    <div className="bg-red-900/10 border border-red-500/20 p-4 rounded-2xl">
-                      <p className="text-red-500 font-bold mb-2">{error}</p>
-                      <button onClick={() => window.location.reload()} className="text-white text-xs bg-red-600 px-4 py-1 rounded-full">إعادة محاولة</button>
+                    <div className="bg-amber-900/10 border border-amber-500/20 p-4 rounded-2xl">
+                      <p className="text-amber-500 font-bold mb-2">{error}</p>
+                      <button onClick={() => window.location.reload()} className="text-black text-xs bg-amber-500 px-4 py-1 rounded-full hover:bg-amber-400 font-bold">إعادة محاولة</button>
                     </div>
                   )}
                 </div>
@@ -195,10 +195,10 @@ const Home = () => {
           >
               {/* Section Header */}
               <div className="relative mb-10 sm:mb-12 md:mb-16 overflow-hidden rounded-3xl">
-                  <div className="absolute inset-0 bg-gradient-to-r from-red-600/10 via-red-500/5 to-transparent blur-3xl" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 via-yellow-500/5 to-transparent blur-3xl" />
                   <div className="relative bg-gradient-to-br from-white/[0.03] to-white/[0.01] p-6 sm:p-10 
                                 border border-white/10 backdrop-blur-xl
-                                hover:border-red-600/30 transition-all duration-500">
+                                hover:border-amber-500/30 transition-all duration-500">
                       <div className="flex flex-row-reverse items-center justify-between">
                           <div className="text-right">
                               <div className="flex items-center justify-end gap-4 mb-3">
@@ -212,7 +212,7 @@ const Home = () => {
                                     }}
                                     transition={{ duration: 2, repeat: Infinity }}
                                   >
-                                    <FaFire className="text-4xl sm:text-5xl text-red-600 drop-shadow-2xl" />
+                                    <FaFire className="text-4xl sm:text-5xl text-amber-500 drop-shadow-2xl" />
                                   </motion.div>
                               </div>
                               <p className="text-gray-400 text-xs sm:text-sm font-bold tracking-wide">
@@ -221,9 +221,9 @@ const Home = () => {
                           </div>
                           <div className="hidden sm:flex items-center gap-3 bg-black/60 px-6 py-3 
                                         rounded-2xl border border-white/10 shadow-xl backdrop-blur-sm
-                                        hover:bg-red-600/20 hover:border-red-600/50 transition-all duration-300 cursor-pointer">
+                                        hover:bg-amber-600/20 hover:border-amber-500/50 transition-all duration-300 cursor-pointer">
                               <span className="text-sm text-white font-black italic">عرض الكل</span>
-                              <FaThLarge className="text-red-500" />
+                              <FaThLarge className="text-amber-500" />
                           </div>
                       </div>
                   </div>
@@ -237,7 +237,13 @@ const Home = () => {
                 className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 
                          gap-3 sm:gap-6 gap-y-8 sm:gap-y-12"
               >
-                  {content.map((item, index) => (
+                  {content
+                    .filter(item => {
+                      if (!kidsMode) return true;
+                      const title = item.title.toLowerCase();
+                      return ['كرتون', 'انمي', 'مدبلج', 'اطفال', 'anime', 'cartoon', 'kids', 'مغامرات'].some(k => title.includes(k));
+                    })
+                    .map((item, index) => (
                       <motion.li
                         key={item.id}
                         initial={{ opacity: 0, y: 20 }}
@@ -262,7 +268,7 @@ const Home = () => {
                               <motion.div
                                 animate={{ rotate: 360 }}
                                 transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                                className="w-16 h-16 border-4 border-red-600 border-t-transparent rounded-full shadow-2xl shadow-red-600/50"
+                                className="w-16 h-16 border-4 border-amber-500 border-t-transparent rounded-full shadow-2xl shadow-amber-500/50"
                               />
                               <p className="text-gray-400 font-black italic text-sm uppercase tracking-widest">
                                   نحضر لك المزيد...
@@ -284,10 +290,10 @@ const Home = () => {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={scrollToTop}
-            className="fixed bottom-8 left-8 z-50 bg-gradient-to-br from-red-600 to-red-700 
-                     text-white p-4 rounded-full shadow-2xl shadow-red-600/50
-                     border-2 border-white/20 backdrop-blur-sm
-                     hover:shadow-red-600/70 transition-all duration-300"
+            className="fixed bottom-8 left-8 z-50 bg-gradient-to-br from-amber-500 to-yellow-600 
+                     text-black p-4 rounded-full shadow-2xl shadow-amber-500/50
+                     border-2 border-black/20 backdrop-blur-sm
+                     hover:shadow-amber-500/70 transition-all duration-300"
           >
             <FaArrowUp className="text-xl" />
           </motion.button>

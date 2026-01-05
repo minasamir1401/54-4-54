@@ -78,7 +78,7 @@ const CommentsSystem = ({ contentId }: Props) => {
   return (
     <div className={`mt-8 sm:mt-12 p-4 sm:p-6 rounded-2xl sm:rounded-[2.5rem] border ${isKidsMode ? 'bg-orange-50 border-orange-200' : 'bg-white/5 border-white/10 shadow-2xl backdrop-blur-xl'}`}>
       <div className="flex items-center gap-3 mb-8">
-        <FaCommentAlt className={isKidsMode ? 'text-orange-500 text-2xl' : 'text-red-600 text-xl'} />
+        <FaCommentAlt className={isKidsMode ? 'text-orange-500 text-2xl' : 'text-amber-500 text-xl'} />
         <h3 className={`text-lg sm:text-xl font-black ${isKidsMode ? 'text-orange-900' : 'text-white'}`}>التعليقات</h3>
         <span className={`px-3 py-0.5 rounded-full text-xs font-bold ${isKidsMode ? 'bg-orange-200 text-orange-800' : 'bg-white/10 text-gray-400'}`}>
           {comments.length}
@@ -96,7 +96,7 @@ const CommentsSystem = ({ contentId }: Props) => {
             w-full p-4 sm:p-5 pr-5 sm:pr-6 pl-14 sm:pl-16 rounded-xl sm:rounded-[1.5rem] outline-none transition-all resize-none h-20 sm:h-24 text-sm sm:text-base
             ${isKidsMode 
               ? 'bg-white border-4 border-orange-200 focus:border-orange-400 text-orange-900 placeholder-orange-300' 
-              : 'bg-black/40 border border-white/10 focus:border-red-600 text-white placeholder-gray-500'}
+              : 'bg-black/40 border border-white/10 focus:border-amber-600 text-white placeholder-gray-500'}
           `}
         />
         <button
@@ -106,7 +106,7 @@ const CommentsSystem = ({ contentId }: Props) => {
             absolute left-3 sm:left-4 bottom-3 sm:bottom-4 p-2.5 sm:p-3 rounded-xl sm:rounded-2xl transition-all
             ${isKidsMode 
               ? 'bg-orange-500 text-white shadow-lg hover:scale-110 active:scale-95' 
-              : 'bg-red-600 text-white hover:bg-red-700 shadow-[0_0_20px_rgba(220,38,38,0.3)]'}
+              : 'bg-amber-600 text-white hover:bg-amber-700 shadow-[0_0_20px_rgba(217,119,6,0.3)]'}
             disabled:opacity-50 disabled:scale-100
           `}
         >

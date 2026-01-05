@@ -58,7 +58,7 @@ const InstallPrompt = () => {
         >
           <div className="bg-black/90 backdrop-blur-2xl border border-white/10 p-6 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative overflow-hidden group">
             {/* Background Glow */}
-            <div className="absolute -top-10 -right-10 w-32 h-32 bg-red-600/20 blur-3xl rounded-full group-hover:bg-red-600/30 transition-all duration-500" />
+            <div className="absolute -top-10 -right-10 w-32 h-32 bg-amber-600/20 blur-3xl rounded-full group-hover:bg-amber-600/30 transition-all duration-500" />
             
             <button 
               onClick={handleClose}
@@ -69,7 +69,7 @@ const InstallPrompt = () => {
             </button>
 
             <div className="flex flex-row-reverse items-start gap-5">
-              <div className="w-16 h-16 bg-gradient-to-br from-red-600 to-red-800 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-red-600/20">
+              <div className="w-16 h-16 bg-gradient-to-br from-amber-600 to-amber-800 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-amber-600/20">
                 <img src="/favicon.png" alt="LMINA Logo" className="w-10 h-10 object-contain" />
               </div>
               
@@ -82,7 +82,7 @@ const InstallPrompt = () => {
                 <div className="flex flex-row-reverse items-center gap-3">
                   <button
                     onClick={handleInstall}
-                    className="flex-1 bg-white text-black py-3 rounded-xl font-bold text-sm hover:bg-red-600 hover:text-white transition-all duration-300 flex items-center justify-center gap-2"
+                    className="flex-1 bg-white text-black py-3 rounded-xl font-bold text-sm hover:bg-amber-600 hover:text-white transition-all duration-300 flex items-center justify-center gap-2"
                   >
                     <FaDownload className="text-xs" />
                     تثبيت الآن

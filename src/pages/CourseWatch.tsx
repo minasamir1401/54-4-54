@@ -66,17 +66,17 @@ const CourseWatch = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-black flex items-center justify-center">
-                <div className="w-16 h-16 border-4 border-amber-500 border-t-transparent rounded-full animate-spin" />
+            <div className="min-h-screen bg-deep-slate-900 flex items-center justify-center">
+                <div className="w-16 h-16 border-4 border-ice-mint border-t-transparent rounded-full animate-spin" />
             </div>
         );
     }
 
     if (!course) {
         return (
-            <div className="min-h-screen bg-black flex flex-col items-center justify-center text-white">
+            <div className="min-h-screen bg-deep-slate-900 flex flex-col items-center justify-center text-white">
                 <h1 className="text-2xl font-bold mb-4">كورس غير موجود</h1>
-                <Link to="/courses" className="bg-amber-500 text-black px-6 py-2 rounded-full font-bold">العودة للكورسات</Link>
+                <Link to="/courses" className="bg-ice-mint text-deep-slate-900 px-6 py-2 rounded-full font-bold hover:bg-ice-mint-hover">العودة للكورسات</Link>
             </div>
         );
     }
@@ -93,7 +93,7 @@ const CourseWatch = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[#050505] text-white pt-20 pb-12 px-4 sm:px-6 md:px-12">
+        <div className="min-h-screen bg-deep-slate-900 text-white pt-20 pb-12 px-4 sm:px-6 md:px-12">
             <SEO 
                 title={`${currentLesson?.title || 'مشاهدة'} | ${course.title} | LMINA Academy`}
                 description={course.description || `تعلم ${course.title} مجاناً مع LMINA Academy. ${course.lessons.length} درس تعليمي بشرح مبسط.`}
@@ -120,14 +120,14 @@ const CourseWatch = () => {
             />
 
             {/* Breadcrumbs */}
-            <div className="flex items-center gap-2 text-gray-500 mb-8 text-sm font-bold overflow-hidden whitespace-nowrap">
-                <Link to="/courses" className="hover:text-amber-400 transition-colors">الكورسات</Link>
+            <div className="flex items-center gap-2 text-text-muted mb-8 text-sm font-bold overflow-hidden whitespace-nowrap">
+                <Link to="/courses" className="hover:text-ice-mint transition-colors">الكورسات</Link>
                 <FaChevronRight className="text-[10px]" />
-                <span className="text-gray-300 truncate">{course.title}</span>
+                <span className="text-text-secondary truncate">{course.title}</span>
                 {currentLesson && (
                     <>
                         <FaChevronRight className="text-[10px]" />
-                        <span className="text-amber-500 truncate">{currentLesson.title}</span>
+                        <span className="text-ice-mint truncate">{currentLesson.title}</span>
                     </>
                 )}
             </div>
@@ -138,8 +138,8 @@ const CourseWatch = () => {
                     {/* Video Player Section */}
                     <div className="relative aspect-video bg-black rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl group">
                         {videoLoading ? (
-                            <div className="absolute inset-0 flex items-center justify-center bg-zinc-900/50 backdrop-blur-sm z-10">
-                                <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin" />
+                            <div className="absolute inset-0 flex items-center justify-center bg-deep-slate-800/50 backdrop-blur-sm z-10">
+                                <div className="w-12 h-12 border-4 border-ice-mint border-t-transparent rounded-full animate-spin" />
                             </div>
                         ) : videoUrl ? (
                             <iframe
@@ -162,11 +162,11 @@ const CourseWatch = () => {
                         animate={{ opacity: 1, y: 0 }}
                         className="bg-white/[0.03] border border-white/10 p-8 sm:p-10 rounded-[2.5rem] relative overflow-hidden"
                     >
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 blur-[60px] rounded-full" />
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-ice-mint/10 blur-[60px] rounded-full" />
                         
                         <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-6 mb-8">
                             <div className="text-right flex-1 w-full sm:w-auto">
-                                <span className="text-amber-500 font-black text-sm uppercase tracking-widest mb-2 block italic">الدرس رقم {currentLesson?.index}</span>
+                                <span className="text-ice-mint font-black text-sm uppercase tracking-widest mb-2 block italic">الدرس رقم {currentLesson?.index}</span>
                                 <h1 className="text-3xl sm:text-4xl font-black mb-3">{currentLesson?.title}</h1>
                                 <div className="flex items-center justify-end gap-4 text-gray-400 font-bold">
                                     <span className="flex items-center gap-2"><FaClock className="text-xs" /> {currentLesson?.duration || 'غير محدد'}</span>
@@ -177,7 +177,7 @@ const CourseWatch = () => {
                             {currentLesson && !currentLesson.completed && (
                                 <button
                                     onClick={() => handleLessonComplete(currentLesson.id)}
-                                    className="w-full sm:w-auto bg-amber-500 hover:bg-amber-600 text-black px-8 py-4 rounded-2xl font-black flex items-center justify-center gap-3 transition-all duration-300 shadow-xl shadow-amber-500/30 group"
+                                    className="w-full sm:w-auto bg-ice-mint hover:bg-ice-mint-hover text-deep-slate-900 px-8 py-4 rounded-2xl font-black flex items-center justify-center gap-3 transition-all duration-300 shadow-xl shadow-ice-mint/30 group"
                                 >
                                     إكمال الدرس
                                     <FaCheckCircle className="text-xl group-hover:scale-110 transition-transform" />
@@ -195,9 +195,9 @@ const CourseWatch = () => {
                         <div className="h-[1px] bg-white/10 w-full mb-8" />
 
                         <div className="text-right">
-                            <h3 className="text-xl font-black mb-4 flex items-center justify-end gap-3 text-gray-300">
+                            <h3 className="text-xl font-black mb-4 flex items-center justify-end gap-3 text-white">
                                 عن الكورس
-                                <FaGraduationCap className="text-amber-500" />
+                                <FaGraduationCap className="text-ice-mint" />
                             </h3>
                             <p className="text-gray-400 leading-relaxed font-bold">
                                 {course.description}
@@ -209,26 +209,26 @@ const CourseWatch = () => {
                 {/* Sidebar (Lesson List & Progress) */}
                 <div className="lg:col-span-1 space-y-6">
                     {/* Progress Card */}
-                    <div className="bg-gradient-to-br from-amber-900/20 to-yellow-900/20 border border-amber-500/20 p-8 rounded-[2rem] shadow-xl">
+                    <div className="bg-gradient-to-br from-ice-mint/20 to-ice-mint-active/20 border border-ice-mint/20 p-8 rounded-[2rem] shadow-xl">
                         <div className="flex items-center justify-between mb-6">
-                            <span className="text-amber-300 font-black italic">{Math.round(course.progress_percentage || 0)}% مكتمل</span>
+                            <span className="text-ice-mint font-black italic">{Math.round(course.progress_percentage || 0)}% مكتمل</span>
                             <span className="text-white font-black">{course.completed_count || 0} / {course.lessons.length} دروس</span>
                         </div>
                         <div className="w-full h-3 bg-white/5 rounded-full overflow-hidden mb-4 p-[2px]">
                             <motion.div 
                                 initial={{ width: 0 }}
                                 animate={{ width: `${course.progress_percentage || 0}%` }}
-                                className="h-full bg-gradient-to-r from-amber-500 to-yellow-500 rounded-full shadow-[0_0_10px_rgba(245,158,11,0.5)]"
+                                className="h-full bg-gradient-to-r from-ice-mint to-ice-mint-active rounded-full shadow-[0_0_10px_rgba(127,255,212,0.5)]"
                             />
                         </div>
-                        <p className="text-gray-400 text-xs text-center font-bold italic">أكمل جميع الدروس للحصول على شهادة (قريباً!)</p>
+                        <p className="text-text-muted text-xs text-center font-bold italic">أكمل جميع الدروس للحصول على شهادة (قريباً!)</p>
                     </div>
 
                     {/* Lesson List Card */}
                     <div className="bg-white/[0.03] border border-white/10 rounded-[2rem] overflow-hidden flex flex-col h-[700px]">
                         <div className="p-6 border-b border-white/10 flex items-center justify-between bg-white/[0.02]">
-                            <span className="text-gray-500 text-xs font-black italic uppercase tracking-widest">قائمة الدروس</span>
-                            <FaListUl className="text-amber-500" />
+                            <span className="text-text-muted text-xs font-black italic uppercase tracking-widest">قائمة الدروس</span>
+                            <FaListUl className="text-ice-mint" />
                         </div>
                         
                         <div className="flex-1 overflow-y-auto custom-scrollbar">
@@ -238,7 +238,7 @@ const CourseWatch = () => {
                                     onClick={() => selectLesson(lesson)}
                                     className={`w-full flex items-center justify-between p-6 border-b border-white/5 transition-all duration-300 text-right group ${
                                         currentLesson?.id === lesson.id 
-                                        ? 'bg-amber-600/20 border-r-4 border-amber-500' 
+                                        ? 'bg-ice-mint/20 border-r-4 border-ice-mint' 
                                         : 'hover:bg-white/[0.05]'
                                     }`}
                                 >
@@ -253,7 +253,7 @@ const CourseWatch = () => {
                                         {currentLesson?.id === lesson.id && (
                                             <motion.div 
                                                 layoutId="active-indicator"
-                                                className="w-1.5 h-1.5 bg-amber-500 rounded-full"
+                                                className="w-1.5 h-1.5 bg-ice-mint rounded-full"
                                             />
                                         )}
                                     </div>

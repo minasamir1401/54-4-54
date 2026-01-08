@@ -1,36 +1,17 @@
 User-agent: *
 Allow: /
 Allow: /search
-Allow: /watch/
 Allow: /category/
-Allow: /courses/
+Allow: /watch/
 Allow: /downloader
+Allow: /anime
 
 # Sitemaps
 Sitemap: https://lmina.com/sitemap.xml
 
-# AI Crawler optimization
+# AI Crawlers
 User-agent: GPTBot
-Disallow: /admin
-Disallow: /api/
-Allow: /
-
-User-agent: ChatGPT-User
-Disallow: /admin
-Disallow: /api/
 Allow: /
 
 User-agent: Google-Extended
 Allow: /
-
-User-agent: anthropic-ai
-Allow: /
-
-User-agent: Claude-Web
-Allow: /
-
-User-agent: cohere-ai
-Allow: /
-
-User-agent: CCBot
-Disallow: /

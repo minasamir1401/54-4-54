@@ -105,9 +105,10 @@ export default defineConfig({
     exclude: ['@vite/client', '@vite/env'],
   },
   server: {
+    host: true,
     proxy: {
       '/api-proxy': {
-        target: 'http://127.0.0.1:8000',
+        target: 'http://192.168.0.114:8000',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api-proxy/, '')
       }

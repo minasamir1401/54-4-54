@@ -4,6 +4,7 @@ import { fetchLatestCourses, fetchCoursesByCategory, searchCourses, ContentItem 
 import { FaGraduationCap, FaSearch, FaFilter, FaArrowUp, FaBookOpen, FaUserGraduate } from 'react-icons/fa';
 import MovieCard from '../components/MovieCard';
 import SEO from '../components/SEO';
+// import { useUser } from '../hooks/useUser';
 
 const COURSE_CATEGORIES = [
   { id: 'all', title: 'الكل' },
@@ -24,8 +25,10 @@ const Courses = () => {
     const [page, setPage] = useState(1);
     const [selectedCat, setSelectedCat] = useState('all');
     const [searchQuery, setSearchQuery] = useState('');
+    // const [isSearching, setIsSearching] = useState(false);
     const [loadingMore, setLoadingMore] = useState(false);
     const [showScrollTop, setShowScrollTop] = useState(false);
+    // const { user } = useUser();
 
     const fetchCourses = async (p: number, cat: string, query: string, append: boolean = false) => {
         try {
@@ -118,11 +121,11 @@ const Courses = () => {
 
             {/* Header Section */}
             <div className="relative mb-12 sm:mb-20">
-                <div className="absolute -top-24 -right-24 w-64 sm:w-96 h-64 sm:h-96 bg-amber-500/10 blur-[100px] rounded-full" />
-                <div className="absolute -bottom-24 -left-24 w-64 sm:w-96 h-64 sm:h-96 bg-yellow-600/5 blur-[100px] rounded-full" />
+                <div className="absolute -top-24 -right-24 w-64 sm:w-96 h-64 sm:h-96 bg-ice-mint/10 blur-[100px] rounded-full" />
+                <div className="absolute -bottom-24 -left-24 w-64 sm:w-96 h-64 sm:h-96 bg-ice-mint-active/5 blur-[100px] rounded-full" />
                 
-                <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 bg-white/[0.03] border border-amber-500/10 backdrop-blur-2xl p-8 sm:p-12 rounded-[2rem] sm:rounded-[3rem] shadow-2xl overflow-hidden">
-                    <div className="absolute top-0 right-0 w-full h-1 bg-gradient-to-r from-transparent via-amber-500 to-transparent opacity-50" />
+                <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 bg-white/[0.03] border border-ice-mint/10 backdrop-blur-2xl p-8 sm:p-12 rounded-[2rem] sm:rounded-[3rem] shadow-2xl overflow-hidden">
+                    <div className="absolute top-0 right-0 w-full h-1 bg-gradient-to-r from-transparent via-ice-mint to-transparent opacity-50" />
                     
                     <div className="text-right flex-1">
                         <motion.div 
@@ -131,25 +134,22 @@ const Courses = () => {
                             className="flex items-center justify-end gap-4 mb-6"
                         >
                             <h1 className="text-4xl sm:text-6xl font-black text-white italic tracking-tighter">أكاديمية LMINA</h1>
-                            <FaGraduationCap className="text-5xl sm:text-7xl text-amber-500 drop-shadow-[0_0_15px_rgba(245,158,11,0.5)]" />
+                            <FaGraduationCap className="text-5xl sm:text-7xl text-ice-mint drop-shadow-[0_0_15px_rgba(127,255,212,0.5)]" />
                         </motion.div>
                         <p className="text-gray-400 text-lg sm:text-xl font-bold max-w-2xl ml-auto leading-relaxed">
                             استكشف عالم المعرفة مع أفضل الكورسات المجانية. طور مهاراتك وراقب تقدمك خطوة بخطوة.
                         </p>
                         
-                        <div className="flex flex-wrap justify-end gap-4 mt-8">
-                            <div className="flex items-center gap-2 bg-amber-600/20 px-4 py-2 rounded-xl border border-amber-500/30">
-                                <span className="text-amber-100 font-black text-sm">مراقبة المحتوى</span>
-                                <FaBookOpen className="text-amber-400" />
-                            </div>
-                            <div className="flex items-center gap-2 bg-yellow-600/20 px-4 py-2 rounded-xl border border-yellow-500/30">
-                                <span className="text-yellow-100 font-black text-sm">شهادات تدريبية</span>
-                                <FaUserGraduate className="text-yellow-400" />
-                            </div>
-                        </div>
+                                    <div className="flex items-center gap-2 bg-deep-slate-800/20 px-4 py-2 rounded-xl border border-ice-mint/30">
+                                        <span className="text-ice-mint font-black text-sm">مراقبة المحتوى</span>
+                                        <FaBookOpen className="text-ice-mint" />
+                                    </div>
+                                    <div className="flex items-center gap-2 bg-deep-slate-800/20 px-4 py-2 rounded-xl border border-white/10">
+                                        <span className="text-white font-black text-sm">شهادات تدريبية</span>
+                                        <FaUserGraduate className="text-ice-mint" />
+                                    </div>
                     </div>
 
-                    {/* Search Bar */}
                     <motion.form 
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -161,9 +161,9 @@ const Courses = () => {
                             placeholder="ابحث عن كورس..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full bg-black/40 border-2 border-white/10 rounded-2xl py-4 sm:py-5 px-6 sm:px-8 text-right text-white font-bold outline-none focus:border-amber-500 transition-all duration-300 group-hover:border-amber-500/50"
+                            className="w-full bg-deep-slate-800/40 border-2 border-deep-slate-border rounded-2xl py-4 sm:py-5 px-6 sm:px-8 text-right text-white font-bold outline-none focus:border-ice-mint transition-all duration-300 group-hover:border-ice-mint/50"
                         />
-                        <button type="submit" className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl text-gray-400 hover:text-amber-500 transition-colors">
+                        <button type="submit" className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl text-text-muted hover:text-ice-mint transition-colors">
                             <FaSearch />
                         </button>
                     </motion.form>
@@ -179,8 +179,8 @@ const Courses = () => {
                             onClick={() => setSelectedCat(cat.id)}
                             className={`px-6 py-3 rounded-2xl font-black text-sm transition-all duration-300 ${
                                 selectedCat === cat.id 
-                                ? 'bg-amber-500 text-black shadow-xl shadow-amber-500/30 scale-105' 
-                                : 'bg-white/5 text-gray-400 hover:bg-white/10 border border-white/5 hover:border-amber-500/30 hover:text-amber-500'
+                                ? 'bg-ice-mint text-deep-slate-900 shadow-xl shadow-ice-mint/30 scale-105' 
+                                : 'bg-white/5 text-text-muted hover:bg-white/10 border border-deep-slate-border hover:border-ice-mint/30 hover:text-ice-mint'
                             }`}
                         >
                             {cat.title}
@@ -251,7 +251,7 @@ const Courses = () => {
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0 }}
                         onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}
-                        className="fixed bottom-10 left-10 p-5 bg-amber-500 text-black rounded-full shadow-2xl shadow-amber-500/50 z-50 border-2 border-black/20 hover:scale-110 transition-transform"
+                        className="fixed bottom-10 left-10 p-5 bg-ice-mint text-deep-slate-900 rounded-full shadow-2xl shadow-ice-mint/50 z-50 border-2 border-deep-slate-900/20 hover:scale-110 transition-transform"
                     >
                         <FaArrowUp />
                     </motion.button>

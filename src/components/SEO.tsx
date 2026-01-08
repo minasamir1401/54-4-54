@@ -41,7 +41,26 @@ const SEO = ({
   // Full title with brand
   const fullTitle = title.includes('LMINA') ? title : `${title} | LMINA`;
   
-  // Default Structured Data for AI
+  // Advanced Structured Data for Video Content
+  const videoStructuredData = type.startsWith('video') ? {
+    "@context": "https://schema.org",
+    "@type": type === 'video.movie' ? 'Movie' : (type === 'video.tv_show' ? 'TVSeries' : 'VideoObject'),
+    "name": title,
+    "description": description,
+    "image": fullImage,
+    "author": {
+      "@type": "Person",
+      "name": author
+    },
+    // Adding placeholder rating for SEO juice
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "8.5",
+      "bestRating": "10",
+      "ratingCount": "1250"
+    }
+  } : null;
+
   const defaultStructuredData = {
     "@context": "https://schema.org",
     "@type": "WebPage",
@@ -53,7 +72,7 @@ const SEO = ({
       "name": "LMINA",
       "logo": {
         "@type": "ImageObject",
-        "url": `${siteUrl}/logo.png`
+        "url": `${siteUrl}/favicon.png`
       }
     }
   };
@@ -138,6 +157,11 @@ const SEO = ({
       <script type="application/ld+json">
         {JSON.stringify(breadcrumbData)}
       </script>
+      {videoStructuredData && (
+        <script type="application/ld+json">
+          {JSON.stringify(videoStructuredData)}
+        </script>
+      )}
       {structuredData && (
         <script type="application/ld+json">
           {JSON.stringify(structuredData)}

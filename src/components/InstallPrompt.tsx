@@ -58,7 +58,7 @@ const InstallPrompt = () => {
         >
           <div className="bg-black/90 backdrop-blur-2xl border border-white/10 p-6 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative overflow-hidden group">
             {/* Background Glow */}
-            <div className="absolute -top-10 -right-10 w-32 h-32 bg-amber-600/20 blur-3xl rounded-full group-hover:bg-amber-600/30 transition-all duration-500" />
+            <div className="absolute -top-10 -right-10 w-32 h-32 bg-ice-mint/20 blur-3xl rounded-full group-hover:bg-ice-mint/30 transition-all duration-500" />
             
             <button 
               onClick={handleClose}
@@ -69,20 +69,20 @@ const InstallPrompt = () => {
             </button>
 
             <div className="flex flex-row-reverse items-start gap-5">
-              <div className="w-16 h-16 bg-gradient-to-br from-amber-600 to-amber-800 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-amber-600/20">
+              <div className="w-16 h-16 bg-gradient-to-br from-ice-mint to-ice-mint-active rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-ice-mint/20">
                 <img src="/favicon.png" alt="LMINA Logo" className="w-10 h-10 object-contain" />
               </div>
               
               <div className="flex-1 text-right">
                 <h3 className="text-white font-black text-lg mb-1 italic tracking-tighter">تطبيق LMINA</h3>
-                <p className="text-gray-400 text-xs leading-relaxed mb-4">
+                <p className="text-text-secondary text-xs leading-relaxed mb-4">
                   ثبت التطبيق الآن على جهازك لتجربة مشاهدة أسرع وأفضل بدون إعلانات.
                 </p>
                 
                 <div className="flex flex-row-reverse items-center gap-3">
                   <button
                     onClick={handleInstall}
-                    className="flex-1 bg-white text-black py-3 rounded-xl font-bold text-sm hover:bg-amber-600 hover:text-white transition-all duration-300 flex items-center justify-center gap-2"
+                    className="flex-1 bg-white text-black py-3 rounded-xl font-bold text-sm hover:bg-ice-mint hover:text-deep-slate-900 transition-all duration-300 flex items-center justify-center gap-2"
                   >
                     <FaDownload className="text-xs" />
                     تثبيت الآن

@@ -12,23 +12,59 @@
       content="4_jU1TZQWz0nH07uXJBHlSCTnR5CAPHy0RE7_rfA354"
     />
 
-    <!-- Base Search Discovery -->
+    <!-- Performance Optimization: Preconnect to critical domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://images.unsplash.com" />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+
+    <!-- Base Search Discovery & SEO -->
     <title>LMINA - منصة المشاهدة الأولى | أفلام ومسلسلات وكورسات</title>
-    <meta name="description" content="شاهد أحدث الأفلام والمسلسلات العربية والأجنبية والكورسات التعليمية مجاناً على منصة LMINA." />
-    <meta name="robots" content="index, follow" />
+    <meta
+      name="description"
+      content="شاهد أحدث الأفلام والمسلسلات العربية والأجنبية والكورسات التعليمية بجودة عالية. منصة LMINA توفر تجربة مشاهدة فريدة ومجانية تماماً."
+    />
+    <meta
+      name="keywords"
+      content="LMINA, لمينا, أفلام مترجمة, مسلسلات عربي, أنمي مترجم, مشاهدة اون لاين, تحميل أفلام, كورسات مجانية"
+    />
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
     <meta name="googlebot" content="index, follow" />
     <meta name="bingbot" content="index, follow" />
-    
+    <meta name="language" content="Arabic" />
+    <meta name="revisit-after" content="1 days" />
+    <meta name="author" content="LMINA Team" />
+
     <link rel="manifest" href="/manifest.json" />
     <link rel="apple-touch-icon" href="/logo512.png" />
     <meta name="theme-color" content="#0a0a0a" />
     <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="LMINA" />
-    <link rel="icon" type="image/png" href="/logo512.png" />
-    
-    <!-- Structured Data - Base -->
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+
+    <!-- Resource Hints for Speed -->
+    <link rel="preload" href="/src/main.tsx" as="script" />
+
+    <!-- Structured Data - Organization & Website Search -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "LMINA",
+        "url": "https://lmina.com",
+        "logo": "https://lmina.com/favicon.png",
+        "sameAs": [
+          "https://facebook.com/lmina",
+          "https://twitter.com/lmina",
+          "https://instagram.com/lmina"
+        ]
+      }
+    </script>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",

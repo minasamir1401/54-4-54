@@ -25,6 +25,7 @@ const Watch = () => {
   const [lightsOff, setLightsOff] = useState(false);
   const [activeSeason, setActiveSeason] = useState<number | null>(null);
   const [kidsMode, setKidsMode] = useState(localStorage.getItem('kidsMode') === 'true');
+  const [protectionLevel, setProtectionLevel] = useState<'strict' | 'moderate' | 'off'>('moderate');
   const { user, refreshStatus } = useUser();
 
   // Listen to Kids Mode changes
@@ -95,7 +96,9 @@ const Watch = () => {
           // Set initial season if multiple exist
           if (safeData.seasons && safeData.seasons.length > 0) {
              // Try to find which season the current episode belongs to
-             const currentSeason = safeData.seasons.find(s => s.episodes.some(e => e.id === targetId));
+             const currentSeason = safeData.seasons.find(s => 
+               Array.isArray(s.episodes) && s.episodes.some(e => e.id === targetId)
+             );
              setActiveSeason(currentSeason?.number || safeData.seasons[0].number);
           }
 
@@ -195,9 +198,9 @@ const Watch = () => {
   };
 
   if (loading) return (
-    <div className="min-h-screen bg-transparent text-white flex flex-col font-sans dir-rtl">
+    <div className={`min-h-screen bg-transparent ${kidsMode ? 'text-deep-slate-900' : 'text-white'} flex flex-col font-sans dir-rtl`}>
       {/* Skeleton Header */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-[#060606]/90 backdrop-blur-md border-b border-white/5 px-6 py-4">
+      <div className={`fixed top-0 left-0 right-0 z-50 px-6 py-4 ${kidsMode ? 'bg-white/90 border-kids-blue/20 shadow-sm' : 'bg-[#060606]/90 border-white/5'} backdrop-blur-md border-b`}>
           <div className="max-w-7xl mx-auto flex items-center justify-between">
               <div className="w-10 h-10 bg-white/10 rounded-lg animate-pulse"></div>
               <div className="h-6 bg-white/10 rounded-lg animate-pulse flex-1 mx-4 max-w-md"></div>
@@ -212,7 +215,7 @@ const Watch = () => {
               <div className="flex-1 space-y-6">
                   <div className="relative aspect-video bg-black/50 rounded-3xl overflow-hidden shadow-2xl border border-white/10 animate-pulse" style={{ minHeight: '300px' }}>
                       <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="w-16 h-16 border-4 border-amber-600/30 border-t-transparent rounded-full animate-spin"></div>
+                          <div className="w-16 h-16 border-4 border-ice-mint/30 border-t-transparent rounded-full animate-spin"></div>
                       </div>
                   </div>
 
@@ -268,7 +271,7 @@ const Watch = () => {
              <button onClick={() => id && fetchData(id)} className="flex items-center gap-2 bg-white/10 hover:bg-white/20 px-6 py-3 rounded-xl font-bold transition-all">
                 <FaRedo /> إعادة المحاولة
              </button>
-             <button onClick={() => navigate('/')} className="bg-amber-600 hover:bg-amber-700 text-black px-6 py-3 rounded-xl font-bold transition-all">
+             <button onClick={() => navigate('/')} className="bg-ice-mint hover:bg-ice-mint-hover text-deep-slate-900 px-6 py-3 rounded-xl font-bold transition-all">
                 الرئيسية
              </button>
         </div>
@@ -276,7 +279,7 @@ const Watch = () => {
   );
 
   return (
-    <div className="min-h-screen bg-transparent text-white flex flex-col font-sans dir-rtl">
+    <div className={`min-h-screen bg-transparent ${kidsMode ? 'text-deep-slate-900' : 'text-white'} flex flex-col font-sans dir-rtl`}>
       {data && (
         <SEO 
           title={data.title}
@@ -302,12 +305,15 @@ const Watch = () => {
       )}
       
       {/* Header */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-[#060606]/90 backdrop-blur-md border-b border-white/5 px-6 py-4">
+      <div className={`fixed top-0 left-0 right-0 z-50 px-6 py-4 backdrop-blur-md border-b transition-colors duration-500
+                      ${kidsMode 
+                          ? 'bg-white/90 border-kids-blue/20 shadow-md' 
+                          : 'bg-deep-slate-900/90 border-deep-slate-border text-white'}`}>
           <div className="max-w-7xl mx-auto flex items-center justify-between">
               <button 
                   onClick={() => navigate(-1)} 
                   aria-label="الرجوع للصفحة السابقة"
-                  className="p-2 bg-white/5 hover:bg-white/10 rounded-lg transition-all"
+                  className={`p-2 rounded-lg transition-all ${kidsMode ? 'bg-kids-blue/10 hover:bg-kids-blue/20 text-kids-blue' : 'bg-white/5 hover:bg-white/10'}`}
               >
                   <FaArrowRight aria-hidden="true" />
               </button>
@@ -317,15 +323,15 @@ const Watch = () => {
       </div>
 
       <main className="flex-1 max-w-7xl mx-auto w-full px-3 sm:px-6 py-20 sm:py-24">
-          <div className="flex flex-col lg:flex-row gap-8">
+          <div className="flex flex-col lg:flex-row xl:gap-12 gap-6 sm:gap-8">
               
               {/* Player Section - Load immediately for fast perception */}
               <div className="flex-1 space-y-4 sm:space-y-6">
-                  <div className="relative aspect-video bg-black rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border border-white/10 group" style={{ minHeight: '200px' }}>
+                  <div className={`relative aspect-video rounded-xl sm:rounded-3xl overflow-hidden shadow-2xl group ${kidsMode ? 'bg-black border-4 border-kids-blue' : 'bg-black border border-white/10'}`} style={{ minHeight: '200px' }}>
                       {serverLoading && (
-                          <div className="absolute inset-0 z-20 bg-black/80 flex flex-col items-center justify-center">
-                              <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-                              <p className="text-xs font-bold text-amber-500 uppercase tracking-widest">
+                          <div className="absolute inset-0 z-20 bg-deep-slate-900/80 flex flex-col items-center justify-center">
+                              <div className="w-12 h-12 border-4 border-ice-mint border-t-transparent rounded-full animate-spin mb-4"></div>
+                              <p className="text-xs font-bold text-ice-mint uppercase tracking-widest">
                                   {activeServer ? `جاري الاتصال بـ ${activeServer.name}` : 'جاري التحضير...'}
                               </p>
                           </div>
@@ -346,6 +352,8 @@ const Watch = () => {
                           activeServer.type === 'iframe' ? (
                               // Enhanced server validation to check for various issues
                               (() => {
+                                  // Sandbox removed for full compatibility
+
                                   return (
                                       <div className="relative w-full h-full">
                                           {showShield && (
@@ -356,20 +364,20 @@ const Watch = () => {
                                                       setShieldActive(true);
                                                   }}
                                               >
-                                                  <div className="w-20 h-20 bg-amber-500 rounded-full flex items-center justify-center shadow-2xl shadow-amber-500/40 group-hover/shield:scale-110 transition-transform duration-500">
-                                                      <FaTv className="text-3xl text-black ml-1" />
+                                                  <div className="w-16 h-16 sm:w-20 sm:h-20 bg-ice-mint rounded-full flex items-center justify-center shadow-2xl shadow-ice-mint/40 group-hover/shield:scale-110 transition-transform duration-500">
+                                                      <FaTv className="text-2xl sm:text-3xl text-deep-slate-900 ml-1" />
                                                   </div>
-                                                  <p className="mt-6 text-white font-black italic text-xl tracking-tighter uppercase">اضغط لبدء المشاهدة الآمنة</p>
-                                                  <p className="mt-2 text-white/40 text-xs font-bold uppercase tracking-widest">نظام حماية من الإعلانات المنبثقة مفعل</p>
+                                                  <p className="mt-6 text-white font-black italic text-lg sm:text-xl tracking-tighter uppercase">اضغط للمشاهدة</p>
                                               </div>
                                           )}
                                           
                                           <iframe 
-                                              key={activeServer.url}
+                                              key={`${activeServer.url}-${protectionLevel}`}
                                               src={activeServer.url} 
                                               title={`مشغل فيديو - ${data.title}`}
                                               className={`w-full h-full border-0 ${!shieldActive ? 'pointer-events-none' : ''}`} 
                                               allowFullScreen 
+                                              /* Sandbox removed by user request for full compatibility */
                                               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen; web-share"
                                               referrerPolicy="no-referrer-when-downgrade"
                                               loading="lazy"
@@ -379,9 +387,24 @@ const Watch = () => {
                                           />
                                           
                                           {shieldActive && (
-                                              <div className="absolute top-4 left-4 z-40 bg-green-500/20 backdrop-blur-md border border-green-500/30 px-3 py-1.5 rounded-full flex items-center gap-2 pointer-events-none">
-                                                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                                                  <span className="text-[10px] font-black text-green-500 uppercase tracking-widest">درع الحماية نشط</span>
+                                              <div className="absolute top-4 left-4 z-40 flex items-center gap-2">
+                                                  <button
+                                                      onClick={() => {
+                                                          const next = protectionLevel === 'strict' ? 'moderate' : protectionLevel === 'moderate' ? 'off' : 'strict';
+                                                          setProtectionLevel(next);
+                                                      }}
+                                                      className={`backdrop-blur-md border px-3 py-1.5 rounded-full flex items-center gap-2 transition-colors hover:bg-white/10 ${
+                                                          protectionLevel === 'strict' ? 'bg-green-500/20 border-green-500/30 text-green-500' :
+                                                          protectionLevel === 'moderate' ? 'bg-yellow-500/20 border-yellow-500/30 text-yellow-500' :
+                                                          'bg-red-500/20 border-red-500/30 text-red-500'
+                                                      }`}
+                                                      title="تغيير مستوى الحماية (اضغط في حالة عدم عمل الفيديو)"
+                                                  >
+                                                      <div className={`w-2 h-2 rounded-full ${protectionLevel !== 'off' ? 'animate-pulse' : ''} bg-current`}></div>
+                                                      <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest hidden xs:inline">
+                                                          {protectionLevel === 'strict' ? 'حماية قصوى' : protectionLevel === 'moderate' ? 'حماية متوازنة' : 'حماية متوقفة'}
+                                                      </span>
+                                                  </button>
                                               </div>
                                           )}
                                       </div>
@@ -422,12 +445,12 @@ const Watch = () => {
                   </div>
 
                   {/* Servers - Load immediately as they're critical for playback */}
-                  <div className="bg-zinc-900/50 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-white/5" style={{ minHeight: '120px' }}>
+                  <div className={`rounded-xl sm:rounded-2xl p-4 sm:p-6 border transition-all ${kidsMode ? 'bg-white border-kids-blue/20 shadow-md' : 'bg-zinc-900/50 border-white/5'}`} style={{ minHeight: '120px' }}>
                       <div className="flex items-center justify-between mb-4">
-                          <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">سيرفرات المشاهدة</span>
-                           <FaTv className="text-amber-500" />
+                          <span className={`text-[10px] sm:text-xs font-black uppercase tracking-widest ${kidsMode ? 'text-kids-pink' : 'text-text-muted'}`}>سيرفرات المشاهدة</span>
+                           <FaTv className={kidsMode ? 'text-kids-blue' : 'text-ice-mint'} />
                       </div>
-                      <ul className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                      <ul className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-4 xl:grid-cols-5 gap-2">
                           {data.servers.map((srv, idx) => {
                               const isFailed = failedServers.has(srv.url);
                               const isActive = activeServer?.url === srv.url;
@@ -447,12 +470,16 @@ const Watch = () => {
                                                   setActiveServer(srv); 
                                                   setServerLoading(true); 
                                               }}
-                                              className={`w-full p-2 sm:p-3 rounded-lg sm:rounded-xl text-[10px] sm:text-xs font-bold transition-all border ${
+                                              className={`w-full p-2.5 sm:p-3 rounded-lg sm:rounded-xl text-xs font-bold transition-all border ${
                                                   isActive 
-                                                     ? 'bg-amber-500 border-amber-500 text-black shadow-lg shadow-amber-500/20' 
+                                                     ? (kidsMode 
+                                                          ? 'bg-kids-blue border-kids-blue text-white shadow-lg'
+                                                          : 'bg-ice-mint border-ice-mint text-deep-slate-900 shadow-lg shadow-ice-mint/20')
                                                     : isFailed
-                                                        ? 'bg-amber-900/10 border-amber-900/20 text-amber-500 opacity-50 cursor-not-allowed'
-                                                        : 'bg-white/5 border-white/5 text-gray-400 hover:bg-white/10'
+                                                        ? 'bg-red-900/10 border-red-900/20 text-red-500 opacity-50 cursor-not-allowed'
+                                                        : (kidsMode
+                                                            ? 'bg-white border-kids-blue/10 text-gray-500 hover:bg-kids-blue/5 hover:text-kids-blue'
+                                                            : 'bg-white/5 border-white/5 text-gray-400 hover:bg-white/10')
                                               }`}
                                               disabled={isFailed}
                                           >
@@ -470,15 +497,15 @@ const Watch = () => {
                       
                       {/* AI Summary Section */}
                       {data.ai_summary && (
-                          <div className="bg-white/5 border border-white/10 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-right">
-                               <h4 className="text-[10px] font-black text-amber-500 uppercase tracking-widest mb-2">ملخص ذكي (AI Summary)</h4>
-                              <p className="text-sm text-gray-300 italic leading-relaxed">
+                          <div className={`border rounded-xl sm:rounded-2xl p-4 sm:p-6 text-right ${kidsMode ? 'bg-kids-yellow/10 border-kids-yellow/30' : 'bg-white/5 border-white/10'}`}>
+                               <h4 className={`text-[10px] font-black uppercase tracking-widest mb-2 ${kidsMode ? 'text-orange-500' : 'text-ice-mint'}`}>ملخص ذكي (AI Summary)</h4>
+                              <p className={`text-sm italic leading-relaxed ${kidsMode ? 'text-gray-700 font-bold' : 'text-gray-300'}`}>
                                   "{data.ai_summary}"
                               </p>
                           </div>
                       )}
 
-                      <p className="text-gray-400 leading-relaxed text-sm">{data.description}</p>
+                      <p className={`leading-relaxed text-sm ${kidsMode ? 'text-gray-600 font-medium' : 'text-gray-400'}`}>{data.description}</p>
                       
                                 {/* Recommendations Sidebar / Grid */}
                                 {data.recommendations && data.recommendations.length > 0 && (
@@ -524,7 +551,7 @@ const Watch = () => {
                         <div className={`rounded-[3rem] p-8 sm:p-12 border transition-all duration-500 relative overflow-hidden group ${
                             kidsMode 
                             ? 'bg-white border-blue-100 shadow-2xl' 
-                            : 'bg-gradient-to-br from-amber-900/40 to-black border-amber-500/20 shadow-amber-500/10'
+                            : 'bg-gradient-to-br from-deep-slate-800 to-deep-slate-900 border-ice-mint/20 shadow-ice-mint/10'
                         }`}>
                             {kidsMode && (
                                 <div className="absolute -top-10 -right-10 w-40 h-40 bg-pink-100 rounded-full blur-3xl opacity-50 animate-pulse"></div>
@@ -534,11 +561,11 @@ const Watch = () => {
                                     <div className={`w-14 h-14 rounded-3xl flex items-center justify-center border-4 transition-all duration-500 ${
                                         kidsMode 
                                         ? 'bg-blue-400 border-white shadow-lg animate-bounce' 
-                                        : 'bg-amber-600/20 border-amber-600/30'
+                                        : 'bg-ice-mint/10 border-ice-mint/20 text-ice-mint'
                                     }`}>
-                                        <FaDownload className={`${kidsMode ? 'text-white text-2xl' : 'text-amber-400 text-lg'}`} />
+                                        <FaDownload className={`${kidsMode ? 'text-white text-2xl' : 'text-ice-mint text-lg'}`} />
                                     </div>
-                                    <h3 className={`text-2xl font-black italic tracking-tighter uppercase ${kidsMode ? 'text-blue-500' : 'text-amber-100'}`}>
+                                    <h3 className={`text-2xl font-black italic tracking-tighter uppercase ${kidsMode ? 'text-blue-500' : 'text-white'}`}>
                                         {kidsMode ? 'حفظ المغامرة 🎈' : 'روابط التحميل المباشر'}
                                     </h3>
                                 </div>
@@ -554,20 +581,20 @@ const Watch = () => {
                                             className={`flex items-center justify-between p-6 rounded-[2rem] w-full transition-all duration-300 group/btn border-4 ${
                                                 kidsMode 
                                                 ? 'bg-blue-50 border-white hover:bg-pink-50 hover:border-pink-200 hover:scale-105 shadow-md' 
-                                                : 'bg-amber-950/20 border-white/5 hover:bg-amber-600/10 hover:border-amber-600/30 hover:-translate-y-1'
+                                                : 'bg-deep-slate-800 border-deep-slate-border hover:bg-deep-slate-700 hover:border-ice-mint/30 hover:-translate-y-1'
                                             }`}
                                         >
-                                            <span className={`transition-colors ${kidsMode ? 'text-blue-400' : 'text-amber-400 group-hover/btn:text-amber-300'}`}>
+                                            <span className={`transition-colors ${kidsMode ? 'text-blue-400' : 'text-ice-mint group-hover/btn:text-ice-mint-hover'}`}>
                                                 <FaDownload className={`${kidsMode ? 'text-xl' : 'text-xs'}`} />
                                             </span>
                                             <div className="text-right">
                                                 <p className={`text-[10px] font-black uppercase tracking-widest mb-1 transition-colors ${
-                                                    kidsMode ? 'text-pink-400' : 'text-amber-500/50 group-hover/btn:text-amber-400'
+                                                    kidsMode ? 'text-pink-400' : 'text-ice-mint/50 group-hover/btn:text-ice-mint'
                                                 }`}>
                                                     {kidsMode ? 'جودة مدهشة' : 'تحميل مباشر'}
                                                 </p>
                                                 <p className={`text-lg font-black transition-colors ${
-                                                    kidsMode ? 'text-blue-600' : 'text-white group-hover/btn:text-amber-100'
+                                                    kidsMode ? 'text-blue-600' : 'text-white group-hover/btn:text-ice-mint-hover'
                                                 }`}>
                                                     {dl.quality || 'Link'}
                                                 </p>
@@ -594,7 +621,9 @@ const Watch = () => {
                              onClick={() => setShowEpisodes(!showEpisodes)}
                              className="w-full p-4 flex items-center justify-between text-right bg-white/5 hover:bg-white/10"
                           >
-                             <span className="text-xs font-bold text-gray-400">قائمة الحلقات ({data.episodes.length})</span>
+                             <span className="text-xs font-bold text-gray-400">
+                                {data.episodes.length === 1 ? '1 فديو' : `قائمة الحلقات (${data.episodes.length})`}
+                              </span>
                              <FaListUl className="text-amber-500" />
                           </button>
                           
@@ -607,7 +636,7 @@ const Watch = () => {
                                           onClick={() => setActiveSeason(s.number)}
                                           className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-tighter transition-all flex-shrink-0 border ${
                                               activeSeason === s.number 
-                                              ? 'bg-amber-500 border-amber-500 text-black shadow-lg shadow-amber-500/20' 
+                                              ? 'bg-ice-mint border-ice-mint text-deep-slate-900 shadow-lg shadow-ice-mint/20' 
                                               : 'bg-white/5 border-white/5 text-gray-500 hover:bg-white/10'
                                           }`}
                                       >
@@ -642,7 +671,7 @@ const Watch = () => {
                                                           onClick={() => navigate(`/watch/${ep.id}`)}
                                                           className={`w-full p-4 rounded-xl flex flex-row-reverse items-center gap-4 text-right transition-all border ${
                                                               isActive 
-                                                              ? 'bg-amber-500 border-amber-500 text-black shadow-xl shadow-amber-500/20' 
+                                                              ? 'bg-ice-mint border-ice-mint text-deep-slate-900 shadow-xl shadow-ice-mint/20' 
                                                               : 'bg-white/[0.03] border-white/5 text-gray-400 hover:bg-white/10'
                                                           }`}
                                                       >

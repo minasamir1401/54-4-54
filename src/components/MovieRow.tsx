@@ -6,14 +6,16 @@ import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 interface MovieRowProps {
     title: string;
-    catId: string;
+    catId?: string;
+    initialItems?: ContentItem[];
+    kidsMode?: boolean;
 }
 
-const MovieRow = memo(({ title, catId }: MovieRowProps) => {
+const MovieRow = memo(({ title, catId, initialItems, kidsMode = false }: MovieRowProps) => {
     const navigate = useNavigate();
-    const [items, setItems] = useState<ContentItem[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [hasFetched, setHasFetched] = useState(false);
+    const [items, setItems] = useState<ContentItem[]>(initialItems || []);
+    const [loading, setLoading] = useState(!initialItems);
+    const [hasFetched, setHasFetched] = useState(!!initialItems);
     const [showLeftButton, setShowLeftButton] = useState(false);
     const [showRightButton, setShowRightButton] = useState(true);
     const scrollRef = useRef<HTMLUListElement>(null);
@@ -24,7 +26,7 @@ const MovieRow = memo(({ title, catId }: MovieRowProps) => {
 
         const observer = new IntersectionObserver(
             ([entry]) => {
-                if (entry.isIntersecting) {
+                if (entry.isIntersecting && catId) {
                     setHasFetched(true);
                     fetchByCategory(catId, 1)
                         .then(res => setItems(Array.isArray(res) ? res : []))
@@ -89,57 +91,63 @@ const MovieRow = memo(({ title, catId }: MovieRowProps) => {
             ) : (
                 <>
                 {/* Header with modern styling */}
-            <div className="flex flex-row-reverse items-center justify-between mb-5 md:mb-7 px-4 md:px-0">
+            <div className={`flex flex-row-reverse items-center justify-between mb-5 md:mb-7 px-4 md:px-0 ${kidsMode ? 'bg-white/50 p-4 rounded-3xl border border-kids-blue/20' : ''}`}>
                 <div className="flex flex-row-reverse items-center gap-3">
-                    <div className="w-1 h-8 md:h-10 bg-gradient-to-b from-amber-600 to-amber-800 rounded-full" />
-                    <h2 className="text-xl md:text-3xl font-black tracking-wide text-white group-hover:text-amber-500 transition-colors duration-300">
+                    <div className={`w-1 h-8 md:h-10 rounded-full ${kidsMode ? 'bg-kids-blue' : 'bg-gradient-to-b from-ice-mint to-ice-mint-active'}`} />
+                    <h2 className={`text-xl md:text-3xl font-black tracking-wide transition-colors duration-300 ${kidsMode ? 'text-deep-slate-900 group-hover:text-kids-blue' : 'text-white group-hover:text-ice-mint'}`}>
                         {title}
                     </h2>
                 </div>
-                <button 
-                    onClick={() => navigate(`/category/${catId}`)}
-                    className="text-[10px] md:text-xs text-gray-400 font-bold uppercase tracking-widest 
-                                 hover:text-amber-500 transition-all duration-300 
-                                 hover:scale-105 active:scale-95
-                                 px-3 py-1.5 rounded-lg hover:bg-white/5"
-                >
-                    عرض الكل
-                </button>
+                {catId && (
+                    <button 
+                        onClick={() => navigate(`/category/${catId}`)}
+                        className={`text-[10px] md:text-xs font-bold uppercase tracking-widest 
+                                     transition-all duration-300 
+                                     hover:scale-105 active:scale-95
+                                     px-3 py-1.5 rounded-lg
+                                     ${kidsMode 
+                                        ? 'text-kids-blue bg-kids-blue/10 hover:bg-kids-blue hover:text-white border border-kids-blue/20' 
+                                        : 'text-text-muted hover:text-ice-mint hover:bg-white/5'}`}
+                    >
+                        عرض الكل
+                    </button>
+                )}
             </div>
 
             <div className="relative text-right">
+                {/* Enhanced Scroll Buttons with smooth transitions */}
                 {/* Enhanced Scroll Buttons with smooth transitions */}
                 <button 
                     onClick={() => scroll('left')}
                     aria-label="التمرير لليسار"
                     className={`absolute left-0 top-0 bottom-8 z-30 
-                              bg-gradient-to-r from-black/90 to-transparent
                               px-6 py-4 rounded-r-3xl
                               transition-all duration-300 ease-out
-                              hover:from-amber-600/90 hover:to-transparent
+                              hover:to-transparent
                               hidden md:flex items-center
                               backdrop-blur-sm
+                              ${kidsMode 
+                                ? 'bg-gradient-to-r from-kids-blue/20 to-transparent hover:from-kids-blue/40 text-kids-blue' 
+                                : 'bg-gradient-to-r from-deep-slate-900/90 to-transparent hover:from-ice-mint/20 text-white'}
                               ${showLeftButton ? 'opacity-0 group-hover:opacity-100' : 'opacity-0 pointer-events-none'}`}
                 >
-                    <FaChevronLeft className="text-white text-xl drop-shadow-lg 
-                                            transition-transform duration-300 
-                                            hover:scale-125" aria-hidden="true" />
+                    <FaChevronLeft className={`text-xl drop-shadow-lg transition-transform duration-300 hover:scale-125 ${kidsMode ? 'text-kids-blue' : 'text-white'}`} aria-hidden="true" />
                 </button>
                 <button 
                     onClick={() => scroll('right')}
                     aria-label="التمرير لليمين"
                     className={`absolute right-0 top-0 bottom-8 z-30 
-                              bg-gradient-to-l from-black/90 to-transparent
                               px-6 py-4 rounded-l-3xl
                               transition-all duration-300 ease-out
-                              hover:from-amber-600/90 hover:to-transparent
+                              hover:to-transparent
                               hidden md:flex items-center
                               backdrop-blur-sm
+                              ${kidsMode 
+                                ? 'bg-gradient-to-l from-kids-blue/20 to-transparent hover:from-kids-blue/40 text-kids-blue' 
+                                : 'bg-gradient-to-l from-deep-slate-900/90 to-transparent hover:from-ice-mint/20 text-white'}
                               ${showRightButton ? 'opacity-0 group-hover:opacity-100' : 'opacity-0 pointer-events-none'}`}
                 >
-                    <FaChevronRight className="text-white text-xl drop-shadow-lg 
-                                             transition-transform duration-300 
-                                             hover:scale-125" aria-hidden="true" />
+                    <FaChevronRight className={`text-xl drop-shadow-lg transition-transform duration-300 hover:scale-125 ${kidsMode ? 'text-kids-blue' : 'text-white'}`} aria-hidden="true" />
                 </button>
 
                 {/* Scrollable container with improved spacing */}
@@ -167,18 +175,22 @@ const MovieRow = memo(({ title, catId }: MovieRowProps) => {
                                     animationDelay: `${index * 50}ms`
                                 }}
                             >
-                                <MovieCard movie={item} />
+                                <MovieCard movie={item} kidsMode={kidsMode} />
                             </li>
                         ))}
                     </ul>
 
                 {/* Gradient overlays for visual depth */}
-                <div className="absolute top-0 bottom-8 left-0 w-12 md:w-20 
-                              bg-gradient-to-r from-[#0a0a0a] via-[#0a0a0a]/50 to-transparent 
-                              pointer-events-none z-20 hidden md:block" />
-                <div className="absolute top-0 bottom-8 right-0 w-12 md:w-20 
-                              bg-gradient-to-l from-[#0a0a0a] via-[#0a0a0a]/50 to-transparent 
-                              pointer-events-none z-20 hidden md:block" />
+                {!kidsMode && (
+                    <>
+                        <div className="absolute top-0 bottom-8 left-0 w-12 md:w-20 
+                                    bg-gradient-to-r from-[#0a0a0a] via-[#0a0a0a]/50 to-transparent 
+                                    pointer-events-none z-20 hidden md:block" />
+                        <div className="absolute top-0 bottom-8 right-0 w-12 md:w-20 
+                                    bg-gradient-to-l from-[#0a0a0a] via-[#0a0a0a]/50 to-transparent 
+                                    pointer-events-none z-20 hidden md:block" />
+                    </>
+                )}
             </div>
           </>
         )}

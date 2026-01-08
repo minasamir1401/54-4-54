@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import App from './App';
+import { SearchProvider } from './context/SearchContext';
 import './index.css';
 
 // Create a client for React Query
@@ -24,7 +25,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <HelmetProvider>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
-          <App />
+          <SearchProvider>
+            <App />
+          </SearchProvider>
         </BrowserRouter>
       </QueryClientProvider>
     </HelmetProvider>

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   FaServer, FaSyncAlt, FaToggleOn, FaToggleOff,
-  FaCheckCircle, FaExclamationTriangle, FaClock, FaActivity, FaZap, FaTrash
+  FaCheckCircle, FaExclamationTriangle, FaClock, FaChartLine, FaBolt, FaTrash
 } from 'react-icons/fa';
 import axios from 'axios';
 
@@ -12,7 +12,7 @@ const ScrapersManager = () => {
   const [checking, setChecking] = useState(false);
   const [clearing, setClearing] = useState(false);
 
-  const API_BASE = (import.meta as any).env.VITE_API_URL || 'http://localhost:8000';
+  const API_BASE = (import.meta as any).env.VITE_API_URL || '/api-proxy';
   const token = sessionStorage.getItem('admin_token');
 
   const fetchScrapers = async () => {
@@ -106,7 +106,7 @@ const ScrapersManager = () => {
               onClick={fetchScrapers}
               className="glass-panel px-8 py-5 rounded-3xl border-white/5 bg-[#7fffd4] text-[#05070a] font-black flex items-center gap-3 shadow-[0_20px_40px_rgba(127,255,212,0.2)] hover:scale-105 transition-all"
             >
-              <FaZap /> <span className="italic uppercase tracking-wider">Live Refresh</span>
+              <FaBolt /> <span className="italic uppercase tracking-wider">Live Refresh</span>
             </button>
           </div>
         </header>
@@ -118,7 +118,7 @@ const ScrapersManager = () => {
               { label: 'إجمالي المحركات', value: stats.total_scrapers, icon: <FaServer />, color: 'text-blue-400' },
               { label: 'المتاحة حالياً', value: stats.online_scrapers, icon: <FaCheckCircle />, color: 'text-green-400' },
               { label: 'معطلة / خارج الخدمة', value: stats.offline_scrapers, icon: <FaExclamationTriangle />, color: 'text-red-400' },
-              { label: 'كفاءة النطاق', value: `${stats.health_percentage.toFixed(0)}%`, icon: <FaActivity />, color: 'text-[#7fffd4]' }
+              { label: 'كفاءة النطاق', value: `${stats.health_percentage.toFixed(0)}%`, icon: <FaChartLine />, color: 'text-[#7fffd4]' }
             ].map((stat, i) => (
               <motion.div
                 key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
@@ -136,7 +136,7 @@ const ScrapersManager = () => {
 
         {/* Scrapers Detailed Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-          {scrapers && Object.entries(scrapers).map(([key, scraper]: [string, any], idx) => (
+          {scrapers && Object.entries(scrapers).map(([key, scraper]: [string, any]) => (
             <motion.div
               key={key}
               initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}
@@ -202,7 +202,7 @@ const ScrapersManager = () => {
         >
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#7fffd4]/20 to-transparent" />
           <h3 className="text-2xl font-black italic text-white mb-6 flex items-center gap-4">
-            <FaZap className="text-[#7fffd4] animate-bounce" /> قواعد محرك التجميع الذكي
+            <FaBolt className="text-[#7fffd4] animate-bounce" /> قواعد محرك التجميع الذكي
           </h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
             {[

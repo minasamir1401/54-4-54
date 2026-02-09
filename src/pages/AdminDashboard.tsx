@@ -9,6 +9,8 @@ import {
 } from 'react-icons/fa';
 import { clearAllCache } from '../services/api';
 
+const API_BASE = import.meta.env.VITE_API_URL || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+
 // --- Types ---
 interface ScraperSettings {
   larooza_enabled: boolean;
@@ -75,7 +77,7 @@ const UsersListTable = () => {
       const token = sessionStorage.getItem('admin_token');
       if (!token) return;
       try {
-        const res = await fetch('http://localhost:8000/admin/dashboard/users/list?limit=10', {
+        const res = await fetch(`${API_BASE}/admin/dashboard/users/list?limit=10`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         const data = await res.json();
@@ -123,9 +125,8 @@ const AdminDashboard = () => {
   const [stats, setStats] = useState<StatsData | null>(null);
   const [health, setHealth] = useState<HealthStatus | null>(null);
   const [loading, setLoading] = useState(true);
-  const [updating, setUpdating] = useState(false);
+  const [checkingHealth, setCheckingHealth] = useState(false);
   const navigate = useNavigate();
-  const API_BASE = import.meta.env.VITE_API_URL || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
   const getToken = () => sessionStorage.getItem('admin_token');
 
   const fetchAllData = async () => {
@@ -148,7 +149,7 @@ const AdminDashboard = () => {
     const token = getToken();
     setCheckingHealth(true);
     try {
-      const res = await fetch('http://localhost:8000/admin/scrapers/health', { headers: { 'Authorization': `Bearer ${token}` } });
+      const res = await fetch(`${API_BASE}/admin/scrapers/health`, { headers: { 'Authorization': `Bearer ${token}` } });
       const data = await res.json();
       setHealth(data.health);
     } finally { setCheckingHealth(false); }
@@ -156,9 +157,8 @@ const AdminDashboard = () => {
 
   const updateSettings = async (updates: Partial<ScraperSettings>) => {
     const token = getToken();
-    setUpdating(true);
     try {
-      const response = await fetch('http://localhost:8000/admin/scrapers/settings', {
+      const response = await fetch(`${API_BASE}/admin/scrapers/settings`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
         body: JSON.stringify(updates),
@@ -167,7 +167,7 @@ const AdminDashboard = () => {
         const data = await response.json();
         setSettings(data.new_settings);
       }
-    } finally { setUpdating(false); }
+    } catch (e) { console.error(e); }
   };
 
   const handleClearCache = async () => {

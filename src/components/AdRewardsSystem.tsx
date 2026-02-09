@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useUser } from '../hooks/useUser';
-import { redeemReward, trackWatchTime } from '../services/api';
+import { trackWatch } from '../services/api';
 
-const AdRewardsSystem = ({ contentId }: { contentId: string }) => {
+const AdRewardsSystem = ({ contentId: _contentId }: { contentId: string }) => {
   const { user, refreshStatus } = useUser();
   const [showRewardsPanel, setShowRewardsPanel] = useState(false);
   const [watchTime, setWatchTime] = useState(0);
@@ -20,7 +20,7 @@ const AdRewardsSystem = ({ contentId }: { contentId: string }) => {
           const newTime = prev + 1;
           // منح نقاط بناءً على وقت المشاهدة
           if (newTime % 5 === 0) { // كل 5 دقائق
-            trackWatchTime(user.id, 5);
+            trackWatch(user.id, 5);
             refreshStatus();
           }
           return newTime;
@@ -37,7 +37,7 @@ const AdRewardsSystem = ({ contentId }: { contentId: string }) => {
     if (!user) return;
 
     try {
-      switch(rewardType) {
+      switch (rewardType) {
         case 'points':
           // في الواقع، هذه الوظيفة ستكون في الخادم للتحقق من الإعلان
           // هذا فقط عرض تقديمي
@@ -63,7 +63,7 @@ const AdRewardsSystem = ({ contentId }: { contentId: string }) => {
   const startAd = () => {
     setIsWatchingAd(true);
     setAdProgress(0);
-    
+
     // محاكاة تقدم الإعلان
     const adInterval = setInterval(() => {
       setAdProgress(prev => {
@@ -98,7 +98,7 @@ const AdRewardsSystem = ({ contentId }: { contentId: string }) => {
         <div className="fixed bottom-32 right-4 z-50 w-80 bg-black/90 backdrop-blur-lg rounded-2xl border border-white/20 p-4 text-white shadow-2xl">
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-bold text-lg">نظام جزاءات الإعلانات</h3>
-            <button 
+            <button
               onClick={toggleRewardsPanel}
               className="text-gray-400 hover:text-white"
             >
@@ -114,8 +114,8 @@ const AdRewardsSystem = ({ contentId }: { contentId: string }) => {
               <span>نقاط: {user?.points || 0}</span>
             </div>
             <div className="w-full bg-gray-700 rounded-full h-2">
-              <div 
-                className="bg-yellow-500 h-2 rounded-full transition-all duration-1000" 
+              <div
+                className="bg-yellow-500 h-2 rounded-full transition-all duration-1000"
                 style={{ width: `${Math.min((watchTime / 60) * 100, 100)}%` }}
               ></div>
             </div>
@@ -125,11 +125,10 @@ const AdRewardsSystem = ({ contentId }: { contentId: string }) => {
             <button
               onClick={startAd}
               disabled={isWatchingAd}
-              className={`w-full p-3 rounded-xl flex items-center gap-3 transition-all ${
-                isWatchingAd 
-                  ? 'bg-gray-700 cursor-not-allowed' 
-                  : 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700'
-              }`}
+              className={`w-full p-3 rounded-xl flex items-center gap-3 transition-all ${isWatchingAd
+                ? 'bg-gray-700 cursor-not-allowed'
+                : 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700'
+                }`}
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
@@ -144,8 +143,8 @@ const AdRewardsSystem = ({ contentId }: { contentId: string }) => {
                   <span>{adProgress}%</span>
                 </div>
                 <div className="w-full bg-gray-700 rounded-full h-2">
-                  <div 
-                    className="bg-blue-400 h-2 rounded-full transition-all" 
+                  <div
+                    className="bg-blue-400 h-2 rounded-full transition-all"
                     style={{ width: `${adProgress}%` }}
                   ></div>
                 </div>
@@ -165,11 +164,10 @@ const AdRewardsSystem = ({ contentId }: { contentId: string }) => {
             <button
               onClick={() => user && (user.points || 0) >= 500 ? claimAdReward('bonus') : null}
               disabled={(user?.points || 0) < 500}
-              className={`w-full p-3 rounded-xl flex items-center gap-3 transition-all ${
-                (user?.points || 0) >= 500
-                  ? 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700'
-                  : 'bg-gray-700 opacity-50 cursor-not-allowed'
-              }`}
+              className={`w-full p-3 rounded-xl flex items-center gap-3 transition-all ${(user?.points || 0) >= 500
+                ? 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700'
+                : 'bg-gray-700 opacity-50 cursor-not-allowed'
+                }`}
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />

@@ -1,68 +1,26 @@
-const CACHE_NAME = 'lmina-premium-v1';
-const ASSETS_TO_CACHE = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/favicon.png',
-  '/logo512.png'
-];
+// Service Worker Disabled - Preventing fetch errors
+// This service worker is intentionally minimal to avoid blocking resources
 
-// Install Event
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS_TO_CACHE);
-    })
-  );
+  console.log('[SW] Service Worker Installing - Minimal Mode');
   self.skipWaiting();
 });
 
-// Activate Event
 self.addEventListener('activate', (event) => {
+  console.log('[SW] Service Worker Activated - Minimal Mode');
+  // Clear all caches
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
-        cacheNames.map((cache) => {
-          if (cache !== CACHE_NAME) {
-            return caches.delete(cache);
-          }
-        })
+        cacheNames.map((cache) => caches.delete(cache))
       );
     })
   );
+  return self.clients.claim();
 });
 
-// Fetch Event - Stale-While-Revalidate Strategy
+// No fetch interception - let all requests pass through normally
 self.addEventListener('fetch', (event) => {
-  // Skip cross-origin requests and API calls for fresh data
-  if (!event.request.url.startsWith(self.location.origin) || event.request.url.includes('/api/')) {
-    return;
-  }
-
-  event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        // Return cached response, but update it in the background
-        fetch(event.request).then((networkResponse) => {
-          if (networkResponse && networkResponse.status === 200) {
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put(event.request, networkResponse);
-            });
-          }
-        });
-        return cachedResponse;
-      }
-
-      return fetch(event.request).then((networkResponse) => {
-        // Cache new successful requests
-        if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
-          const responseToCache = networkResponse.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache);
-          });
-        }
-        return networkResponse;
-      });
-    })
-  );
+  // Do nothing - let the browser handle all fetches normally
+  return;
 });

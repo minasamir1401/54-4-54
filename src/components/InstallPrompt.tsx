@@ -70,15 +70,15 @@ const InstallPrompt = () => {
 
             <div className="flex flex-row-reverse items-start gap-5">
               <div className="w-16 h-16 bg-gradient-to-br from-ice-mint to-ice-mint-active rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-ice-mint/20">
-                <img src="/favicon.png" alt="LMINA Logo" className="w-10 h-10 object-contain" />
+                <img src="/favicon.png" alt="MOVIDO Logo" className="w-10 h-10 object-contain" />
               </div>
               
               <div className="flex-1 text-right">
-                <h3 className="text-white font-black text-lg mb-1 italic tracking-tighter">تطبيق LMINA</h3>
-                <p className="text-text-secondary text-xs leading-relaxed mb-4">
-                  ثبت التطبيق الآن على جهازك لتجربة مشاهدة أسرع وأفضل بدون إعلانات.
+                <h3 className="text-white font-black italic">MOVIDO PWA</h3>
+                <p className="text-slate-400 text-[10px] font-bold">ثبت تطبيق موفيدو على جهازك لتجربة أسرع وأفضل.</p>
+                <p className="text-[9px] text-slate-400 line-clamp-2 mt-2 leading-relaxed font-medium">
+                  شاهد هذا العمل وبجودة فائقة وحصرياً على MOVIDO.
                 </p>
-                
                 <div className="flex flex-row-reverse items-center gap-3">
                   <button
                     onClick={handleInstall}

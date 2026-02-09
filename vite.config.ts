@@ -108,9 +108,13 @@ export default defineConfig({
     host: true,
     proxy: {
       '/api-proxy': {
-        target: 'http://192.168.0.114:8000',
+        target: 'http://localhost:8000',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api-proxy/, '')
+      },
+      '/sanitize': {
+        target: 'http://localhost:8000',
+        changeOrigin: true
       }
     }
   }

@@ -1,6 +1,6 @@
 {
-  "short_name": "LMINA",
-  "name": "LMINA - شاهد الآن",
+  "short_name": "MOVIDO",
+  "name": "MOVIDO - شاهد الآن",
   "icons": [
     {
       "src": "logo512.png",
@@ -11,9 +11,9 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#0a0a0a",
-  "background_color": "#0a0a0a",
+  "theme_color": "#05070a",
+  "background_color": "#05070a",
   "orientation": "portrait",
-  "description": "أفضل منصة لمشاهدة الأفلام والمسلسلات بجودة عالية وبدون إعلانات مزعجة.",
+  "description": "أفضل منصة MOVIDO لمشاهدة الأفلام والمسلسلات بجودة عالية وبدون إعلانات مزعجة.",
   "lang": "ar"
 }

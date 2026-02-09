@@ -5,13 +5,23 @@ Allow: /category/
 Allow: /watch/
 Allow: /downloader
 Allow: /anime
+Allow: /matches
+Allow: /courses
 
 # Sitemaps
-Sitemap: https://lmina.com/sitemap.xml
+Sitemap: https://movido.com/sitemap.xml
 
-# AI Crawlers
+# AI Crawlers - Allow AI to index for better search discovery on modern AI engines
 User-agent: GPTBot
 Allow: /
 
 User-agent: Google-Extended
 Allow: /
+
+User-agent: CCBot
+Allow: /
+
+# Prevent indexing of admin and auth zones if they exist
+Disallow: /admin/
+Disallow: /auth/
+Disallow: /profile/

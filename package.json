@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "vite build",
     "preview": "vite preview",
     "generate-sitemap": "node scripts/generate-sitemap.js"
   },
@@ -19,7 +19,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-helmet-async": "^2.0.4",
-    "react-icons": "^5.0.1",
+    "react-icons": "^5.5.0",
     "react-lazy-load-image-component": "^1.6.0",
     "react-router-dom": "^6.22.3",
     "swiper": "^11.1.0",

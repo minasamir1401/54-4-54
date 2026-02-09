@@ -17,30 +17,32 @@ const Background3D = memo(() => {
     <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden bg-deep-slate-900" aria-hidden="true">
       {/* 1. AGGRESSIVE CORE GLOWS - Optimized with CSS animations */}
       <div
-        className="absolute -top-[10%] -right-[5%] w-[600px] h-[600px] bg-ice-mint/5 blur-[130px] rounded-full mix-blend-screen animate-pulse-slow"
+        className="absolute -top-[10%] -right-[5%] w-[800px] h-[800px] bg-ice-mint/10 blur-[150px] rounded-full mix-blend-screen animate-pulse-slow"
       />
       
       <div
-        className="absolute -bottom-[10%] -left-[5%] w-[800px] h-[800px] bg-deep-slate-800/15 blur-[160px] rounded-full animate-pulse-slower"
+        className="absolute -bottom-[10%] -left-[5%] w-[1000px] h-[1000px] bg-deep-slate-800/20 blur-[180px] rounded-full animate-pulse-slower"
       />
 
-      {/* 1.5. ADDITIONAL SHIMMER FLARES */}
-      <div className="absolute top-[20%] left-[30%] w-[400px] h-[400px] bg-ice-mint/5 blur-[120px] rounded-full animate-pulse alternate" />
-      <div className="absolute bottom-[30%] right-[25%] w-[500px] h-[500px] bg-ice-mint-active/5 blur-[150px] rounded-full animate-bounce-slow opacity-50" />
+      {/* NEW: Secondary accent glow */}
+      <div
+        className="absolute top-[40%] left-[10%] w-[400px] h-[400px] bg-amber-500/5 blur-[120px] rounded-full animate-pulse-slow"
+      />
 
       {/* 2. OPTIMIZED PARTICLES - Using CSS for performance */}
       <div className="absolute inset-0">
-        {[...Array(8)].map((_, i) => (
+        {[...Array(20)].map((_, i) => (
           <div
             key={i}
             className={`absolute rounded-full blur-[1px] animate-float-up ${
-              i % 2 === 0 ? 'bg-ice-mint w-1 h-1' : 'bg-white/10 w-0.5 h-0.5'
+              i % 3 === 0 ? 'bg-ice-mint w-1.5 h-1.5' : i % 3 === 1 ? 'bg-white/20 w-1 h-1' : 'bg-amber-400/30 w-1 h-1'
             }`}
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
-              animationDuration: `${Math.random() * 10 + 20}s`,
+              animationDuration: `${Math.random() * 15 + 15}s`,
               animationDelay: `${Math.random() * 10}s`,
+              opacity: Math.random() * 0.5 + 0.2
             }}
           />
         ))}

@@ -45,12 +45,12 @@ interface BreadcrumbItem {
 /**
  * Generate Movie Schema
  */
-export const generateMovieSchema = (movie: Movie, siteUrl: string = 'https://lmina.com') => {
+export const generateMovieSchema = (movie: Movie, siteUrl: string = 'https://movido.com') => {
   return {
     '@context': 'https://schema.org',
     '@type': 'Movie',
     name: movie.title,
-    description: movie.description || `شاهد فيلم ${movie.title} على منصة LMINA`,
+    description: movie.description || `شاهد فيلم ${movie.title} على منصة MOVIDO`,
     image: movie.poster || `${siteUrl}/default-poster.jpg`,
     url: `${siteUrl}/movie/${slugify(movie.title)}`,
     datePublished: movie.year,
@@ -65,7 +65,7 @@ export const generateMovieSchema = (movie: Movie, siteUrl: string = 'https://lmi
     inLanguage: 'ar',
     provider: {
       '@type': 'Organization',
-      name: 'LMINA',
+      name: 'MOVIDO',
       url: siteUrl
     }
   };
@@ -74,12 +74,12 @@ export const generateMovieSchema = (movie: Movie, siteUrl: string = 'https://lmi
 /**
  * Generate TV Series Schema
  */
-export const generateTVSeriesSchema = (series: TVSeries, siteUrl: string = 'https://lmina.com') => {
+export const generateTVSeriesSchema = (series: TVSeries, siteUrl: string = 'https://movido.com') => {
   return {
     '@context': 'https://schema.org',
     '@type': 'TVSeries',
     name: series.title,
-    description: series.description || `شاهد مسلسل ${series.title} على منصة LMINA`,
+    description: series.description || `شاهد مسلسل ${series.title} على منصة MOVIDO`,
     image: series.poster || `${siteUrl}/default-poster.jpg`,
     url: `${siteUrl}/series/${slugify(series.title)}`,
     datePublished: series.year,
@@ -95,7 +95,7 @@ export const generateTVSeriesSchema = (series: TVSeries, siteUrl: string = 'http
     inLanguage: 'ar',
     provider: {
       '@type': 'Organization',
-      name: 'LMINA',
+      name: 'MOVIDO',
       url: siteUrl
     }
   };
@@ -104,7 +104,7 @@ export const generateTVSeriesSchema = (series: TVSeries, siteUrl: string = 'http
 /**
  * Generate Episode Schema
  */
-export const generateEpisodeSchema = (episode: Episode, siteUrl: string = 'https://lmina.com') => {
+export const generateEpisodeSchema = (episode: Episode, siteUrl: string = 'https://movido.com') => {
   return {
     '@context': 'https://schema.org',
     '@type': 'TVEpisode',
@@ -123,7 +123,7 @@ export const generateEpisodeSchema = (episode: Episode, siteUrl: string = 'https
     inLanguage: 'ar',
     provider: {
       '@type': 'Organization',
-      name: 'LMINA',
+      name: 'MOVIDO',
       url: siteUrl
     }
   };
@@ -132,12 +132,12 @@ export const generateEpisodeSchema = (episode: Episode, siteUrl: string = 'https
 /**
  * Generate VideoObject Schema
  */
-export const generateVideoObjectSchema = (video: Movie | TVSeries, siteUrl: string = 'https://lmina.com') => {
+export const generateVideoObjectSchema = (video: Movie | TVSeries, siteUrl: string = 'https://movido.com') => {
   return {
     '@context': 'https://schema.org',
     '@type': 'VideoObject',
     name: video.title,
-    description: video.description || `شاهد ${video.title} على منصة LMINA`,
+    description: video.description || `شاهد ${video.title} على منصة MOVIDO`,
     thumbnailUrl: video.poster || `${siteUrl}/default-poster.jpg`,
     uploadDate: video.year,
     contentUrl: `${siteUrl}/watch/${video.id}`,
@@ -145,7 +145,7 @@ export const generateVideoObjectSchema = (video: Movie | TVSeries, siteUrl: stri
     inLanguage: 'ar',
     publisher: {
       '@type': 'Organization',
-      name: 'LMINA',
+      name: 'MOVIDO',
       logo: {
         '@type': 'ImageObject',
         url: `${siteUrl}/logo.png`
@@ -157,7 +157,7 @@ export const generateVideoObjectSchema = (video: Movie | TVSeries, siteUrl: stri
 /**
  * Generate Breadcrumb Schema
  */
-export const generateBreadcrumbSchema = (items: BreadcrumbItem[], siteUrl: string = 'https://lmina.com') => {
+export const generateBreadcrumbSchema = (items: BreadcrumbItem[], siteUrl: string = 'https://movido.com') => {
   return {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -173,17 +173,17 @@ export const generateBreadcrumbSchema = (items: BreadcrumbItem[], siteUrl: strin
 /**
  * Generate Organization Schema
  */
-export const generateOrganizationSchema = (siteUrl: string = 'https://lmina.com') => {
+export const generateOrganizationSchema = (siteUrl: string = 'https://movido.com') => {
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'LMINA',
+    name: 'MOVIDO',
     url: siteUrl,
     logo: {
       '@type': 'ImageObject',
       url: `${siteUrl}/logo.png`
     },
-    description: 'منصة LMINA لمشاهدة الأفلام والمسلسلات العربية والأجنبية بجودة عالية',
+    description: 'منصة MOVIDO لمشاهدة الأفلام والمسلسلات العربية والأجنبية بجودة عالية',
     sameAs: [
       // Add social media links here
     ]
@@ -193,11 +193,11 @@ export const generateOrganizationSchema = (siteUrl: string = 'https://lmina.com'
 /**
  * Generate WebSite Schema with Search Action
  */
-export const generateWebSiteSchema = (siteUrl: string = 'https://lmina.com') => {
+export const generateWebSiteSchema = (siteUrl: string = 'https://movido.com') => {
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: 'LMINA',
+    name: 'MOVIDO',
     url: siteUrl,
     potentialAction: {
       '@type': 'SearchAction',

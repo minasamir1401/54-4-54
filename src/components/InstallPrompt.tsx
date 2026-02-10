@@ -25,14 +25,14 @@ const InstallPrompt = () => {
 
   const handleInstall = async () => {
     if (!deferredPrompt) return;
-    
+
     // Show the install prompt
     deferredPrompt.prompt();
-    
+
     // Wait for the user to respond to the prompt
     const { outcome } = await deferredPrompt.userChoice;
     console.log(`User response to the install prompt: ${outcome}`);
-    
+
     // We've used the prompt, and can't use it again, throw it away
     setDeferredPrompt(null);
     setShowPrompt(false);
@@ -51,44 +51,42 @@ const InstallPrompt = () => {
     <AnimatePresence>
       {showPrompt && (
         <motion.div
-          initial={{ y: 100, opacity: 0 }}
+          initial={{ y: -100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 100, opacity: 0 }}
-          className="fixed bottom-6 left-6 right-6 md:left-auto md:right-8 md:w-[400px] z-[10000]"
+          exit={{ y: -100, opacity: 0 }}
+          className="fixed top-2 md:top-auto md:bottom-8 left-2 right-2 md:left-auto md:right-8 md:w-[380px] z-[10000]"
         >
-          <div className="bg-black/90 backdrop-blur-2xl border border-white/10 p-6 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative overflow-hidden group">
+          <div className="bg-black/95 backdrop-blur-2xl border border-white/10 p-3 md:p-6 rounded-[1.2rem] md:rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.8)] relative overflow-hidden group">
             {/* Background Glow */}
             <div className="absolute -top-10 -right-10 w-32 h-32 bg-ice-mint/20 blur-3xl rounded-full group-hover:bg-ice-mint/30 transition-all duration-500" />
-            
-            <button 
+
+            <button
               onClick={handleClose}
-              className="absolute top-4 left-4 text-gray-500 hover:text-white transition-colors"
+              className="absolute top-3 left-3 w-6 h-6 flex items-center justify-center rounded-full bg-white/5 text-gray-400 hover:text-white transition-colors"
               aria-label="إغلاق"
             >
-              <FaTimes />
+              <FaTimes className="text-[10px]" />
             </button>
 
-            <div className="flex flex-row-reverse items-start gap-5">
-              <div className="w-16 h-16 bg-gradient-to-br from-ice-mint to-ice-mint-active rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-ice-mint/20">
-                <img src="/favicon.png" alt="MOVIDO Logo" className="w-10 h-10 object-contain" />
+            <div className="flex flex-row-reverse items-center gap-4 md:gap-5">
+              <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-ice-mint to-ice-mint-active rounded-xl md:rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-ice-mint/20">
+                <img src="/favicon.png" alt="MOVIDO Logo" className="w-8 h-8 md:w-10 md:h-10 object-contain" />
               </div>
-              
+
               <div className="flex-1 text-right">
-                <h3 className="text-white font-black italic">MOVIDO PWA</h3>
-                <p className="text-slate-400 text-[10px] font-bold">ثبت تطبيق موفيدو على جهازك لتجربة أسرع وأفضل.</p>
-                <p className="text-[9px] text-slate-400 line-clamp-2 mt-2 leading-relaxed font-medium">
-                  شاهد هذا العمل وبجودة فائقة وحصرياً على MOVIDO.
-                </p>
-                <div className="flex flex-row-reverse items-center gap-3">
+                <h3 className="text-white text-xs md:text-base font-black italic">MOVIDO PWA</h3>
+                <p className="text-slate-400 text-[8px] md:text-[10px] font-bold leading-tight mt-1">تطبيق موفيدو لتجربة أسرع وأفضل على جهازك.</p>
+
+                <div className="flex flex-row-reverse items-center gap-2 mt-3">
                   <button
                     onClick={handleInstall}
-                    className="flex-1 bg-white text-black py-3 rounded-xl font-bold text-sm hover:bg-ice-mint hover:text-deep-slate-900 transition-all duration-300 flex items-center justify-center gap-2"
+                    className="flex-1 bg-white text-black py-2 md:py-3 rounded-lg md:rounded-xl font-black text-[10px] md:text-sm hover:bg-ice-mint hover:text-deep-slate-900 transition-all duration-300 flex items-center justify-center gap-2"
                   >
-                    <FaDownload className="text-xs" />
-                    تثبيت الآن
+                    <FaDownload className="text-[8px] md:text-xs" />
+                    تثبيت
                   </button>
-                  
-                  <div className="flex items-center gap-2 text-gray-500 text-[10px] font-bold uppercase tracking-widest">
+
+                  <div className="hidden sm:flex items-center gap-2 text-gray-500 text-[8px] font-black uppercase tracking-widest">
                     <FaMobileAlt title="جوال" />
                     <FaLaptop title="كمبيوتر" />
                   </div>

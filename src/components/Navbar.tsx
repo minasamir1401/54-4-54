@@ -12,14 +12,11 @@ import {
   FaHome,
   FaFilm,
   FaTv,
-  FaFutbol,
-  FaGraduationCap,
   FaDownload,
   FaEllipsisH,
   FaFire,
   FaRobot,
   FaStar
-
 } from 'react-icons/fa';
 import { useUser } from '../hooks/useUser';
 import { redeemPromo } from '../services/api';
@@ -160,17 +157,16 @@ const Navbar = () => {
   const navLinks = kidsMode
     ? [
       { name: 'الرئيسية', path: '/', icon: <FaHome /> },
-      { name: 'مسلسلات مدبلجة', path: '/category/dubbed-series', icon: <FaTv /> },
-      { name: 'مسلسلات كورية', path: '/category/korean-series', icon: <FaRobot /> },
+      { name: 'مسلسلات مدبلجة', path: '/category/dubbed-series', icon: <FaTv />, prefetch: 'dubbed-series' },
+      { name: 'مسلسلات كورية', path: '/category/korean-series', icon: <FaRobot />, prefetch: 'korean-series' },
+      { name: 'أنمي', path: '/category/cartoon-series', icon: <FaRobot />, prefetch: 'cartoon-series' },
     ]
     : [
       { name: 'الرئيسية', path: '/', icon: <FaHome /> },
       { name: 'الأفلام', path: '#', hasMenu: true, items: movieCategories, icon: <FaFilm /> },
       { name: 'المسلسلات', path: '#', hasMenu: true, items: seriesCategories, icon: <FaTv /> },
       { name: 'رمضان', path: '#', hasMenu: true, items: ramadanCategories, icon: <FaFire /> },
-      { name: 'أنمي', path: '/category/cartoon-series', icon: <FaRobot /> },
-      { name: 'مباريات', path: '/matches', icon: <FaFutbol /> },
-      { name: 'الكورسات', path: '/courses', icon: <FaGraduationCap /> },
+      { name: 'أنمي', path: '/category/cartoon-series', icon: <FaRobot />, prefetch: 'cartoon-series' },
       { name: 'تحميل', path: '/downloader', icon: <FaDownload /> },
       { name: 'إضافي', path: '#', hasMenu: true, items: otherCategories, icon: <FaEllipsisH /> },
     ];
@@ -182,10 +178,10 @@ const Navbar = () => {
           ? 'h-20 bg-[#05070a]/90 backdrop-blur-2xl border-b border-white/5 shadow-2xl'
           : 'h-28 bg-transparent'}`}>
 
-        <div className="max-w-[1920px] mx-auto h-full px-6 lg:px-12 flex items-center justify-between gap-4">
+        <div className="max-w-[1920px] mx-auto h-full px-4 md:px-10 flex items-center justify-between gap-2 md:gap-4 min-w-0 w-full">
 
           {/* Menu Icon (Mobile) */}
-          <button onClick={() => setIsMenuOpen(true)} className="lg:hidden text-2xl text-white p-2">
+          <button onClick={() => setIsMenuOpen(true)} className="md:hidden text-2xl text-white p-2">
             <FaBars />
           </button>
 
@@ -205,130 +201,39 @@ const Navbar = () => {
             </div>
           </Link>
 
-          {/* Optimized Navigation Pill - Responsive for Laptops */}
-          <div className="hidden lg:flex flex-1 justify-center px-2">
+          {/* Optimized Navigation Pill - Improved MD visibility */}
+          <div className="hidden md:flex flex-1 justify-center px-2">
             <div className="glass-panel rounded-full px-2 py-1 flex items-center gap-0.5 border-white/5">
-
-              {/* Home */}
-              <div className="relative group/nav">
-                <div onClick={() => handleNavClick('/')} className="cursor-pointer px-3 py-2 text-[10px] xl:text-[11px] font-black uppercase tracking-wider transition-all rounded-full flex items-center gap-1.5 whitespace-nowrap text-slate-400 hover:text-white hover:bg-white/5">
-                  <span className="text-xs opacity-60 group-hover/nav:opacity-100 transition-opacity"><FaHome /></span>
-                  <span className="hidden sm:inline">الرئيسية</span>
-                </div>
-              </div>
-
-              {/* Movies */}
-              <div className="relative group/nav">
-                <Link to="#" className="px-3 py-2 text-[10px] xl:text-[11px] font-black uppercase tracking-wider transition-all rounded-full flex items-center gap-1.5 whitespace-nowrap text-slate-400 hover:text-white hover:bg-white/5">
-                  <span className="text-xs opacity-60 group-hover/nav:opacity-100 transition-opacity"><FaFilm /></span>
-                  <span className="hidden sm:inline">الأفلام</span>
-                  <span className="text-[7px] opacity-30 group-hover/nav:rotate-180 transition-transform">▼</span>
-                </Link>
-                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-4 opacity-0 scale-95 pointer-events-none group-hover/nav:opacity-100 group-hover/nav:scale-100 group-hover/nav:pointer-events-auto transition-all duration-300 z-50">
-                  <div className="glass-panel p-3 rounded-[2rem] min-w-[14rem] grid gap-1 border-white/10 shadow-huge">
-                    {movieCategories.map((item) => (
-                      <div key={item.path} onClick={() => handleNavClick(item.path)} onMouseEnter={() => prefetchCategory(item.path.split('/').pop()!)}
-                        className="cursor-pointer px-5 py-3 rounded-xl text-[11px] font-bold text-slate-300 hover:text-white hover:bg-white/5 transition-all text-right flex justify-between items-center">
-                        {item.name}
-                        <span className="w-1 h-1 rounded-full bg-[#7fffd4] opacity-0 group-hover:opacity-100 transition-opacity"></span>
+              {navLinks.map((link, idx) => (
+                <div key={idx} className="relative group/nav">
+                  {link.hasMenu ? (
+                    <>
+                      <Link to="#" className="px-3 py-2 text-[10px] xl:text-[11px] font-black uppercase tracking-wider transition-all rounded-full flex items-center gap-1.5 whitespace-nowrap text-slate-400 hover:text-white hover:bg-white/5">
+                        <span className="text-xs opacity-60 group-hover/nav:opacity-100 transition-opacity">{link.icon}</span>
+                        <span className="hidden sm:inline">{link.name}</span>
+                        <span className="text-[7px] opacity-30 group-hover/nav:rotate-180 transition-transform">▼</span>
+                      </Link>
+                      <div className="absolute top-full left-1/2 -translate-x-1/2 pt-4 opacity-0 scale-95 pointer-events-none group-hover/nav:opacity-100 group-hover/nav:scale-100 group-hover/nav:pointer-events-auto transition-all duration-300 z-50">
+                        <div className="glass-panel p-3 rounded-[2rem] min-w-[14rem] grid gap-1 border-white/10 shadow-huge">
+                          {link.items?.map((item) => (
+                            <div key={item.path} onClick={() => handleNavClick(item.path)} onMouseEnter={() => prefetchCategory(item.path.split('/').pop()!)}
+                              className="cursor-pointer px-5 py-3 rounded-xl text-[11px] font-bold text-slate-300 hover:text-white hover:bg-white/5 transition-all text-right flex justify-between items-center">
+                              {item.name}
+                              <span className="w-1 h-1 rounded-full bg-[#7fffd4] opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                    ))}
-                  </div>
+                    </>
+                  ) : (
+                    <div onClick={() => handleNavClick(link.path)} onMouseEnter={() => link.prefetch && prefetchCategory(link.prefetch)}
+                      className="cursor-pointer px-3 py-2 text-[10px] xl:text-[11px] font-black uppercase tracking-wider transition-all rounded-full flex items-center gap-1.5 whitespace-nowrap text-slate-400 hover:text-white hover:bg-white/5">
+                      <span className="text-xs opacity-60 group-hover/nav:opacity-100 transition-opacity">{link.icon}</span>
+                      <span className="hidden sm:inline">{link.name}</span>
+                    </div>
+                  )}
                 </div>
-              </div>
-
-              {/* Series */}
-              <div className="relative group/nav">
-                <Link to="#" className="px-3 py-2 text-[10px] xl:text-[11px] font-black uppercase tracking-wider transition-all rounded-full flex items-center gap-1.5 whitespace-nowrap text-slate-400 hover:text-white hover:bg-white/5">
-                  <span className="text-xs opacity-60 group-hover/nav:opacity-100 transition-opacity"><FaTv /></span>
-                  <span className="hidden sm:inline">المسلسلات</span>
-                  <span className="text-[7px] opacity-30 group-hover/nav:rotate-180 transition-transform">▼</span>
-                </Link>
-                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-4 opacity-0 scale-95 pointer-events-none group-hover/nav:opacity-100 group-hover/nav:scale-100 group-hover/nav:pointer-events-auto transition-all duration-300 z-50">
-                  <div className="glass-panel p-3 rounded-[2rem] min-w-[14rem] grid gap-1 border-white/10 shadow-huge">
-                    {seriesCategories.map((item) => (
-                      <div key={item.path} onClick={() => handleNavClick(item.path)} onMouseEnter={() => prefetchCategory(item.path.split('/').pop()!)}
-                        className="cursor-pointer px-5 py-3 rounded-xl text-[11px] font-bold text-slate-300 hover:text-white hover:bg-white/5 transition-all text-right flex justify-between items-center">
-                        {item.name}
-                        <span className="w-1 h-1 rounded-full bg-[#7fffd4] opacity-0 group-hover:opacity-100 transition-opacity"></span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Ramadan */}
-              <div className="relative group/nav">
-                <Link to="#" className="px-3 py-2 text-[10px] xl:text-[11px] font-black uppercase tracking-wider transition-all rounded-full flex items-center gap-1.5 whitespace-nowrap text-slate-400 hover:text-white hover:bg-white/5">
-                  <span className="text-xs opacity-60 group-hover/nav:opacity-100 transition-opacity"><FaFire /></span>
-                  <span className="hidden sm:inline">رمضان</span>
-                  <span className="text-[7px] opacity-30 group-hover/nav:rotate-180 transition-transform">▼</span>
-                </Link>
-                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-4 opacity-0 scale-95 pointer-events-none group-hover/nav:opacity-100 group-hover/nav:scale-100 group-hover/nav:pointer-events-auto transition-all duration-300 z-50">
-                  <div className="glass-panel p-3 rounded-[2rem] min-w-[14rem] grid gap-1 border-white/10 shadow-huge">
-                    {ramadanCategories.map((item) => (
-                      <div key={item.path} onClick={() => handleNavClick(item.path)} onMouseEnter={() => prefetchCategory(item.path.split('/').pop()!)}
-                        className="cursor-pointer px-5 py-3 rounded-xl text-[11px] font-bold text-slate-300 hover:text-white hover:bg-white/5 transition-all text-right flex justify-between items-center">
-                        {item.name}
-                        <span className="w-1 h-1 rounded-full bg-[#7fffd4] opacity-0 group-hover:opacity-100 transition-opacity"></span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Anime/Cartoon Series */}
-              <div className="relative group/nav">
-                <div onClick={() => handleNavClick('/category/cartoon-series')} onMouseEnter={() => prefetchCategory('cartoon-series')} className="cursor-pointer px-3 py-2 text-[10px] xl:text-[11px] font-black uppercase tracking-wider transition-all rounded-full flex items-center gap-1.5 whitespace-nowrap text-slate-400 hover:text-white hover:bg-white/5">
-                  <span className="text-xs opacity-60 group-hover/nav:opacity-100 transition-opacity"><FaRobot /></span>
-                  <span className="hidden sm:inline">أنمي</span>
-                </div>
-              </div>
-
-              {/* Matches */}
-              <div className="relative group/nav hidden xl:block">
-                <div onClick={() => handleNavClick('/matches')} className="cursor-pointer px-3 py-2 text-[10px] xl:text-[11px] font-black uppercase tracking-wider transition-all rounded-full flex items-center gap-1.5 whitespace-nowrap text-slate-400 hover:text-white hover:bg-white/5">
-                  <span className="text-xs opacity-60 group-hover/nav:opacity-100 transition-opacity"><FaFutbol /></span>
-                  <span className="hidden sm:inline">مباريات</span>
-                </div>
-              </div>
-
-              {/* Courses */}
-              <div className="relative group/nav hidden xl:block">
-                <div onClick={() => handleNavClick('/courses')} className="cursor-pointer px-3 py-2 text-[10px] xl:text-[11px] font-black uppercase tracking-wider transition-all rounded-full flex items-center gap-1.5 whitespace-nowrap text-slate-400 hover:text-white hover:bg-white/5">
-                  <span className="text-xs opacity-60 group-hover/nav:opacity-100 transition-opacity"><FaGraduationCap /></span>
-                  <span className="hidden sm:inline">الكورسات</span>
-                </div>
-              </div>
-
-              {/* Downloader */}
-              <div className="relative group/nav hidden xl:block">
-                <div onClick={() => handleNavClick('/downloader')} className="cursor-pointer px-3 py-2 text-[10px] xl:text-[11px] font-black uppercase tracking-wider transition-all rounded-full flex items-center gap-1.5 whitespace-nowrap text-slate-400 hover:text-white hover:bg-white/5">
-                  <span className="text-xs opacity-60 group-hover/nav:opacity-100 transition-opacity"><FaDownload /></span>
-                  <span className="hidden sm:inline">تحميل</span>
-                </div>
-              </div>
-
-              {/* Extra */}
-              <div className="relative group/nav">
-                <Link to="#" className="px-3 py-2 text-[10px] xl:text-[11px] font-black uppercase tracking-wider transition-all rounded-full flex items-center gap-1.5 whitespace-nowrap text-slate-400 hover:text-white hover:bg-white/5">
-                  <span className="text-xs opacity-60 group-hover/nav:opacity-100 transition-opacity"><FaEllipsisH /></span>
-                  <span className="hidden sm:inline">إضافي</span>
-                  <span className="text-[7px] opacity-30 group-hover/nav:rotate-180 transition-transform">▼</span>
-                </Link>
-                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-4 opacity-0 scale-95 pointer-events-none group-hover/nav:opacity-100 group-hover/nav:scale-100 group-hover/nav:pointer-events-auto transition-all duration-300 z-50">
-                  <div className="glass-panel p-3 rounded-[2rem] min-w-[14rem] grid gap-1 border-white/10 shadow-huge">
-                    {otherCategories.map((item) => (
-                      <div key={item.path} onClick={() => handleNavClick(item.path)} onMouseEnter={() => prefetchCategory(item.path.split('/').pop()!)}
-                        className="cursor-pointer px-5 py-3 rounded-xl text-[11px] font-bold text-slate-300 hover:text-white hover:bg-white/5 transition-all text-right flex justify-between items-center">
-                        {item.name}
-                        <span className="w-1 h-1 rounded-full bg-[#7fffd4] opacity-0 group-hover:opacity-100 transition-opacity"></span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
+              ))}
             </div>
           </div>
 

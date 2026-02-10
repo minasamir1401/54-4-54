@@ -62,54 +62,54 @@ const Rewards = () => {
     const isAdFree = user && user.ad_free_until > (Date.now() / 1000);
 
     return (
-        <div className="min-h-screen pt-32 pb-20 px-6 sm:px-12 bg-[#05070a]">
+        <div className="min-h-screen pt-20 md:pt-32 pb-20 px-2 md:px-12 bg-[#05070a]">
             <SEO title="نظام المكافأت والربح | MOVIDO" description="اجمع النقاط من مشاهدة الأفلام ومشاركة الروابط واستبدلها باشتراكات مميزة بدون إعلانات." />
 
             <div className="max-w-6xl mx-auto">
                 {/* Header Stats */}
-                <div className="grid md:grid-cols-3 gap-8 mb-16">
-                    <motion.div 
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-8 mb-8 md:mb-16">
+                    <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="glass-panel p-8 rounded-[3rem] border-[#7fffd4]/10 flex items-center gap-6"
+                        className="glass-panel p-3 md:p-8 rounded-xl md:rounded-[3rem] border-[#7fffd4]/10 flex items-center gap-3 md:gap-6"
                     >
-                        <div className="w-20 h-20 rounded-[2rem] bg-[#7fffd4]/10 flex items-center justify-center text-4xl text-[#7fffd4]">
+                        <div className="w-10 h-10 md:w-20 md:h-20 rounded-lg md:rounded-[2rem] bg-[#7fffd4]/10 flex items-center justify-center text-lg md:text-4xl text-[#7fffd4] shrink-0">
                             <FaCoins />
                         </div>
-                        <div>
-                            <p className="text-slate-500 text-sm font-black uppercase tracking-widest mb-1">نقاطك الحالية</p>
-                            <h2 className="text-4xl font-black text-white tabular-nums">{user?.points || 0}</h2>
+                        <div className="min-w-0">
+                            <p className="text-slate-500 text-[7px] md:text-sm font-black uppercase tracking-widest mb-0.5 truncate">نقاطك الحالية</p>
+                            <h2 className="text-xl md:text-4xl font-black text-white tabular-nums truncate">{user?.points || 0}</h2>
                         </div>
                     </motion.div>
 
-                    <motion.div 
+                    <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
-                        className="glass-panel p-8 rounded-[3rem] border-white/5 flex items-center gap-6"
+                        className="glass-panel p-3 md:p-8 rounded-xl md:rounded-[3rem] border-white/5 flex items-center gap-3 md:gap-6"
                     >
-                        <div className="w-20 h-20 rounded-[2rem] bg-pink-500/10 flex items-center justify-center text-4xl text-pink-500">
+                        <div className="w-10 h-10 md:w-20 md:h-20 rounded-lg md:rounded-[2rem] bg-pink-500/10 flex items-center justify-center text-lg md:text-4xl text-pink-500 shrink-0">
                             <FaClock />
                         </div>
-                        <div>
-                            <p className="text-slate-500 text-sm font-black uppercase tracking-widest mb-1">وقت المشاهدة</p>
-                            <h2 className="text-3xl font-black text-white italic">{( (user?.watch_time_total || 0) / 3600 ).toFixed(1)} <span className="text-sm opacity-40">ساعة</span></h2>
+                        <div className="min-w-0">
+                            <p className="text-slate-500 text-[7px] md:text-sm font-black uppercase tracking-widest mb-0.5 truncate">وقت المشاهدة</p>
+                            <h2 className="text-lg md:text-3xl font-black text-white italic truncate">{((user?.watch_time_total || 0) / 3600).toFixed(1)} <span className="text-[8px] opacity-40">ساعة</span></h2>
                         </div>
                     </motion.div>
 
-                    <motion.div 
+                    <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2 }}
-                        className="glass-panel p-8 rounded-[3rem] border-white/5 flex items-center gap-6"
+                        className="glass-panel p-3 md:p-8 rounded-xl md:rounded-[3rem] border-white/5 flex items-center gap-3 md:gap-6"
                     >
-                        <div className={`w-20 h-20 rounded-[2rem] flex items-center justify-center text-4xl ${isAdFree ? 'bg-green-500/10 text-green-500' : 'bg-orange-500/10 text-orange-500'}`}>
+                        <div className={`w-10 h-10 md:w-20 md:h-20 rounded-lg md:rounded-[2rem] flex items-center justify-center text-lg md:text-4xl shrink-0 ${isAdFree ? 'bg-green-500/10 text-green-500' : 'bg-orange-500/10 text-orange-500'}`}>
                             <FaShieldAlt />
                         </div>
-                        <div>
-                            <p className="text-slate-500 text-sm font-black uppercase tracking-widest mb-1">حالة الاشتراك</p>
-                            <h2 className={`text-xl font-black italic ${isAdFree ? 'text-green-500' : 'text-orange-500'}`}>
-                                {isAdFree ? 'مفعل (بدون إعلانات)' : 'مستخدم عادي'}
+                        <div className="min-w-0">
+                            <p className="text-slate-500 text-[7px] md:text-sm font-black uppercase tracking-widest mb-0.5 truncate">حالة الاشتراك</p>
+                            <h2 className={`text-xs md:text-xl font-black italic truncate ${isAdFree ? 'text-green-500' : 'text-orange-500'}`}>
+                                {isAdFree ? 'مفعل مميز' : 'مستخدم عادي'}
                             </h2>
                         </div>
                     </motion.div>
@@ -118,13 +118,12 @@ const Rewards = () => {
                 {/* Notifications */}
                 <AnimatePresence>
                     {message && (
-                        <motion.div 
+                        <motion.div
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.9 }}
-                            className={`p-6 rounded-2xl mb-12 text-center font-bold flex items-center justify-center gap-4 ${
-                                message.type === 'success' ? 'bg-green-500/10 text-green-400 border border-green-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'
-                            }`}
+                            className={`p-6 rounded-2xl mb-12 text-center font-bold flex items-center justify-center gap-4 ${message.type === 'success' ? 'bg-green-500/10 text-green-400 border border-green-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'
+                                }`}
                         >
                             {message.type === 'success' ? <FaCheckCircle /> : <FaExclamationTriangle />}
                             {message.text}
@@ -133,59 +132,58 @@ const Rewards = () => {
                     )}
                 </AnimatePresence>
 
-                <div className="grid lg:grid-cols-2 gap-12">
+                <div className="grid lg:grid-cols-2 gap-8 md:gap-12">
                     {/* Rewards Store & Promo */}
-                    <div className="space-y-12">
+                    <div className="space-y-8 md:space-y-12">
                         {/* Promo Code Section */}
-                        <div className="glass-panel p-8 rounded-[3rem] border-[#7fffd4]/30 bg-gradient-to-br from-[#7fffd4]/5 to-transparent relative overflow-hidden">
-                             <div className="absolute top-0 right-0 p-4 opacity-10 text-4xl"><FaGift /></div>
-                             <h3 className="text-xl font-black text-white italic mb-4">هل لديك كود هدية؟ 🎁</h3>
-                             <div className="flex gap-3">
-                                <input 
-                                    type="text" 
+                        <div className="glass-panel p-4 md:p-8 rounded-2xl md:rounded-[3rem] border-[#7fffd4]/30 bg-gradient-to-br from-[#7fffd4]/5 to-transparent relative overflow-hidden">
+                            <div className="absolute top-0 right-0 p-3 opacity-10 text-2xl md:text-4xl"><FaGift /></div>
+                            <h3 className="text-lg md:text-xl font-black text-white italic mb-4">هل لديك كود هدية؟ 🎁</h3>
+                            <div className="flex flex-col sm:flex-row gap-2 md:gap-3">
+                                <input
+                                    type="text"
                                     value={promoCode}
                                     onChange={(e) => setPromoCode(e.target.value)}
                                     placeholder="أدخل الكود هنا..."
-                                    className="flex-1 bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white font-bold outline-none focus:border-[#7fffd4]/50 transition-all uppercase"
+                                    className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 md:px-6 md:py-4 text-white font-bold outline-none focus:border-[#7fffd4]/50 transition-all uppercase text-xs md:text-base"
                                 />
-                                <button 
+                                <button
                                     disabled={loading || !promoCode.trim()}
                                     onClick={handlePromoRedeem}
-                                    className="px-8 bg-[#7fffd4] text-[#05070a] rounded-2xl font-black text-xs hover:scale-105 active:scale-95 transition-all disabled:opacity-50 disabled:grayscale"
+                                    className="px-6 py-3 md:px-8 sm:py-0 bg-[#7fffd4] text-[#05070a] rounded-xl font-black text-[10px] md:text-xs hover:scale-105 active:scale-95 transition-all disabled:opacity-50 disabled:grayscale"
                                 >
                                     تفعيل
                                 </button>
-                             </div>
-                             <p className="mt-4 text-[9px] text-slate-500 font-bold italic">أكواد الهدايا صالحة لشخص واحد ولمرة واحدة فقط.</p>
+                            </div>
+                            <p className="mt-3 text-[8px] md:text-[9px] text-slate-500 font-bold italic">أكواد الهدايا صالحة لشخص واحد ولمرة واحدة فقط.</p>
                         </div>
 
                         <div>
-
-                            <h3 className="text-3xl font-black text-white italic mb-2 tracking-tighter">متجر المكافأت 🎁</h3>
+                            <h3 className="text-2xl md:text-3xl font-black text-white italic mb-2 tracking-tighter">متجر المكافأت 🎁</h3>
                             <p className="text-slate-500 text-sm font-bold">استخدم نقاطك للحصول على مميزات حصرية.</p>
                         </div>
-                        
-                        <div className="space-y-4">
+
+                        <div className="space-y-3">
                             {rewards.map((reward) => (
-                                <div key={reward.id} className="glass-panel p-6 rounded-[2.5rem] flex items-center justify-between border-white/5 hover:border-[#7fffd4]/20 transition-all group">
-                                    <div className="flex items-center gap-6">
-                                        <div className="text-3xl group-hover:scale-110 transition-transform">
+                                <div key={reward.id} className="glass-panel p-4 md:p-6 rounded-2xl md:rounded-[2.5rem] flex flex-col sm:flex-row items-start sm:items-center justify-between border-white/5 hover:border-[#7fffd4]/20 transition-all group gap-4">
+                                    <div className="flex items-center gap-4 md:gap-6 w-full sm:w-auto">
+                                        <div className="text-2xl md:text-3xl group-hover:scale-110 transition-transform bg-white/5 w-12 h-12 md:w-16 md:h-16 flex items-center justify-center rounded-xl md:rounded-2xl shrink-0">
                                             {reward.icon}
                                         </div>
-                                        <div>
-                                            <h4 className="font-black text-white mb-1">{reward.name}</h4>
-                                            <p className="text-xs text-slate-500 font-bold italic tracking-wider">المدة: {reward.duration}</p>
+                                        <div className="flex-1 min-w-0">
+                                            <h4 className="font-black text-white text-sm md:text-base mb-1 truncate">{reward.name}</h4>
+                                            <p className="text-[10px] md:text-xs text-slate-500 font-bold italic tracking-wider">المدة: {reward.duration}</p>
                                         </div>
                                     </div>
-                                    <button 
+                                    <button
                                         disabled={loading || !user || user.points < reward.cost}
                                         onClick={() => handleRedeem(reward.id, reward.cost)}
-                                        className={`px-8 py-3 rounded-2xl font-black text-xs transition-all
-                                            ${user && user.points >= reward.cost 
-                                                ? 'bg-[#7fffd4] text-[#05070a] shadow-xl hover:scale-105 active:scale-95' 
+                                        className={`w-full sm:w-auto px-6 md:px-8 py-3 md:py-3.5 rounded-xl md:rounded-2xl font-black text-[10px] md:text-xs transition-all flex items-center justify-center gap-2
+                                            ${user && user.points >= reward.cost
+                                                ? 'bg-[#7fffd4] text-[#05070a] shadow-xl hover:scale-105 active:scale-95'
                                                 : 'bg-white/5 text-slate-600 cursor-not-allowed'}`}
                                     >
-                                        {reward.cost} <FaCoins className="inline ml-1" />
+                                        استبدال بـ {reward.cost} <FaCoins className="inline" />
                                     </button>
                                 </div>
                             ))}
@@ -193,35 +191,35 @@ const Rewards = () => {
                     </div>
 
                     {/* How to earn */}
-                    <div className="space-y-8">
+                    <div className="space-y-6 md:space-y-8">
                         <div>
-                            <h3 className="text-3xl font-black text-white italic mb-2 tracking-tighter">كيف تربح النقاط؟ 🚀</h3>
-                            <p className="text-slate-500 text-sm font-bold">طرق حقيقية وسهلة لجمع الذهب في MOVIDO.</p>
+                            <h3 className="text-xl md:text-3xl font-black text-white italic mb-1 md:mb-2 tracking-tighter">كيف تربح النقاط؟ 🚀</h3>
+                            <p className="text-slate-500 text-[10px] md:text-sm font-bold">طرق حقيقية وسهلة لجمع الذهب في MOVIDO.</p>
                         </div>
 
                         <div className="space-y-4">
-                            <div className="glass-panel p-8 rounded-[3rem] border-white/5 bg-gradient-to-br from-[#7fffd4]/5 to-transparent">
-                                <div className="flex items-start gap-6 mb-8">
-                                    <div className="w-16 h-16 rounded-2xl bg-[#7fffd4]/10 flex items-center justify-center text-3xl text-[#7fffd4]">
+                            <div className="glass-panel p-4 md:p-8 rounded-2xl md:rounded-[3rem] border-white/5 bg-gradient-to-br from-[#7fffd4]/5 to-transparent">
+                                <div className="flex flex-col sm:flex-row items-start gap-3 md:gap-6 mb-8">
+                                    <div className="w-10 h-10 md:w-16 md:h-16 rounded-lg md:rounded-2xl bg-[#7fffd4]/10 flex items-center justify-center text-lg md:text-3xl text-[#7fffd4] shrink-0">
                                         <FaClock />
                                     </div>
-                                    <div>
-                                        <h4 className="text-xl font-black text-white mb-2 italic">مشاهدة حقيقية</h4>
-                                        <p className="text-slate-400 text-sm leading-relaxed font-medium">كل دقيقة تقضيها في مشاهدة أفلامك المفضلة تعطيك <span className="text-[#7fffd4] font-black underline">2 نقطة</span>. ساعة واحدة تمنحك 120 نقطة!</p>
+                                    <div className="min-w-0">
+                                        <h4 className="text-sm md:text-xl font-black text-white mb-1 md:mb-2 italic">مشاهدة حقيقية</h4>
+                                        <p className="text-slate-400 text-[9px] md:text-sm leading-relaxed font-medium">كل دقيقة تقضيها في مشاهدة أفلامك المفضلة تعطيك <span className="text-[#7fffd4] font-black underline">2 نقطة</span>. ساعة واحدة تمنحك 120 نقطة!</p>
                                     </div>
                                 </div>
 
-                                <div className="flex items-start gap-6">
-                                    <div className="w-16 h-16 rounded-2xl bg-purple-500/10 flex items-center justify-center text-3xl text-purple-500">
+                                <div className="flex flex-col sm:flex-row items-start gap-3 md:gap-6">
+                                    <div className="w-10 h-10 md:w-16 md:h-16 rounded-lg md:rounded-2xl bg-purple-500/10 flex items-center justify-center text-lg md:text-3xl text-purple-500 shrink-0">
                                         <FaUserFriends />
                                     </div>
-                                    <div className="flex-1">
-                                        <h4 className="text-xl font-black text-white mb-2 italic">نظام الإحالة (Invite)</h4>
-                                        <p className="text-slate-400 text-sm leading-relaxed font-medium mb-6">شارك رابطك الخاص مع أصدقائك. ستحصل على <span className="text-purple-400 font-black">50 نقطة</span> فور انضمام كل صديق جديد، و <span className="text-purple-400 font-black">5 نقاط</span> لكل ضغطة فريدة على رابطك!</p>
-                                        
-                                        <button 
+                                    <div className="flex-1 w-full min-w-0">
+                                        <h4 className="text-sm md:text-xl font-black text-white mb-1 md:mb-2 italic">نظام الإحالة (Invite)</h4>
+                                        <p className="text-slate-400 text-[9px] md:text-sm leading-relaxed font-medium mb-6">شارك رابطك الخاص مع أصدقائك. ستحصل على <span className="text-purple-400 font-black">50 نقطة</span> فور انضمام كل صديق جديد، و <span className="text-purple-400 font-black">5 نقاط</span> لكل ضغطة فريدة على رابطك!</p>
+
+                                        <button
                                             onClick={copyReferral}
-                                            className="w-full py-5 rounded-2xl bg-white/5 border border-white/10 text-white font-black text-xs flex items-center justify-center gap-3 hover:bg-white/10 transition-all active:scale-95"
+                                            className="w-full py-3 md:py-5 rounded-xl md:rounded-2xl bg-white/5 border border-white/10 text-white font-black text-[9px] md:text-xs flex items-center justify-center gap-2 hover:bg-white/10 transition-all active:scale-95"
                                         >
                                             <FaShareAlt /> نسخ رابط الإحالة الخاص بك
                                         </button>
@@ -229,11 +227,11 @@ const Rewards = () => {
                                 </div>
                             </div>
 
-                            <div className="glass-panel p-6 rounded-[2.5rem] border-yellow-500/20 bg-yellow-500/5 flex items-center gap-6">
-                                 <FaGift className="text-3xl text-yellow-500 animate-bounce" />
-                                 <p className="text-xs text-yellow-200/60 font-medium italic">
-                                     نصيحة: شاهد حلقة كاملة بدون تخطي لتحصل على <span className="text-yellow-500 font-black">200 نقطة بونص</span> كل ساعتين!
-                                 </p>
+                            <div className="glass-panel p-3 md:p-6 rounded-xl md:rounded-[2.5rem] border-yellow-500/20 bg-yellow-500/5 flex items-center gap-3 md:gap-6 text-right">
+                                <FaGift className="text-lg md:text-3xl text-yellow-500 shrink-0 animate-bounce" />
+                                <p className="text-[8px] md:text-xs text-yellow-200/60 font-medium italic leading-relaxed">
+                                    نصيحة: شاهد حلقة كاملة بدون تخطي لتحصل على <span className="text-yellow-500 font-black">200 نقطة بونص</span> كل ساعتين!
+                                </p>
                             </div>
                         </div>
                     </div>

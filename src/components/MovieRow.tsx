@@ -75,17 +75,17 @@ const MovieRow = memo(({ title, catId, initialItems, kidsMode = false }: MovieRo
             <div className="flex flex-row-reverse items-center justify-between mb-8 px-4 md:px-0">
                 <div className="flex flex-row-reverse items-center gap-4">
                     <div className={`w-1.5 h-10 rounded-full ${kidsMode ? 'bg-kids-blue shadow-[0_0_15px_rgba(79,195,247,0.5)]' : 'bg-[#7fffd4] shadow-[0_0_15px_rgba(127,255,212,0.5)]'}`} />
-                    <h2 className={`text-2xl md:text-4xl font-black heading-premium tracking-tighter ${kidsMode ? 'text-slate-900' : 'text-white'}`}>
+                    <h2 className={`text-xl sm:text-2xl md:text-4xl font-black heading-premium tracking-tighter ${kidsMode ? 'text-slate-900' : 'text-white'}`}>
                         {title}
                     </h2>
                 </div>
                 {catId && (
-                    <button 
+                    <button
                         onClick={() => navigate(`/category/${catId}`)}
                         className={`text-[10px] md:text-xs font-black uppercase tracking-widest px-4 py-2 rounded-xl transition-all duration-300
-                                   ${kidsMode 
-                                    ? 'bg-kids-blue/10 text-kids-blue hover:bg-kids-blue hover:text-white' 
-                                    : 'bg-white/5 text-[#7fffd4] hover:bg-[#7fffd4] hover:text-[#05070a] border border-white/5'}`}
+                                   ${kidsMode
+                                ? 'bg-kids-blue/10 text-kids-blue hover:bg-kids-blue hover:text-white'
+                                : 'bg-white/5 text-[#7fffd4] hover:bg-[#7fffd4] hover:text-[#05070a] border border-white/5'}`}
                     >
                         عرض الكل
                     </button>
@@ -94,7 +94,7 @@ const MovieRow = memo(({ title, catId, initialItems, kidsMode = false }: MovieRo
 
             <div className="relative overflow-visible">
                 {/* Scroll Buttons */}
-                <button 
+                <button
                     onClick={() => scroll('left')}
                     className={`absolute left-0 top-0 bottom-10 z-30 px-6 hidden md:flex items-center transition-all duration-500
                                bg-gradient-to-r from-[#05070a]/90 to-transparent backdrop-blur-[2px]
@@ -102,8 +102,8 @@ const MovieRow = memo(({ title, catId, initialItems, kidsMode = false }: MovieRo
                 >
                     <FaChevronLeft className={`text-2xl ${kidsMode ? 'text-kids-blue' : 'text-[#7fffd4]'}`} />
                 </button>
-                
-                <button 
+
+                <button
                     onClick={() => scroll('right')}
                     className={`absolute right-0 top-0 bottom-10 z-30 px-6 hidden md:flex items-center transition-all duration-500
                                bg-gradient-to-l from-[#05070a]/90 to-transparent backdrop-blur-[2px]
@@ -113,23 +113,23 @@ const MovieRow = memo(({ title, catId, initialItems, kidsMode = false }: MovieRo
                 </button>
 
                 {/* Content */}
-                <ul 
+                <ul
                     ref={scrollRef}
-                    className="flex overflow-x-auto gap-4 md:gap-6 px-4 md:px-0 no-scrollbar scroll-smooth pb-10 snap-x snap-mandatory"
+                    className="flex overflow-x-auto gap-3 sm:gap-4 md:gap-6 px-4 md:px-0 no-scrollbar scroll-smooth pb-10 snap-x snap-mandatory"
                 >
                     {loading ? (
-                        [1,2,3,4,5,6].map(i => (
-                            <li key={i} className="flex-shrink-0 w-[160px] md:w-[260px] aspect-[2/3] bg-white/5 rounded-2xl animate-pulse" />
+                        [1, 2, 3, 4, 5, 6].map(i => (
+                            <li key={i} className="flex-shrink-0 w-[140px] sm:w-[160px] md:w-[260px] aspect-[2/3] bg-white/5 rounded-2xl animate-pulse" />
                         ))
                     ) : (
                         items.map((item, index) => (
-                            <motion.li 
+                            <motion.li
                                 key={item.id}
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.5, delay: index * 0.05 }}
-                                className="flex-shrink-0 w-[160px] md:w-[260px] snap-start"
+                                className="flex-shrink-0 w-[140px] sm:w-[160px] md:w-[260px] snap-start"
                             >
                                 <MovieCard movie={item} kidsMode={kidsMode} />
                             </motion.li>

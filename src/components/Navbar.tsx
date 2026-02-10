@@ -185,10 +185,7 @@ const Navbar = () => {
 
           {/* Logo Section */}
           <Link to="/" className="flex flex-row-reverse items-center gap-4 group shrink-0">
-            <div className={`w-11 h-11 rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(127,255,212,0.2)] border border-white/10 group-hover:scale-110 group-hover:rotate-[10deg] transition-all duration-700 relative`}>
-              <div className="absolute inset-0 bg-[#7fffd4]/10 group-hover:opacity-0 transition-opacity" />
-              <img src="/favicon.png" className="w-full h-full object-cover" alt="MOVIDO" />
-            </div>
+            <img src="/mobile-logo.png" className="w-11 h-11 rounded-2xl shadow-[0_0_30px_rgba(127,255,212,0.2)] group-hover:scale-110 group-hover:rotate-[10deg] transition-all duration-700" alt="MOVIDO" />
             <div className="flex flex-col items-start pr-2">
               <span className={`text-2xl md:text-4xl font-black heading-premium italic tracking-tighter transition-all duration-700
                   ${kidsMode
@@ -499,7 +496,7 @@ const Navbar = () => {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed top-0 right-0 bottom-0 w-85 bg-[#0c0f16] z-[201] p-8 flex flex-col gap-8 shadow-huge border-l border-white/5"
+              className="fixed top-0 right-0 bottom-0 w-full sm:w-80 max-w-sm bg-[#0c0f16] z-[201] p-8 flex flex-col gap-8 shadow-huge border-l border-white/5"
             >
               <div className="flex items-center justify-between">
                 <button onClick={() => setIsMenuOpen(false)} className="text-3xl text-white hover:text-[#7fffd4] transition-colors">

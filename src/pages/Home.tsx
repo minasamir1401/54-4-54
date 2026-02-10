@@ -114,7 +114,7 @@ const Home = () => {
       <Hero movie={heroMovie} kidsMode={kidsMode} />
 
       <main className="relative z-20 -mt-24 md:-mt-40">
-        <div className="px-6 md:px-12 space-y-24">
+        <div className="px-4 sm:px-6 md:px-12 space-y-16 md:space-y-24">
           {/* Top Ad Banner */}
           <div className="flex justify-center md:hidden">
             <AdBanner />
@@ -191,7 +191,7 @@ const Home = () => {
               <div className="flex flex-col-reverse md:flex-row-reverse items-center justify-between gap-12">
                 <div className="text-center md:text-right">
                   <div className="flex flex-col md:flex-row-reverse items-center gap-6 mb-8">
-                    <h2 className={`text-3xl md:text-5xl font-black heading-premium italic leading-tight ${kidsMode ? 'text-slate-800' : 'text-white'}`}>
+                    <h2 className={`text-2xl sm:text-3xl md:text-5xl font-black heading-premium italic leading-tight ${kidsMode ? 'text-slate-800' : 'text-white'}`}>
                       {kidsMode ? 'مملكة المرح بانتظارك 🎭' : 'اكتشف المزيد من MOVIDO'}
                     </h2>
                     <motion.div animate={{ rotate: [0, 10, -10, 0] }} transition={{ repeat: Infinity, duration: 2 }}>
@@ -218,7 +218,7 @@ const Home = () => {
           <AdBanner />
 
           {/* Global Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6 md:gap-8">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-6 md:gap-8">
             {content.map((item, index) => (
               <motion.div
                 key={item.id}

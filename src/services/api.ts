@@ -128,39 +128,25 @@ export interface CourseDetails {
     completed_count?: number;
 }
 
+const getBaseUrl = () => {
+    if (API_BASE_URL.startsWith('http')) return API_BASE_URL;
+    return window.location.origin + (API_BASE_URL === '/api-proxy' ? '' : API_BASE_URL);
+};
+
 export const getProxyImage = (url: string) => {
     if (!url) return "";
-
-    // If it's already a full proxied URL or relative proxy path, return as is
-    if (url.includes("/proxy/image")) {
-        if (url.startsWith("http")) return url;
-        return `${API_BASE_URL}${url.startsWith("/") ? "" : "/"}${url}`;
-    }
-
-    // If it's a relative path from the backend (like /uploads/...)
-    if (url.startsWith("/") && !url.startsWith("http")) {
-        return `${API_BASE_URL}/proxy/image?url=${encodeURIComponent(url)}`;
-    }
-
-    // If it's a full external URL, proxy it
-    if (url.startsWith("http")) {
-        return `${API_BASE_URL}/proxy/image?url=${encodeURIComponent(url)}`;
-    }
-
-    return url;
+    const base = getBaseUrl();
+    if (url.includes("/proxy/image")) return url.startsWith('http') ? url : `${base}${url}`;
+    return `${base}/proxy/image?url=${encodeURIComponent(url)}`;
 };
 
 export const getProxyDownloadUrl = (url: string, filename: string) => {
-    return `${API_BASE_URL}/proxy/download?url=${encodeURIComponent(
-        url
-    )}&filename=${encodeURIComponent(filename)}`;
+    return `${getBaseUrl()}/proxy/download?url=${encodeURIComponent(url)}&filename=${encodeURIComponent(filename)}`;
 };
 
-export const getProxyStreamUrl = (url: string, type: 'hls' | 'stream', referer?: string) => {
-    let proxyUrl = `${API_BASE_URL}/proxy/${type}?url=${encodeURIComponent(url)}`;
-    if (referer) {
-        proxyUrl += `&referer=${encodeURIComponent(referer)}`;
-    }
+export const getProxyStreamUrl = (url: string, type: 'hls' | 'stream' | 'video', referer?: string) => {
+    let proxyUrl = `${getBaseUrl()}/proxy/${type}?url=${encodeURIComponent(url)}`;
+    if (referer) proxyUrl += `&referer=${encodeURIComponent(referer)}`;
     return proxyUrl;
 };
 
@@ -649,11 +635,17 @@ export const fetchAnimeEpisode = async (id: string) => {
 
 export const resolveStream = async (url: string) => {
     try {
-        const response = await api.get(`/proxy/resolve?url=${encodeURIComponent(url)}`);
+        // Appending timestamp to force fresh extraction (bypass backend LRU cache)
+        const response = await api.get('/proxy/resolve', {
+            params: {
+                url,
+                t: Date.now()
+            }
+        });
         return response.data;
     } catch (error) {
         console.error("Stream resolution failed:", error);
-        return null;
+        return { success: false, message: "Server error" };
     }
 };
 

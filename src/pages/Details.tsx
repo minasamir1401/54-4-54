@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaDownload, FaPlay, FaCloudDownloadAlt, FaChevronRight } from 'react-icons/fa';
-import { fetchDetails, Details, ContentItem, fetchByCategory, fetchLatest, saveHistory } from '../services/api';
+import { fetchDetails, Details, ContentItem, fetchByCategory, fetchLatest, saveHistory, resolveStream, getProxyStreamUrl } from '../services/api';
 import SEO from '../components/SEO';
 import AdBanner from '../components/AdBanner';
+import VideoPlayer from '../components/VideoPlayer';
 
 const DetailsPage = () => {
     const { id } = useParams<{ id: string }>();
@@ -15,6 +16,9 @@ const DetailsPage = () => {
     const [selectedServer, setSelectedServer] = useState<number>(0);
     const [fallbackMovies, setFallbackMovies] = useState<ContentItem[]>([]);
     const [fallbackSeries, setFallbackSeries] = useState<ContentItem[]>([]);
+    const [directStream, setDirectStream] = useState<{ url: string; type: string; headers?: any } | null>(null);
+    const [isResolving, setIsResolving] = useState(false);
+    const [serverError, setServerError] = useState<string | null>(null);
 
     // Ad Logic State - Aggressive Mode
     const [serverClicks, setServerClicks] = useState(0);
@@ -126,6 +130,57 @@ const DetailsPage = () => {
         loadDiscovery();
     }, [id]);
 
+    // Auto-resolve stream for selected server
+    useEffect(() => {
+        if (!data?.servers?.[selectedServer]) {
+            setDirectStream(null);
+            return;
+        }
+
+        const resolve = async () => {
+            const server = data.servers![selectedServer];
+            console.log("Resolution refresh V2 for:", server.url);
+            setIsResolving(true);
+            setServerError(null);
+            setDirectStream(null);
+
+            try {
+                // Determine if this server is likely bypassable
+                const isBypassable = /vidara|savefiles|reviewrate|mixdrop|streamtape|upstream|vidoza|up4fun|voe|bysezejataos|frizat|vidmoly|byse/i.test(server.url);
+
+                if (isBypassable) {
+                    const result = await resolveStream(server.url);
+
+                    if (result && result.success && result.url) {
+                        if (result.url === "deleted" || result.type === "error") {
+                            setServerError("عذراً، هذا السيرفر لم يعد متاحاً (تم حذفه من المصدر)");
+                            setIsResolving(false);
+                            return;
+                        }
+
+                        const type = result.type === 'hls' ? 'hls' : 'video';
+                        const proxiedUrl = getProxyStreamUrl(result.url, type, result.headers?.Referer || result.headers?.referer || server.url);
+                        setDirectStream({
+                            url: proxiedUrl,
+                            type: result.type || 'hls'
+                        });
+                        setIsResolving(false);
+                        return;
+                    }
+                }
+
+                // If not bypassable or resolution failed, we just show iframe (which happens by default when directStream is null and isResolving is false)
+                console.info("Falling back to standard iframe for:", server.url);
+            } catch (e) {
+                console.warn("Stream resolution failed", e);
+            } finally {
+                setIsResolving(false);
+            }
+        };
+
+        resolve();
+    }, [selectedServer, data]);
+
 
     if (loading) {
         return (
@@ -209,7 +264,7 @@ const DetailsPage = () => {
                         <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
                     </div>
                     <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide" dir="rtl">
-                        {data.servers?.map((server, idx) => (
+                        {data.servers?.map((_, idx) => (
                             <button
                                 key={idx}
                                 onClick={() => handleServerWithAds(idx)}
@@ -242,7 +297,7 @@ const DetailsPage = () => {
                                     <div className="p-6 border-b border-white/5 bg-[#13161c]">
                                         <h3 className="text-lg font-black italic text-white flex items-center justify-between">
                                             <span>الحلقات</span>
-                                            <span className="text-[10px] bg-white/5 px-2 py-1 rounded text-slate-400">{data.episodes.length}</span>
+                                            <span className="text-[10px] bg-white/5 px-2 py-1 rounded text-slate-400">{data.episodes!.length}</span>
                                         </h3>
                                     </div>
                                     <div className="overflow-y-auto p-4 space-y-2 custom-scrollbar">
@@ -289,14 +344,56 @@ const DetailsPage = () => {
                             <div className="relative aspect-video w-full rounded-[2rem] overflow-hidden bg-black shadow-2xl border border-white/5">
                                 <AnimatePresence mode="wait">
                                     <motion.div key={selectedServer} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="w-full h-full relative z-10">
-                                        {currentServer?.url ? (
-                                            <iframe src={currentServer.url} className="w-full h-full border-0" allowFullScreen allow="autoplay; encrypted-media" title="MoviePlayer" />
-                                        ) : (
-                                            <div className="w-full h-full flex flex-col items-center justify-center gap-4 text-zinc-500 italic">
-                                                <div className="w-10 h-10 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
-                                                <p className="text-xs font-black tracking-[0.2em]">جارٍ تحضير السيرفر...</p>
-                                            </div>
-                                        )}
+                                        <div className="w-full h-full bg-[#0a0c10] rounded-2xl overflow-hidden shadow-2xl border border-white/5 relative">
+                                            {isResolving && (
+                                                <div className="w-full h-full flex flex-col items-center justify-center gap-6 bg-[#0a0c10]">
+                                                    <div className="relative w-16 h-16">
+                                                        <div className="absolute inset-0 border-4 border-indigo-500/20 rounded-full"></div>
+                                                        <div className="absolute inset-0 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+                                                    </div>
+                                                    <div className="text-center">
+                                                        <h3 className="text-lg font-bold text-white animate-pulse">جارٍ استخراج الرابط المباشر...</h3>
+                                                        <p className="text-slate-400 text-xs mt-1">لحظات لتخطي الإعلانات المزعجة</p>
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {!isResolving && serverError && (
+                                                <div className="w-full h-full flex flex-col items-center justify-center gap-4 text-center px-6">
+                                                    <div className="w-16 h-16 bg-rose-500/20 rounded-full flex items-center justify-center text-4xl mb-2">⚠️</div>
+                                                    <h3 className="text-xl font-bold text-white">{serverError}</h3>
+                                                    <button
+                                                        onClick={() => setSelectedServer((selectedServer + 1) % (data.servers?.length || 1))}
+                                                        className="mt-4 px-6 py-2 bg-indigo-600 hover:bg-indigo-700 rounded-full text-white text-sm transition-colors"
+                                                    >
+                                                        تجربة سيرفر آخر
+                                                    </button>
+                                                </div>
+                                            )}
+
+                                            {!isResolving && !serverError && directStream && (
+                                                <VideoPlayer url={directStream.url} poster={data.poster} />
+                                            )}
+
+                                            {!isResolving && !serverError && !directStream && currentServer?.url && (
+                                                <div className="w-full h-full relative group/player">
+                                                    <iframe
+                                                        src={currentServer.url}
+                                                        className="w-full h-full border-0"
+                                                        allowFullScreen
+                                                        allow="autoplay; encrypted-media"
+                                                        title="MoviePlayer"
+                                                    />
+                                                    <div className="absolute inset-0 bg-transparent z-20 pointer-events-none group-active/player:hidden" />
+                                                </div>
+                                            )}
+
+                                            {!isResolving && !serverError && !directStream && !currentServer?.url && (
+                                                <div className="w-full h-full flex items-center justify-center text-zinc-500">
+                                                    <span>لا يوجد فيديو متاح لهذا السيرفر</span>
+                                                </div>
+                                            )}
+                                        </div>
                                     </motion.div>
                                 </AnimatePresence>
                             </div>

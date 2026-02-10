@@ -97,7 +97,7 @@ const Hero = ({ movie, kidsMode = false }: HeroProps) => {
                 </div>
               </div>
 
-              <h1 className={`text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-black mb-4 sm:mb-10 heading-premium tracking-tighter italic leading-tight ${kidsMode ? 'text-transparent bg-clip-text bg-gradient-to-r from-kids-blue to-kids-pink drop-shadow-2xl' : 'text-white drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]'}`}>
+              <h1 className={`text-2xl sm:text-4xl md:text-5xl lg:text-7xl font-black mb-4 sm:mb-10 heading-premium tracking-tighter italic leading-tight ${kidsMode ? 'text-transparent bg-clip-text bg-gradient-to-r from-kids-blue to-kids-pink drop-shadow-2xl' : 'text-white drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]'}`}>
                 {movie.title}
               </h1>
 
@@ -113,7 +113,7 @@ const Hero = ({ movie, kidsMode = false }: HeroProps) => {
                     openSmartLink();
                     navigate(`/details/${movie.id}`);
                   }}
-                  className={`flex flex-row-reverse items-center px-6 py-3 sm:px-16 sm:py-6 rounded-2xl sm:rounded-3xl font-black text-xs sm:text-xl transition-all duration-500 overflow-hidden relative group/btn ${kidsMode
+                  className={`flex flex-row-reverse items-center px-5 py-3 sm:px-16 sm:py-6 rounded-2xl sm:rounded-3xl font-black text-xs sm:text-xl transition-all duration-500 overflow-hidden relative group/btn ${kidsMode
                     ? 'bg-kids-blue text-white shadow-2xl'
                     : 'bg-[#7fffd4] text-[#05070a] shadow-[0_15px_40px_rgba(127,255,212,0.3)]'
                     }`}
@@ -130,7 +130,7 @@ const Hero = ({ movie, kidsMode = false }: HeroProps) => {
                     openSmartLink();
                     navigate(`/details/${movie.id}`);
                   }}
-                  className={`flex flex-row-reverse items-center backdrop-blur-3xl px-5 py-3 sm:px-14 sm:py-6 rounded-2xl sm:rounded-3xl font-black text-xs sm:text-xl transition-all duration-300 border-2 ${kidsMode
+                  className={`flex flex-row-reverse items-center backdrop-blur-3xl px-4 py-3 sm:px-14 sm:py-6 rounded-2xl sm:rounded-3xl font-black text-xs sm:text-xl transition-all duration-300 border-2 ${kidsMode
                     ? 'bg-white text-kids-blue border-kids-blue shadow-lg'
                     : 'bg-white/5 text-white border-white/10 hover:border-white/20'
                     }`}

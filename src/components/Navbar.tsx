@@ -185,7 +185,7 @@ const Navbar = () => {
 
           {/* Logo Section */}
           <Link to="/" className="flex flex-row-reverse items-center gap-4 group shrink-0">
-            <img src="/mobile-logo.png" className="w-11 h-11 rounded-2xl shadow-[0_0_30px_rgba(127,255,212,0.2)] group-hover:scale-110 group-hover:rotate-[10deg] transition-all duration-700" alt="MOVIDO" />
+
             <div className="flex flex-col items-start pr-2">
               <span className={`text-2xl md:text-4xl font-black heading-premium italic tracking-tighter transition-all duration-700
                   ${kidsMode

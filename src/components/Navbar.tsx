@@ -163,12 +163,12 @@ const Navbar = () => {
     ]
     : [
       { name: 'الرئيسية', path: '/', icon: <FaHome /> },
-      { name: 'الأفلام', path: '#', hasMenu: true, items: movieCategories, icon: <FaFilm /> },
-      { name: 'المسلسلات', path: '#', hasMenu: true, items: seriesCategories, icon: <FaTv /> },
-      { name: 'رمضان', path: '#', hasMenu: true, items: ramadanCategories, icon: <FaFire /> },
+      { name: 'الأفلام', path: '/category/netflix-movies', hasMenu: true, items: movieCategories, icon: <FaFilm /> },
+      { name: 'المسلسلات', path: '/category/netflix-series', hasMenu: true, items: seriesCategories, icon: <FaTv /> },
+      { name: 'رمضان', path: '/ramadan-2026', hasMenu: true, items: ramadanCategories, icon: <FaFire /> },
       { name: 'أنمي', path: '/category/cartoon-series', icon: <FaRobot />, prefetch: 'cartoon-series' },
       { name: 'تحميل', path: '/downloader', icon: <FaDownload /> },
-      { name: 'إضافي', path: '#', hasMenu: true, items: otherCategories, icon: <FaEllipsisH /> },
+      { name: 'إضافي', path: '/category/plays', hasMenu: true, items: otherCategories, icon: <FaEllipsisH /> },
     ];
 
   return (
@@ -185,39 +185,44 @@ const Navbar = () => {
             <FaBars />
           </button>
 
-          {/* Logo Section */}
-          <Link to="/" className="flex flex-row-reverse items-center gap-4 group shrink-0">
+          {/* Logo Section - Restored Icon & Fixed Styling */}
+          <Link to="/" className="flex items-center gap-3 md:gap-4 group shrink-0 no-underline">
+            <div className={`w-10 h-10 md:w-14 md:h-14 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-all duration-500 relative overflow-hidden
+              ${kidsMode ? 'bg-kids-yellow shadow-kids-blue/20' : 'bg-gradient-to-br from-[#7fffd4] to-[#1e88e5] shadow-ice-mint/20'}`}>
+              <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+              <span className="text-xl md:text-2xl font-black text-[#05070a] italic">M</span>
+            </div>
 
-            <div className="flex flex-col items-start pr-2">
-              <span className={`text-2xl md:text-4xl font-black heading-premium italic tracking-tighter transition-all duration-700
+            <div className="flex flex-col items-start pt-1">
+              <span className={`text-xl md:text-3xl font-black heading-premium italic tracking-tighter leading-none
                   ${kidsMode
                   ? 'text-transparent bg-clip-text bg-gradient-to-r from-kids-blue to-kids-pink'
-                  : 'text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]'}`}>
+                  : 'text-white'}`}>
                 MOVIDO
               </span>
-              <span className={`text-[8px] font-black tracking-[0.6em] -mt-1.5 opacity-40 ${kidsMode ? 'text-kids-blue' : 'text-[#7fffd4]'}`}>
-                {kidsMode ? 'FOR KIDS' : 'PREMIUM TV'}
+              <span className={`text-[7px] md:text-[8px] font-black tracking-[0.5em] mt-0.5 opacity-50 ${kidsMode ? 'text-kids-blue' : 'text-[#7fffd4]'}`}>
+                {kidsMode ? 'KIDS MODE' : 'PREMIUM TV'}
               </span>
             </div>
           </Link>
 
           {/* Optimized Navigation Pill - Improved MD visibility */}
-          <div className="hidden md:flex flex-1 justify-center px-2">
+          <div className="hidden md:flex flex-1 justify-center px-1">
             <div className="glass-panel rounded-full px-2 py-1 flex items-center gap-0.5 border-white/5">
               {navLinks.map((link, idx) => (
-                <div key={idx} className="relative group/nav">
+                <div key={idx} className="relative group">
                   {link.hasMenu ? (
                     <>
-                      <Link to="#" className="px-3 py-2 text-[10px] xl:text-[11px] font-black uppercase tracking-wider transition-all rounded-full flex items-center gap-1.5 whitespace-nowrap text-slate-400 hover:text-white hover:bg-white/5">
-                        <span className="text-xs opacity-60 group-hover/nav:opacity-100 transition-opacity">{link.icon}</span>
-                        <span className="hidden sm:inline">{link.name}</span>
-                        <span className="text-[7px] opacity-30 group-hover/nav:rotate-180 transition-transform">▼</span>
-                      </Link>
-                      <div className="absolute top-full left-1/2 -translate-x-1/2 pt-4 opacity-0 scale-95 pointer-events-none group-hover/nav:opacity-100 group-hover/nav:scale-100 group-hover/nav:pointer-events-auto transition-all duration-300 z-50">
+                      <div onClick={() => handleNavClick(link.path)} className="cursor-pointer px-2.5 xl:px-3 py-2 text-[10px] xl:text-[11px] font-black uppercase tracking-wider transition-all rounded-full flex items-center gap-1.5 whitespace-nowrap text-slate-400 hover:text-white hover:bg-white/5">
+                        <span className="opacity-60 group-hover:opacity-100 transition-opacity">{link.icon}</span>
+                        <span className="hidden lg:inline">{link.name}</span>
+                        <span className="text-[7px] opacity-30 group-hover:rotate-180 transition-transform">▼</span>
+                      </div>
+                      <div className="absolute top-full left-1/2 -translate-x-1/2 pt-4 opacity-0 scale-95 pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto transition-all duration-300 z-50">
                         <div className="glass-panel p-3 rounded-[2rem] min-w-[14rem] grid gap-1 border-white/10 shadow-huge">
                           {link.items?.map((item) => (
                             <div key={item.path} onClick={() => handleNavClick(item.path)} onMouseEnter={() => prefetchCategory(item.path.split('/').pop()!)}
-                              className="cursor-pointer px-5 py-3 rounded-xl text-[11px] font-bold text-slate-300 hover:text-white hover:bg-white/5 transition-all text-right flex justify-between items-center">
+                              className="cursor-pointer px-5 py-3 rounded-xl text-[11px] font-bold text-slate-300 hover:text-white hover:bg-white/5 transition-all text-right flex justify-between items-center whitespace-nowrap">
                               {item.name}
                               <span className="w-1 h-1 rounded-full bg-[#7fffd4] opacity-0 group-hover:opacity-100 transition-opacity"></span>
                             </div>
@@ -227,9 +232,9 @@ const Navbar = () => {
                     </>
                   ) : (
                     <div onClick={() => handleNavClick(link.path)} onMouseEnter={() => link.prefetch && prefetchCategory(link.prefetch)}
-                      className="cursor-pointer px-3 py-2 text-[10px] xl:text-[11px] font-black uppercase tracking-wider transition-all rounded-full flex items-center gap-1.5 whitespace-nowrap text-slate-400 hover:text-white hover:bg-white/5">
-                      <span className="text-xs opacity-60 group-hover/nav:opacity-100 transition-opacity">{link.icon}</span>
-                      <span className="hidden sm:inline">{link.name}</span>
+                      className="cursor-pointer px-2.5 xl:px-3 py-2 text-[10px] xl:text-[11px] font-black uppercase tracking-wider transition-all rounded-full flex items-center gap-1.5 whitespace-nowrap text-slate-400 hover:text-white hover:bg-white/5">
+                      <span className="opacity-60 group-hover:opacity-100 transition-opacity">{link.icon}</span>
+                      <span className="hidden lg:inline">{link.name}</span>
                     </div>
                   )}
                 </div>

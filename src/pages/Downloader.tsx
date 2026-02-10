@@ -37,16 +37,16 @@ const Downloader = () => {
                 {/* Lab Header */}
                 <motion.header
                     initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}
-                    className="text-center mb-8 md:mb-20"
+                    className="text-center mb-6 md:mb-20"
                 >
                     <div className="inline-flex items-center gap-2 md:gap-4 px-3 md:px-6 py-1.5 md:py-2 rounded-full border border-[#7fffd4]/20 bg-[#7fffd4]/10 text-[#7fffd4] mb-4 md:mb-8">
-                        <FaMagic className="animate-pulse text-[10px]" />
+                        <FaMagic className="animate-pulse text-[8px] md:text-[10px]" />
                         <span className="text-[7px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.5em]">تحميل الفيديو</span>
                     </div>
-                    <h1 className="text-2xl md:text-6xl lg:text-8xl font-black heading-premium italic tracking-tighter leading-none mb-3 md:mb-6">
+                    <h1 className="text-xl md:text-6xl lg:text-8xl font-black heading-premium italic tracking-tighter leading-none mb-3 md:mb-6">
                         تحميل <span className="text-white/30">&</span> مشاهدة
                     </h1>
-                    <p className="text-[10px] md:text-xl text-slate-500 font-bold italic px-2">قم بتحميل مقاطع الفيديو من جميع المواقع المفضلة لديك بسهولة.</p>
+                    <p className="text-[9px] md:text-xl text-slate-500 font-bold italic px-2">قم بتحميل مقاطع الفيديو من جميع المواقع المفضلة لديك بسهولة.</p>
                 </motion.header>
 
                 {/* Input Lab Section */}
@@ -60,10 +60,10 @@ const Downloader = () => {
                                 value={url}
                                 onChange={(e) => setUrl(e.target.value)}
                                 placeholder="رابط الفيديو (TikTok, Instagram...)"
-                                className="w-full bg-white/5 border border-white/10 p-4 md:p-8 rounded-xl md:rounded-[2.5rem] outline-none text-right dir-rtl font-black text-xs md:text-2xl placeholder:opacity-20 focus:border-[#7fffd4]/40 transition-all shadow-inner"
+                                className="w-full bg-white/5 border border-white/10 p-4 md:p-8 rounded-xl md:rounded-[2.5rem] outline-none text-right dir-rtl font-black text-[10px] md:text-2xl placeholder:opacity-20 focus:border-[#7fffd4]/40 transition-all shadow-inner"
                                 required
                             />
-                            <div className="absolute left-4 md:left-10 top-1/2 -translate-y-1/2 text-sm md:text-2xl text-[#7fffd4] opacity-40 group-focus-within:opacity-100 transition-opacity">
+                            <div className="absolute left-4 md:left-10 top-1/2 -translate-y-1/2 text-xs md:text-2xl text-[#7fffd4] opacity-40 group-focus-within:opacity-100 transition-opacity">
                                 <FaLink />
                             </div>
                         </div>
@@ -128,9 +128,9 @@ const Downloader = () => {
                         { title: 'جودة عالية', desc: 'استخراج بأعلى جودة متوفرة (4K/HD).' },
                         { title: 'سريع وآمن', desc: 'روابط مباشرة وخالية من الإعلانات المنبثقة.' }
                     ].map((card, i) => (
-                        <div key={i} className="glass-panel p-4 md:p-10 rounded-xl md:rounded-[3rem] border-white/5 text-center">
-                            <h3 className="text-sm md:text-xl font-black italic mb-2 md:mb-4 text-[#7fffd4]">{card.title}</h3>
-                            <p className="text-[9px] md:text-slate-500 font-bold">{card.desc}</p>
+                        <div key={i} className="glass-panel p-3 md:p-10 rounded-xl md:rounded-[3rem] border-white/5 text-center">
+                            <h3 className="text-xs md:text-xl font-black italic mb-1 md:mb-4 text-[#7fffd4]">{card.title}</h3>
+                            <p className="text-[8px] md:text-slate-500 font-bold leading-relaxed">{card.desc}</p>
                         </div>
                     ))}
                 </div>

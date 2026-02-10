@@ -81,7 +81,7 @@ const Courses = () => {
     }, []);
 
     return (
-        <div className="bg-[#05070a] min-h-screen pb-32 px-6 md:px-12 pt-32">
+        <div className="bg-[#05070a] min-h-screen pb-32 px-3 md:px-12 pt-24 md:pt-32">
             <SEO
                 title="أكاديمية MOVIDO | تعلم البرمجة، اللغات، والمهارات الرقمية مجاناً"
                 description="منصة موفيدو التعليمية توفر لك آلاف الكورسات المجانية في البرمجة، التصميم، اللغات، والأمن السيبراني بجودة احترافية."
@@ -93,19 +93,19 @@ const Courses = () => {
                 {/* Academy Header */}
                 <motion.div
                     initial={{ opacity: 0, y: -30 }} animate={{ opacity: 1, y: 0 }}
-                    className="glass-panel p-12 md:p-20 rounded-[4rem] border-white/5 mb-16 relative overflow-hidden group shadow-2xl"
+                    className="glass-panel p-6 md:p-20 rounded-[2rem] md:rounded-[4rem] border-white/5 mb-10 md:mb-16 relative overflow-hidden group shadow-2xl"
                 >
                     <div className="absolute inset-0 bg-gradient-to-br from-[#7fffd4]/10 to-transparent blur-[120px] -z-10" />
                     <div className="relative z-10 flex flex-col md:flex-row-reverse items-center justify-between gap-12">
                         <div className="text-center md:text-right">
-                            <div className="inline-flex items-center gap-4 bg-white/5 px-6 py-2 rounded-2xl border border-white/10 mb-8">
-                                <FaMagic className="text-[#7fffd4] animate-pulse" />
-                                <span className="text-[10px] font-black uppercase tracking-[0.5em] text-[#7fffd4]">مستقبل التعلم</span>
+                            <div className="inline-flex items-center gap-2 md:gap-4 bg-white/5 px-4 md:px-6 py-1.5 md:py-2 rounded-xl md:rounded-2xl border border-white/10 mb-4 md:mb-8">
+                                <FaMagic className="text-[#7fffd4] animate-pulse text-[10px]" />
+                                <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] md:tracking-[0.5em] text-[#7fffd4]">مستقبل التعلم</span>
                             </div>
-                            <h1 className="text-4xl md:text-8xl font-black heading-premium italic tracking-tighter leading-tight mb-6">
+                            <h1 className="text-2xl md:text-8xl font-black heading-premium italic tracking-tighter leading-tight mb-4 md:mb-6">
                                 أكاديمية <span className="opacity-30">|</span> موفيدو
                             </h1>
-                            <p className="text-xl md:text-2xl text-slate-400 font-bold max-w-3xl md:mr-0 mx-auto leading-relaxed italic">
+                            <p className="text-sm md:text-2xl text-slate-400 font-bold max-w-3xl md:mr-0 mx-auto leading-relaxed italic">
                                 بوابتك نحو الاحتراف. الآلاف من الكورسات المجانية بانتظارك لتبدأ رحلة النجاح اليوم.
                             </p>
                         </div>
@@ -113,12 +113,12 @@ const Courses = () => {
                         <form onSubmit={handleSearch} className="w-full md:w-[400px] relative group">
                             <input
                                 type="text"
-                                placeholder="ابحث عن مهارة، لغة، أو كورس..."
+                                placeholder="ابحث عن مهارة..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full bg-white/5 border border-white/10 rounded-[2.5rem] p-8 text-right text-white font-black text-xl outline-none focus:border-[#7fffd4]/40 transition-all shadow-inner"
+                                className="w-full bg-white/5 border border-white/10 rounded-2xl md:rounded-[2.5rem] p-4 md:p-8 text-right text-white font-black text-xs md:text-xl outline-none focus:border-[#7fffd4]/40 transition-all shadow-inner"
                             />
-                            <button type="submit" className="absolute left-10 top-1/2 -translate-y-1/2 text-2xl text-[#7fffd4] opacity-40 group-focus-within:opacity-100 transition-opacity">
+                            <button type="submit" className="absolute left-6 md:left-10 top-1/2 -translate-y-1/2 text-lg md:text-2xl text-[#7fffd4] opacity-40 group-focus-within:opacity-100 transition-opacity">
                                 <FaSearch />
                             </button>
                         </form>
@@ -127,12 +127,12 @@ const Courses = () => {
 
                 {/* Intelligent Navigation/Filters */}
                 <div className="flex flex-col md:flex-row-reverse items-center justify-between gap-10 mb-20">
-                    <div className="flex flex-wrap flex-row-reverse items-center gap-4">
+                    <div className="flex flex-wrap flex-row-reverse items-center justify-center md:justify-start gap-2 md:gap-4">
                         {COURSE_CATEGORIES.map(cat => (
                             <button
                                 key={cat.id}
                                 onClick={() => setSelectedCat(cat.id)}
-                                className={`px-8 py-4 rounded-2xl font-black text-sm transition-all duration-500 border ${selectedCat === cat.id
+                                className={`px-4 md:px-8 py-2 md:py-4 rounded-xl md:rounded-2xl font-black text-[10px] md:text-sm transition-all duration-500 border ${selectedCat === cat.id
                                     ? 'bg-[#7fffd4] text-[#05070a] border-[#7fffd4] shadow-2xl scale-110'
                                     : 'bg-white/5 text-slate-400 border-white/5 hover:bg-white/10 hover:text-white'
                                     }`}
@@ -160,7 +160,7 @@ const Courses = () => {
                         <button onClick={() => window.location.reload()} className="bg-[#7fffd4] text-[#05070a] px-12 py-4 rounded-2xl font-black hover:scale-105 transition-all">إعادة المحاولة</button>
                     </div>
                 ) : (
-                    <motion.div layout className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-8 md:gap-10">
+                    <motion.div layout className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-10">
                         {courses.map((course, idx) => (
                             <motion.div key={course.id} initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ delay: (idx % 6) * 0.05 }} viewport={{ once: true }}>
                                 <MovieCard movie={{ ...course, type: 'course' }} />

@@ -16,7 +16,9 @@ import {
   FaEllipsisH,
   FaFire,
   FaRobot,
-  FaStar
+  FaStar,
+  FaGraduationCap,
+  FaFutbol
 } from 'react-icons/fa';
 import { useUser } from '../hooks/useUser';
 import { redeemPromo } from '../services/api';
@@ -88,6 +90,8 @@ const Navbar = () => {
   ];
 
   const otherCategories = [
+    { name: 'الكورسات التعليمية', path: '/courses', icon: <FaGraduationCap /> },
+    { name: 'المباريات والرياضة', path: '/matches', icon: <FaFutbol /> },
     { name: 'مسرحيات عربية', path: '/category/plays' },
     { name: 'مصارعة حرة (WWE)', path: '/category/wwe' },
     { name: 'أغاني عربية', path: '/category/arabic-songs' },
@@ -167,6 +171,8 @@ const Navbar = () => {
       { name: 'المسلسلات', path: '/category/netflix-series', hasMenu: true, items: seriesCategories, icon: <FaTv /> },
       { name: 'رمضان', path: '/ramadan-2026', hasMenu: true, items: ramadanCategories, icon: <FaFire /> },
       { name: 'أنمي', path: '/category/cartoon-series', icon: <FaRobot />, prefetch: 'cartoon-series' },
+      { name: 'الكورسات', path: '/courses', icon: <FaGraduationCap /> },
+      { name: 'المباريات', path: '/matches', icon: <FaFutbol />, isXL: true },
       { name: 'تحميل', path: '/downloader', icon: <FaDownload /> },
       { name: 'إضافي', path: '/category/plays', hasMenu: true, items: otherCategories, icon: <FaEllipsisH /> },
     ];
@@ -209,18 +215,18 @@ const Navbar = () => {
           {/* Optimized Navigation Pill - Improved MD visibility */}
           <div className="hidden md:flex flex-1 justify-center px-1">
             <div className="glass-panel rounded-full px-2 py-1 flex items-center gap-0.5 border-white/5">
-              {navLinks.map((link, idx) => (
-                <div key={idx} className="relative group">
+              {navLinks.map((link: any, idx) => (
+                <div key={idx} className={`relative group ${link.isXL ? 'hidden xl:block' : ''}`}>
                   {link.hasMenu ? (
                     <>
-                      <div onClick={() => handleNavClick(link.path)} className="cursor-pointer px-2.5 xl:px-3 py-2 text-[10px] xl:text-[11px] font-black uppercase tracking-wider transition-all rounded-full flex items-center gap-1.5 whitespace-nowrap text-slate-400 hover:text-white hover:bg-white/5">
+                      <div onClick={() => handleNavClick(link.path)} className="cursor-pointer px-2 xl:px-3 py-2 text-[10px] xl:text-[11px] font-black uppercase tracking-wider transition-all rounded-full flex items-center gap-1.5 whitespace-nowrap text-slate-400 hover:text-white hover:bg-white/5">
                         <span className="opacity-60 group-hover:opacity-100 transition-opacity">{link.icon}</span>
                         <span className="hidden lg:inline">{link.name}</span>
                         <span className="text-[7px] opacity-30 group-hover:rotate-180 transition-transform">▼</span>
                       </div>
                       <div className="absolute top-full left-1/2 -translate-x-1/2 pt-4 opacity-0 scale-95 pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto transition-all duration-300 z-50">
                         <div className="glass-panel p-3 rounded-[2rem] min-w-[14rem] grid gap-1 border-white/10 shadow-huge">
-                          {link.items?.map((item) => (
+                          {link.items?.map((item: any) => (
                             <div key={item.path} onClick={() => handleNavClick(item.path)} onMouseEnter={() => prefetchCategory(item.path.split('/').pop()!)}
                               className="cursor-pointer px-5 py-3 rounded-xl text-[11px] font-bold text-slate-300 hover:text-white hover:bg-white/5 transition-all text-right flex justify-between items-center whitespace-nowrap">
                               {item.name}
@@ -232,7 +238,7 @@ const Navbar = () => {
                     </>
                   ) : (
                     <div onClick={() => handleNavClick(link.path)} onMouseEnter={() => link.prefetch && prefetchCategory(link.prefetch)}
-                      className="cursor-pointer px-2.5 xl:px-3 py-2 text-[10px] xl:text-[11px] font-black uppercase tracking-wider transition-all rounded-full flex items-center gap-1.5 whitespace-nowrap text-slate-400 hover:text-white hover:bg-white/5">
+                      className="cursor-pointer px-2 xl:px-3 py-2 text-[10px] xl:text-[11px] font-black uppercase tracking-wider transition-all rounded-full flex items-center gap-1.5 whitespace-nowrap text-slate-400 hover:text-white hover:bg-white/5">
                       <span className="opacity-60 group-hover:opacity-100 transition-opacity">{link.icon}</span>
                       <span className="hidden lg:inline">{link.name}</span>
                     </div>

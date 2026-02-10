@@ -121,7 +121,7 @@ const Navbar = () => {
       setKidsMode(true);
       localStorage.setItem('kidsMode', 'true');
       window.dispatchEvent(new Event('kidsModeChange'));
-      navigate('/category/cartoon-series');
+      navigate('/category/dubbed-series');
     }
   };
 
@@ -157,17 +157,23 @@ const Navbar = () => {
 
   if (location.pathname.startsWith('/admin') || ['/watch'].some(p => location.pathname.startsWith(p))) return null;
 
-  const navLinks = [
-    { name: 'الرئيسية', path: '/', icon: <FaHome /> },
-    { name: 'الأفلام', path: '#', hasMenu: true, items: movieCategories, icon: <FaFilm /> },
-    { name: 'المسلسلات', path: '#', hasMenu: true, items: seriesCategories, icon: <FaTv /> },
-    { name: 'رمضان', path: '#', hasMenu: true, items: ramadanCategories, icon: <FaFire /> },
-    { name: 'أنمي', path: '/category/cartoon-series', icon: <FaRobot /> },
-    { name: 'مباريات', path: '/matches', icon: <FaFutbol /> },
-    { name: 'الكورسات', path: '/courses', icon: <FaGraduationCap /> },
-    { name: 'تحميل', path: '/downloader', icon: <FaDownload /> },
-    { name: 'إضافي', path: '#', hasMenu: true, items: otherCategories, icon: <FaEllipsisH /> },
-  ];
+  const navLinks = kidsMode
+    ? [
+      { name: 'الرئيسية', path: '/', icon: <FaHome /> },
+      { name: 'مسلسلات مدبلجة', path: '/category/dubbed-series', icon: <FaTv /> },
+      { name: 'مسلسلات كورية', path: '/category/korean-series', icon: <FaRobot /> },
+    ]
+    : [
+      { name: 'الرئيسية', path: '/', icon: <FaHome /> },
+      { name: 'الأفلام', path: '#', hasMenu: true, items: movieCategories, icon: <FaFilm /> },
+      { name: 'المسلسلات', path: '#', hasMenu: true, items: seriesCategories, icon: <FaTv /> },
+      { name: 'رمضان', path: '#', hasMenu: true, items: ramadanCategories, icon: <FaFire /> },
+      { name: 'أنمي', path: '/category/cartoon-series', icon: <FaRobot /> },
+      { name: 'مباريات', path: '/matches', icon: <FaFutbol /> },
+      { name: 'الكورسات', path: '/courses', icon: <FaGraduationCap /> },
+      { name: 'تحميل', path: '/downloader', icon: <FaDownload /> },
+      { name: 'إضافي', path: '#', hasMenu: true, items: otherCategories, icon: <FaEllipsisH /> },
+    ];
 
   return (
     <>

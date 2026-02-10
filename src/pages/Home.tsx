@@ -30,7 +30,7 @@ const Home = () => {
 
   useEffect(() => {
     setLoading(true);
-    const fetchFunc = kidsMode ? () => import('../services/api').then(m => m.fetchByCategory('anime-movies', 1)) : () => fetchLatest(1);
+    const fetchFunc = kidsMode ? () => import('../services/api').then(m => m.fetchByCategory('dubbed-series', 1)) : () => fetchLatest(1);
 
     fetchFunc()
       .then(data => {
@@ -169,9 +169,8 @@ const Home = () => {
           <div className="space-y-24 pb-20">
             {kidsMode ? (
               <>
-                <MovieRow title="أفلام أنمي" catId="anime-movies" kidsMode={kidsMode} />
-                <MovieRow title="مسلسلات أنمي" catId="anime-series" kidsMode={kidsMode} />
-                <MovieRow title="أفلام مدبلجة" catId="dubbed-movies" kidsMode={kidsMode} />
+                <MovieRow title="مسلسلات مدبلجة" catId="dubbed-series" kidsMode={kidsMode} />
+                <MovieRow title="مسلسلات كورية" catId="korean-series" kidsMode={kidsMode} />
               </>
             ) : (
               <>

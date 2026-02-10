@@ -17,7 +17,7 @@ const BottomNav = () => {
             setKidsMode(true);
             localStorage.setItem('kidsMode', 'true');
             window.dispatchEvent(new Event('kidsModeChange'));
-            navigate('/category/anime-movies');
+            navigate('/category/dubbed-series');
         }
     };
 
@@ -38,14 +38,21 @@ const BottomNav = () => {
         return () => window.removeEventListener('kidsModeChange', handleKidsChange);
     }, []);
 
-    const navItems = [
-        { name: 'الرئيسية', path: '/', icon: <FaHome />, match: (p: string) => p === '/' },
-        { name: 'بحث', path: '/search', icon: <FaSearch />, match: (p: string) => p === '/search' },
-        { name: 'تحميل', path: '/downloader', icon: <FaDownload />, match: (p: string) => p === '/downloader' },
-        { name: 'أنمي', path: '/category/cartoon-series', icon: <FaFilm />, match: (p: string) => p.includes('cartoon') },
-        { name: 'أطفال', path: '#', icon: <FaChild />, isAction: true, action: handleKidsClick, isActive: kidsMode }
-    ];
-    
+    const navItems = kidsMode
+        ? [
+            { name: 'الرئيسية', path: '/', icon: <FaHome />, match: (p: string) => p === '/' },
+            { name: 'مدبلج', path: '/category/dubbed-series', icon: <FaFilm />, match: (p: string) => p.includes('dubbed') },
+            { name: 'كوري', path: '/category/korean-series', icon: <FaSearch />, match: (p: string) => p.includes('korean') },
+            { name: 'أطفال', path: '#', icon: <FaChild />, isAction: true, action: handleKidsClick, isActive: kidsMode }
+        ]
+        : [
+            { name: 'الرئيسية', path: '/', icon: <FaHome />, match: (p: string) => p === '/' },
+            { name: 'مكافآت', path: '/rewards', icon: <FaFilm />, match: (p: string) => p === '/rewards' },
+            { name: 'تحميل', path: '/downloader', icon: <FaDownload />, match: (p: string) => p === '/downloader' },
+            { name: 'بحث', path: '/search', icon: <FaSearch />, match: (p: string) => p === '/search' },
+            { name: 'أطفال', path: '#', icon: <FaChild />, isAction: true, action: handleKidsClick, isActive: kidsMode }
+        ];
+
     if (['/watch', '/details'].some(path => location.pathname.startsWith(path))) return null;
 
     return (
@@ -57,14 +64,14 @@ const BottomNav = () => {
                         {navItems.map((item, idx) => {
                             const isActive = item.isActive !== undefined ? item.isActive : item.match(location.pathname);
                             return (
-                                <Link 
-                                    key={idx} 
+                                <Link
+                                    key={idx}
                                     to={item.path}
                                     onClick={item.isAction ? item.action : undefined}
                                     className={`flex flex-col items-center gap-1.5 transition-all duration-500
-                                               ${isActive 
-                                                 ? (kidsMode ? 'text-kids-blue scale-110' : 'text-[#7fffd4] scale-110') 
-                                                 : (kidsMode ? 'text-slate-400' : 'text-slate-600')}`}
+                                               ${isActive
+                                            ? (kidsMode ? 'text-kids-blue scale-110' : 'text-[#7fffd4] scale-110')
+                                            : (kidsMode ? 'text-slate-400' : 'text-slate-600')}`}
                                 >
                                     <span className={`text-xl ${isActive ? 'drop-shadow-[0_0_10px_rgba(127,255,212,0.4)]' : ''}`}>
                                         {item.icon}
@@ -85,7 +92,7 @@ const BottomNav = () => {
                         <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="glass-panel p-10 rounded-[3rem] w-full max-w-sm text-center">
                             <FaLock className="text-4xl text-[#7fffd4] mx-auto mb-6" />
                             <h3 className="text-xl font-black text-white mb-2">منطقة الوالدين</h3>
-                            <input 
+                            <input
                                 type="password" maxLength={4} value={pinInput} onChange={e => setPinInput(e.target.value)} autoFocus
                                 className="w-full bg-white/5 border border-white/10 p-5 rounded-2xl text-center text-3xl tracking-[0.5em] text-white outline-none"
                             />

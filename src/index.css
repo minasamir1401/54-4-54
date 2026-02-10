@@ -161,17 +161,34 @@ body {
 
 /* Kids Mode Global Overrides */
 .kids-mode {
-  background-color: #f0fdf9 !important;
+  background-color: #ffffff !important;
   background-image: 
-    radial-gradient(circle at 10% 10%, rgba(79, 195, 247, 0.1) 0%, transparent 30%),
-    radial-gradient(circle at 90% 90%, rgba(255, 138, 128, 0.1) 0%, transparent 30%) !important;
+    radial-gradient(circle at 10% 20%, rgba(79, 195, 247, 0.15) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(255, 138, 128, 0.15) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(255, 241, 118, 0.1) 0%, transparent 50%) !important;
   color: #1e293b !important;
 }
 
 .kids-mode .glass-panel {
-  background: rgba(255, 255, 255, 0.85);
-  border-color: rgba(79, 195, 247, 0.15);
-  box-shadow: 0 10px 30px rgba(79, 195, 247, 0.1);
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-color: rgba(79, 195, 247, 0.2) !important;
+  box-shadow: 0 15px 40px rgba(79, 195, 247, 0.1) !important;
+  backdrop-filter: blur(20px) !important;
+}
+
+.kids-mode .text-white {
+  color: #1e293b !important;
+}
+
+.kids-mode .text-slate-400,
+.kids-mode .text-slate-500,
+.kids-mode .text-slate-600 {
+  color: #64748b !important;
+}
+
+.kids-mode .bg-white\/5,
+.kids-mode .bg-white\/10 {
+  background-color: rgba(79, 192, 247, 0.05) !important;
 }
 
 /* Mobile & Touch Optimizations */

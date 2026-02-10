@@ -68,7 +68,7 @@ const App = () => {
 
   return (
     <div
-      className={`min-h-screen transition-colors duration-500 ${kidsMode ? "bg-white text-deep-slate-900 selection:bg-kids-pink/30" : "bg-deep-slate-900 selection:bg-ice-mint/30"}`}
+      className={`min-h-screen transition-colors duration-500 ${kidsMode ? "bg-white text-deep-slate-900 selection:bg-kids-pink/30 kids-mode" : "bg-deep-slate-900 selection:bg-ice-mint/30"}`}
     >
       <Background3D />
       <KidsBackground />

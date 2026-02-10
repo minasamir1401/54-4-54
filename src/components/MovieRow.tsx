@@ -63,7 +63,7 @@ const MovieRow = memo(({ title, catId, initialItems, kidsMode = false }: MovieRo
     const scroll = useCallback((direction: 'left' | 'right') => {
         if (scrollRef.current) {
             const { scrollLeft, clientWidth } = scrollRef.current;
-            const scrollAmount = clientWidth * 0.85;
+            const scrollAmount = clientWidth * 0.8;
             const scrollTo = direction === 'left' ? scrollLeft - scrollAmount : scrollLeft + scrollAmount;
             scrollRef.current.scrollTo({ left: scrollTo, behavior: 'smooth' });
         }
@@ -115,11 +115,11 @@ const MovieRow = memo(({ title, catId, initialItems, kidsMode = false }: MovieRo
                 {/* Content */}
                 <ul
                     ref={scrollRef}
-                    className="flex overflow-x-auto gap-3 sm:gap-4 md:gap-6 px-4 md:px-0 no-scrollbar scroll-smooth pb-10 snap-x snap-mandatory"
+                    className="flex overflow-x-auto gap-2.5 sm:gap-4 md:gap-6 px-4 md:px-0 no-scrollbar scroll-smooth pb-10 snap-x snap-mandatory"
                 >
                     {loading ? (
                         [1, 2, 3, 4, 5, 6].map(i => (
-                            <li key={i} className="flex-shrink-0 w-[140px] sm:w-[160px] md:w-[260px] aspect-[2/3] bg-white/5 rounded-2xl animate-pulse" />
+                            <li key={i} className="flex-shrink-0 w-[120px] sm:w-[160px] md:w-[260px] aspect-[2/3] bg-white/5 rounded-2xl animate-pulse" />
                         ))
                     ) : (
                         items.map((item, index) => (
@@ -129,7 +129,7 @@ const MovieRow = memo(({ title, catId, initialItems, kidsMode = false }: MovieRo
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.5, delay: index * 0.05 }}
-                                className="flex-shrink-0 w-[140px] sm:w-[160px] md:w-[260px] snap-start"
+                                className="flex-shrink-0 w-[120px] sm:w-[160px] md:w-[260px] snap-start"
                             >
                                 <MovieCard movie={item} kidsMode={kidsMode} />
                             </motion.li>
